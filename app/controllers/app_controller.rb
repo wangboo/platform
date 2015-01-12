@@ -6,6 +6,12 @@ class AppController < AppSideController
 
   # 服务器列表
   # 入参 mask平台标记，username用户名
+  # 切智:ANDROID-ANZHI
+  # 百度:ANDROID-BAIDU
+  # 360:ANDROID-QIHU
+  # OPPO:ANDROID-NEARME-GAMECENTER
+  # 小米:ANDROID-MI
+  # 豌豆荚:ANDROID-WDJ
   def server_list
     username = params[:username]
     mask = params[:mask]
@@ -148,6 +154,31 @@ def login
   resp_app_s account_id: account_id, sort_id: account.aid
 end
 
+<<<<<<< HEAD
+=======
+
+def verify
+  Rails.logger.debug "params=#{params}"
+  resp = ::AnyServer.verify params
+  Rails.logger.debug "resp=#{resp}"
+  return render json: resp
+end
+
+
+
+def verify_sign
+  Rails.logger.debug "params=#{params}"
+  resp = AnyPayServer.verify_sign params
+  return render json: resp
+end
+
+def uc_verify_sign
+  resp = AnyPayServer.uc_verify_pay params
+  return render json: resp
+end
+
+
+>>>>>>> 833f4aad7b008cbeb5e43c400df3a893a2d85921
 # 用UC account创建一个账号
 def android_uc
   resp = U9Server.login params[:sid]
@@ -162,12 +193,16 @@ def android_uc
   end
   [user, account_id]
 end
+<<<<<<< HEAD
 def verify
   Rails.logger.debug "params=#{params}"
   resp = AnyServer.verify params
   Rails.logger.debug "resp=#{resp}"
   return render json: resp
 end
+=======
+
+>>>>>>> 833f4aad7b008cbeb5e43c400df3a893a2d85921
 #   随机用户
 def random_user
   while(true)

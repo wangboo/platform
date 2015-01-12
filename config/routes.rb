@@ -30,6 +30,11 @@ Rails.application.routes.draw do
   get "/app/login" => "app#login"
   #any sdk
   post "/app/verify" => "app#verify"
+<<<<<<< HEAD
+=======
+  post "/app/verify_pay" => "app#verify_sign"
+  post "/app/uc_verify_pay" => "app#uc_verify_sign"
+>>>>>>> 833f4aad7b008cbeb5e43c400df3a893a2d85921
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
   
@@ -117,6 +122,11 @@ Rails.application.routes.draw do
   get "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg_view", as: "tools_scroll_msg_view"
   # 发公告
   post "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg", as: "tools_scroll_msg"
+<<<<<<< HEAD
+=======
+  #充值
+  post "/platforms/:id/tools/pay_verify" => "tools#pay_verify", as: "tools_pay_verify"
+>>>>>>> 833f4aad7b008cbeb5e43c400df3a893a2d85921
 
   # ajax请求
   # 服务器信息

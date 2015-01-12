@@ -137,8 +137,12 @@ class ToolsController < ApplicationController
 	def post server, path, args
 		params = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: args}
 		uri = "http://#{server.ip}:#{server.port}/jiyu/admin/tools/#{path}"
+<<<<<<< HEAD
 		Rails.logger.debug "uri #{uri}"
 		Rails.logger.debug "post #{args}"
+=======
+		Rails.logger.debug "send #{args}"
+>>>>>>> 833f4aad7b008cbeb5e43c400df3a893a2d85921
 		HTTParty.post(uri, params)
 	end
 

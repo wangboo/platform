@@ -24,7 +24,11 @@ class ApplicationController < ActionController::Base
 
   private
 	def auth_key
+<<<<<<< HEAD
 		@@auth_key ||= "123132123132asssdas"
+=======
+		@@auth_key ||= SecureRandom.hex(24)
+>>>>>>> 833f4aad7b008cbeb5e43c400df3a893a2d85921
 	end
 
 end

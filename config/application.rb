@@ -41,9 +41,14 @@ module Jiyu
     config.assets.precompile += %w[*.png *.jpg *.jpeg *.gif]
     config.autoload_paths += %W(#{config.root}/app/utils/ #{config.root}/app/models/u9/)
     require "#{config.root}/app/models/u9/u9.rb"
+<<<<<<< HEAD
 
     require "#{config.root}/app/models/any/any.rb"
 
+=======
+    require "#{config.root}/app/models/any/any.rb"
+    require "#{config.root}/app/models/any/any_pay.rb"
+>>>>>>> 833f4aad7b008cbeb5e43c400df3a893a2d85921
     require 'net/ssh'
     require 'net/scp'
 
