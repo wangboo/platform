@@ -1,0 +1,55 @@
+<div class="col-xs-8 col-sm-10 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1" id="container">
+	<%= form_for(@version, html: {class: "form-horizontal", multipart: true}) do |f| %>
+		<div class="form-group col-md-6">
+			<label for="version" class="col-md-3 control-label">version</label>
+			<div class="col-md-9">
+				<input id="version" value="<%= @version.version %>" class="form-control" disabled>
+			</div>
+		</div>
+		<div class="form-group col-md-6">
+			<label for="app_version" class="col-md-3 control-label">app_version</label>
+			<div class="col-md-9">
+				<input id="app_version" name="version[app_version]" value="<%= @version.app_version %>" class="form-control">
+			</div>
+		</div>
+		<label class="col-md-12" style="align:left;">差异文件集合</label>
+		<span class="col-md-12" style="padding: 8px; border-top: 2px solid #cccccc;"></span>
+		<% @version.diff.each_with_index do |diff, index|%>
+		<div id="<%= "div_#{index}" %>">
+		<!-- name -->
+		<div class="form-group col-md-5">
+			<label for="name_<%= index %>" class="col-md-3 control-label">name</label>
+			<div class="col-md-9">
+				<input id="name_<%= index %>" name="diff[][name]" value="<%= diff['name'] %>" class="form-control">
+			</div>
+		</div>
+		<!-- act -->
+		<div class="form-group col-md-3">
+			<label for="act_<%= index %>" class="col-md-3 control-label">act</label>
+			<div class="col-md-9">
+				<input id="act_<%= index %>" name="diff[][act]" value="<%= diff['act'] %>" class="form-control">
+			</div>
+		</div>
+		<div class="form-group col-md-3">
+			<input type="file" name="file_<%= index %>">
+		</div>
+		<div class="col-md-1">
+			<button id="del_btn" p-url="<%= ajax_version_del_diff_item_path(@version) << "?name=#{diff['name']}" %>" class="btn btn-danger" p-div="<%= "div_#{index}" %>" type="button" onclick="del_diff_item(this);return false;">删除</button>
+		</div>
+		<span class="col-md-12" style="padding: 8px; border-top: 2px solid #cccccc;"></span>
+		</div>
+		<% end %>
+	<div class="col-md-6 col-md-offset-5">
+		<%= f.submit "提交", class: "btn btn-info" %>
+	</div>
+	<% end %>
+</div>
+<script type="text/javascript">
+function del_diff_item(btn) {
+	var url = btn.getAttribute("p-url")
+	$.get(url, function(){
+		var div_name = btn.getAttribute("p-div")
+		var rst = $("#"+div_name).remove()
+	})
+}
+</script>

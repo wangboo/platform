@@ -1,0 +1,23 @@
+<h1>Listing active_codes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @active_codes.each do |active_code| %>
+      <tr>
+        <td><%= link_to 'Show', active_code %></td>
+        <td><%= link_to 'Edit', edit_active_code_path(active_code) %></td>
+        <td><%= link_to 'Destroy', active_code, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Active code', new_active_code_path %>

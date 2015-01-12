@@ -1,0 +1,193 @@
+<%= javascript_include_tag "jquery.flot.min.js" %>
+<%= javascript_include_tag "jquery.flot.time.min" %>
+<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+	<div class="col-md-5 col-lg-5">
+		<div class="jumbotron">
+			<div class="container">
+				<h2><%= "#{@server.platform.name} : #{@server.name}" %></h2>				
+				<p><%= @server.desc %></p>
+			</div>
+		</div>
+	</div>
+	<!-- 修改服务器 -->
+	<div class="panel panel-primary col-md-7 col-lg-7">
+		  <div class="panel-heading">
+				<h3 class="panel-title">修改服务器信息</h3>
+		  </div>
+		  <div class="panel-body">					
+				<%= form_for(platform_server_path(@server.platform, @server), method: "put", html: {class: "form-horizontal"}) do |f|%>
+						<div class="form-group">
+							<label class="control-label col-md-2" for="update_name">名字</label>
+							<div class="col-md-10">
+								<input class="form-control" id="update_name" name="server[name]" value="<%= @server.name %>">
+							</div>
+						</div>
+						<!-- zone_id -->
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="zone_id">zone_id</label>
+						<div class="col-md-10">
+							<input class="form-control" id="zone_id" name="server[zone_id]" value="<%= @server.zone_id %>">
+						</div>
+					</div>
+						<div class="form-group">
+							<label class="control-label col-md-2" for="update_ip">IP</label>
+							<div class="col-md-10">
+								<input class="form-control" id="update_ip" name="server[ip]" value="<%= @server.ip %>">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-2" for="update_port">端口</label>
+							<div class="col-md-10">
+								<input class="form-control" id="update_port" name="server[port]" value="<%= @server.port %>">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-2" for="update_work_state">状态</label>
+							<div class="col-md-10">
+								<%= work_state_select_tag @server.work_state, "update_work_state" %>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-2" for="update_server_state">服务状态</label>
+							<div class="col-md-10">
+								<%= select_tag "server[server_state]", options_from_collection_for_select(ServerState.all, "id", "name", @server.server_state_id), class: "form-control", id: "update_server_state" %>
+							</div>
+						</div>
+						<% %w(ssh_user ssh_pwd project_path mysql_user mysql_pwd mysql_database mysql_host).each do |i| %>
+						<div class="form-group">
+							<label class="control-label col-md-2" for="<%= i %>"><%= i %></label>
+							<div class="col-md-10">
+								<input class="form-control" type='text' name='server[<%= i %>]' id='<%= i %>' value="<%=@server[i] %>">
+							</div>
+						</div>
+						<% end %>
+						<div class="text-center">
+							<%= f.submit "提交", class: "btn btn-primary" %>
+						</div>
+					<% end %>
+		  </div>
+		
+	</div>
+<!-- 
+	<form class="form-horizontal" role="form">
+		<div class="form-group">
+			<legend>
+				<div style="margin-bottom: 3px">
+					服务器信息
+					<a class="btn btn-primary col-md-offset-1" onclick="userInfo()">刷新</a>
+					<%= link_to "等级区间", server_user_range_path(@server), class: "btn btn-default" %>
+					<%= link_to "活跃区间", server_user_active_path(@server), class: "btn btn-default" %>
+					<%= link_to "消费曲线", server_use_gold_path(@server), class: "btn btn-default" %>
+				</div>
+			</legend>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="onlineSize">实时在线人数</label>
+			<div class="col-md-7">
+				<label class="form-control" id="onlineSize"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="onlineDaylong">当日在线时长</label>
+			<div class="col-md-7">
+				<label class="form-control" id="onlineDaylong"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="requestTimes">当日请求次数</label>
+			<div class="col-md-7">
+				<label class="form-control" id="requestTimes"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="requestUserSize">当日用户数</label>
+			<div class="col-md-7">
+				<label class="form-control" id="requestUserSize"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="userSize">全服注册人数</label>
+			<div class="col-md-7">
+				<label class="form-control" id="userSize"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="goldSum">全服元宝数</label>
+			<div class="col-md-7">
+				<label class="form-control" id="goldSum"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="donateSum">赠送元宝数</label>
+			<div class="col-md-7">
+				<label class="form-control" id="donateSum"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="voucherSum">全服代金券</label>
+			<div class="col-md-7">
+				<label class="form-control" id="voucherSum"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="silverCost">银两消耗</label>
+			<div class="col-md-7">
+				<label class="form-control" id="silverCost"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="goldCost">元宝消耗</label>
+			<div class="col-md-7">
+				<label class="form-control" id="goldCost"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="donateCost">赠送元宝消耗</label>
+			<div class="col-md-7">
+				<label class="form-control" id="donateCost"></label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label col-md-5" for="voucherCost">金券消耗</label>
+			<div class="col-md-7">
+				<label class="form-control" id="voucherCost"></label>
+			</div>
+		</div>
+	</form>
+	<div class="clearfix"></div>
+
+	<div id="placeholder" style="height: 450px;width: 600px"></div>
+
+</div>
+
+
+<script type="text/javascript">
+	
+	function userInfo() {
+		$.get("<%= ajax_server_info_path %>", {id: "<%= @server.id %>"}, function(data, status){
+			console.log(data);
+			$("#onlineSize").text(data.onlineSize+"人");
+			$("#onlineDaylong").text("约"+data.onlineDaylong+"小时");
+			$("#requestTimes").text(data.requestTimes+"次");
+			$("#userSize").text(data.userSize+"人");
+			$("#requestUserSize").text(data.requestUserSize+"人");
+			$("#goldSum").text(data.goldSum+"金");
+			$("#donateSum").text(data.donateSum+"金");
+			$("#voucherSum").text(data.voucherSum+"个");
+			$("#silverCost").text(data.sysCost.silverCost+"两");
+			$("#goldCost").text(data.sysCost.goldCost+"金");
+			$("#voucherCost").text(data.sysCost.voucherCost+"个");
+			$("#donateCost").text(data.sysCost.donateCost+"金");
+		});
+	}
+
+	$(function(){
+		
+		userInfo();
+
+
+		
+	})
+</script>
+
+ -->

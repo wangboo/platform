@@ -1,0 +1,112 @@
+<div class="container">
+
+	<!-- <form action="<%= platform_path @platform %>" method="post" class="form-horizontal" role="form"> -->
+	<%= form_for @platform, html: {class: "col-md-offset-2 col-lg-offset-2 form-horizontal", action: platform_path(@platform)} do |f| %>
+		<div class="col-md-10 panel panel-info">
+			  <div class="panel-heading">
+					<h3 class="panel-title">服务器信息:</h3>
+			  </div>
+			  <div class="panel-body">
+					<!-- form -->
+					<div class="form-group col-md-6">
+						<label class="col-md-4 control-label" for="name">名字</label>
+						<div class="col-md-8">
+							<input class="form-control" id="name" name="platform[name]" value="<%= @platform.name %>">
+						</div>
+					</div>
+					<div class="form-group col-md-6">
+						<label class="col-md-4 control-label" for="mask">mask</label>
+						<div class="col-md-8">
+							<input class="form-control" id="mask" name="platform[mask]" value="<%= @platform.mask %>">
+						</div>
+					</div>
+					<!-- channel_id -->
+					<div class="form-group col-md-6">
+						<label class="col-md-4 control-label" for="channel_id">channel_id</label>
+						<div class="col-md-8">
+							<input class="form-control" id="channel_id" name="platform[channel_id]" value="<%= @platform.channel_id %>">
+						</div>
+					</div>
+					<!-- channel_name -->
+					<div class="form-group col-md-6">
+						<label class="col-md-4 control-label" for="channel_name">channel_name</label>
+						<div class="col-md-8">
+							<input class="form-control" id="channel_name" name="platform[channel_name]" value="<%= @platform.channel_name %>">
+						</div>
+					</div>
+					<!-- platform -->
+					<div class="form-group col-md-6">
+						<label class="col-md-4 control-label" for="platform">platform</label>
+						<div class="col-md-8">
+							<select name="platform[platform]" id="platform" class="form-control">
+								<option <%= raw "selected" unless [1,2].include? @platform.platform %>>--NONE--</option>
+								<option value="1" <%= raw "selected" if @platform.platform == 1 %>>IOS</option>
+								<option value="2" <%= raw "selected" if @platform.platform == 2 %>>Android</option>
+							</select>
+						</div>
+					</div>
+					<!-- vers -->
+					<div class="form-group col-md-6">
+						<label class="col-md-4 control-label" for="vers">vers</label>
+						<div class="col-md-8">
+							<input class="form-control" id="vers" name="platform[vers]" value="<%= @platform.vers %>">
+						</div>
+					</div>
+					<div class="form-group col-md-12">
+						<label class="col-md-2 control-label" for="download_url">更新路径</label>
+						<div class="col-md-8">
+							<input class="form-control" id="download_url" name="platform[download_url]" value="<%= @platform.download_url %>">
+						</div>
+					</div>
+					<!-- <div class="form-group col-md-12">
+						<label class="col-md-2 control-label" for="platform_rmd_id">推荐服务器</label>
+					<div class="col-md-4">
+					<%=select_tag "platform[rmd_id]", options_from_collection_for_select(@platform.servers.where(work_state: 0), "id", "name"),selected: [@rmd.try(:id), @rmd.try(:name)], include_blank: "", class: "form-control" %>
+					
+					</div> -->
+					<div class="form-group col-md-3">
+						<button type="submit" class="btn btn-primary">修改</button>
+					</div>
+
+
+			  </div>
+		</div>
+		
+<!-- </form> -->
+	<% end %>
+
+	<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
+		<div class="row">
+			<!-- jumbotron -->
+			<div class="jumbotron">
+				<div class="container">
+					<h2><%= @platform.name %>&nbsp;&nbsp;&nbsp;&nbsp;一共有<%= @platform.servers.size %>台服务器</h2>					
+					<%= link_to "版本管理", version_path(@platform), class: "btn btn-info" %>
+					<%= link_to "管理工具", tools_path(@platform), class: "btn btn-primary" %>
+				</div>
+			</div><!-- jumbotron over -->
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>名字</th>
+						<th>ip</th>
+						<th>端口</th>
+						<th>工作状态</th>
+						<th>显示状态</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%= content_tag_for :tr, @platform.servers do |server| %>
+					<td><%= link_to server.name, platform_server_path(@platform, server) %></td>
+					<td><%= server.ip %></td>
+					<td><%= server.port %></td>
+					<td><%= work_state_name server %></td>
+					<td><%= server.server_state.name %></td>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+	
+</div>

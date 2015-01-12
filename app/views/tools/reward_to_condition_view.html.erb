@@ -1,0 +1,135 @@
+
+<%= render partial: "menu" %>
+
+<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 
+	col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 ">
+
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">执行结果</h4>
+      </div>
+      <div class="modal-body">
+        <p id="rst_title"></p>
+        <p id="rst_message"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="panel panel-info">
+	  <div class="panel-heading">
+			<h3 class="panel-title">发放奖品</h3>
+	  </div>
+	  <div class="panel-body">
+			<form class="form-horizontal">
+				<%= base_form_field %>
+				<!-- 注册时间 -->
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="registBeginCheck">注册时间大于</label>
+					<div class="col-md-7">
+						<div class="input-group">
+				      <span class="input-group-addon">
+				        <input type="checkbox" id="registBeginCheck">
+				      </span>
+				      <input type="text" class="form-control" id="registBegin" disabled>
+				    </div><!-- /input-group -->
+					</div>
+				</div>
+				<!-- 注册时间晚于 -->
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="registAfterCheck">注册时间小于</label>
+					<div class="col-md-7">
+						<div class="input-group">
+				      <span class="input-group-addon">
+				        <input type="checkbox" id="registAfterCheck">
+				      </span>
+				      <input type="text" class="form-control" id="registAfter" disabled>
+				    </div><!-- /input-group -->
+					</div>
+				</div>
+				<!-- 等级大于 -->
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="levelBiggerCheck">等级大于</label>
+					<div class="col-md-7">
+						<div class="input-group">
+				      <span class="input-group-addon">
+				        <input type="checkbox" id="levelBiggerCheck">
+				      </span>
+				      <input type="text" class="form-control" id="levelBigger" disabled>
+				    </div><!-- /input-group -->
+					</div>
+				</div>
+				<!-- 等级小于 -->
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="levelSmallerCheck">等级小于</label>
+					<div class="col-md-7">
+						<div class="input-group">
+				      <span class="input-group-addon">
+				        <input type="checkbox" id="levelSmallerCheck">
+				      </span>
+				      <input type="text" class="form-control" id="levelSmaller" disabled>
+				    </div><!-- /input-group -->
+					</div>
+				</div>
+				<div class="text-center">
+					<button id="sendReward" class="btn btn-primary" type="button">提交</button>
+				</div>
+			</form>
+	  </div>
+	</div>
+</div>
+<%= javascript_include_tag "bootstrap-datetimepicker.min.js" %>
+<%= stylesheet_link_tag "bootstrap-datetimepicker.min.css" %>
+<script type="text/javascript">
+$(function(){
+	["registBegin", "registAfter", "levelBigger", "levelSmaller"].forEach(function(name){
+		$("#"+name+"Check").click(function(){	
+			if($("#"+name+"Check").attr('checked') == 'checked') {
+				$("#"+name).attr("disabled", false)
+			}else {
+				$("#"+name).attr("disabled", true)
+			}
+		})
+	})
+	$("#registBegin").datetimepicker();
+	$("#registAfter").datetimepicker();
+	$("#damgerAlter").alert('close')
+	$("#sendReward").bind('click', function(){
+		var params = {}
+		params.reward = $("#reward").val()
+		params.servers = $("#server option:selected").val()
+		params.title = $("#title").val()
+		params.message = $("#content").val()
+		params.name = $("#sender_name").val()
+		params.platform = "<%= @platform.id %>";
+		["registBegin", "registAfter", "levelBigger", "levelSmaller"].forEach(function(name){
+			if($("#"+name+"Check").attr('checked') == 'checked') {
+				params[name+"Check"] = true
+				params[name] = $("#"+name).val()
+			}else {
+				params[name+"Check"] = false
+			}
+		})
+		console.log(params)
+		$.ajax({
+			type: "POST",
+			url: "<%= tools_reward_to_condition_path(@platform) %>",
+			beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+			data: params,
+		}).success(function(data){
+			$("#rst_title").text(data.rst)
+			$("#rst_message").text(data.msgs)
+			$('#myModal').modal('show');
+		}).error(function(){
+			$("#result").text("网络请求失败")
+			$('#myModal').modal('show');
+		})
+	})
+})
+</script>

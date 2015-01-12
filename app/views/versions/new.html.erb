@@ -1,0 +1,54 @@
+<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
+	<div class="jumbotron">
+		<div class="container">
+			<h3>您正在<font color="red"><%= @platform.name %></font>平台发布版本补丁</h3>
+			<% if @last_version %>
+			<p>您上次发布补丁是在 <%= @last_version.created_at.strftime "%Y-%m-%d %H:%m:%S" %>, 版本号为: <%= @last_version.version %></p>
+			<% else %>
+			<p>你还没发布过补丁</p>
+			<% end %>
+		</div>
+	</div>
+
+	<div class="panel panel-info">
+		  <div class="panel-heading">
+				<h3 class="panel-title">提交新的版本补丁</h3>
+		  </div>
+		  <div class="panel-body">
+				<%= form_for @new_version, url: create_version_path(@platform), multipart: true, html: {class: "form-horizontal"} do |f| %>
+					<input type="hidden" name="platform_id" value="<%= @platform.id %>">
+					<div class="form-group col-md-10">
+						<label class="control-label col-md-2" for="version">版本号</label>
+						<div class="col-md-10">
+							<input id="version" name="version[version]" class="form-control" placeholder="本次的版本号，如:1.12.1">
+						</div>
+					</div>
+					<div class="form-group col-md-10">
+						<label class="control-label col-md-2" for="version">app版本号</label>
+						<div class="col-md-10">
+							<input id="version" name="version[app_version]" class="form-control" placeholder="app端版本号">
+						</div>
+					</div>
+					<div class="form-group col-md-10">
+						<label class="control-label col-md-2" for="desc">描述信息</label>
+						<div class="col-md-10">
+							<input id="desc" name="version[desc]" class="form-control" placeholder="该补丁版本的描述信息">
+						</div>
+					</div>
+					<div class="form-group col-md-10">
+						<label class="control-label col-md-2" for="file">补丁文件</label>
+						<div class="col-md-10">
+							<!-- <input id="file" name="file" class="form-control" type="file"> -->
+							<%= f.file_field :file, class: "form-control" %>
+						</div>
+					</div>
+					<div class="clearfix">
+					</div>
+					<div class="text-center">
+						<button type="submit" class="btn btn-primary">提交</button>
+					</div>
+				<% end %>
+		  </div>
+	</div>
+
+</div>

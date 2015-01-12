@@ -1,0 +1,65 @@
+<div class="container">
+	<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
+		<!-- 头部 -->
+		<div class="jumbotron">
+			<div class="container">
+				<h2>服务器状态</h2>				
+			</div>
+		</div>
+		<!-- 服务器状态列表 -->
+		<div class="panel panel-default"  style="padding: 10px 10px 10px 10px">
+			<legend>服务器状态列表</legend>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>状态</th>
+						<th>显示</th>
+						<th>描述</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<%= content_tag_for :tr, @server_states do |state| %>
+						<%= form_for(state, action: "post", url: server_state_path(state)) do |f| %>
+						<td><%= f.text_field :name, class: "form-control" %></td>
+						<td><%= f.text_field :show, class: "form-control" %></td>
+						<td><%= f.text_field :desc, class: "form-control" %></td>
+						<td><button type="submit" class="btn btn-primary">修改</button></td>
+						<% end %>
+					<% end %>
+				</tbody>
+			</table>
+
+		</div>
+
+		<!-- 创建一个新的服务器状态 -->
+			<div class="panel panel-default" style="padding: 10px 10px 10px 10px">
+				<legend>新建一个服务器状态</legend>
+				<%= form_for(@new_server_state, html: {class: "form-horizontal"}) do |f| %>
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="name">状态名</label>
+							<div class="col-md-8">
+								<input class="form-control" id="name" name="server_state[name]" placeholder="服务器状态名字，如：火爆/新服/拥挤/畅通">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="show">显示状态</label>
+							<div class="col-md-8">
+								<input class="form-control" id="show" name="server_state[show]" placeholder="服务器显示状态，如：ffffff;火爆">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="desc">描述</label>
+							<div class="col-md-8">
+								<input class="form-control" id="desc" name="server_state[desc]" placeholder="状态描述">
+							</div>
+						</div>
+						<div class="text-center">
+							<button type="submit" class="btn btn-info">提交</button>
+						</div>
+				<% end %>
+			</div>
+
+	</div>
+
+</div>

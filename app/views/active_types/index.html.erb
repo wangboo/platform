@@ -1,0 +1,61 @@
+<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
+	
+	<!-- 展示已经穿件的兑换码 -->
+	<div class="panel panel-default">	
+		<div class="panel-heading">
+			<h3 class="panel-title">已创建的兑奖码类型</h3>
+		</div>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>名字</th>
+					<th>mask</th>
+					<th>描述</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<%= content_tag_for :tr, @active_types do |type| %>
+					<%= form_for type, class: "form-horizontal" do |f| %>
+					<td><%= f.text_field :name, class: "form-control" %></td>
+					<td><%= f.text_field :mask, class: "form-control" %></td>
+					<td><%= f.text_field :desc, class: "form-control" %></td>
+					<td><%= f.submit "修改", class: "btn btn-primary"%></td>
+					<% end %>
+				<% end %>
+			</tbody>
+		</table>
+</div>
+
+<div class="panel panel-warning">
+  <div class="panel-heading">
+		<h3 class="panel-title">创建新的兑换码类型，不同类型兑换码和重复使用</h3>
+  </div>
+  <div class="panel-body">
+  	<%= form_for @new_active_type, html: {class: "form-horizontal"} do |f| %>
+		<div class="form-group">
+			<label class="control-label col-md-2" for="name">名字</label>
+			<div class="col-md-8">
+				<input class="form-control" id="name" name="active_type[name]" placeholder="兑奖码类型的名字">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-md-2" for="mask">mask</label>
+			<div class="col-md-8">
+				<input class="form-control" id="mask" name="active_type[mask]" placeholder="兑奖码唯一识别类型">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-md-2" for="desc">描述</label>
+			<div class="col-md-8">
+				<input class="form-control" id="desc" name="active_type[desc]" placeholder="兑奖码描述">
+			</div>
+		</div>
+		<div class="text-center"><button type="submit" class="btn btn-primary">提交</button></div>
+		<% end %>
+  </div>
+	
+</div>
+	
+
+</div>

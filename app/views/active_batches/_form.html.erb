@@ -1,0 +1,118 @@
+<%=stylesheet_link_tag "bootstrap-datetimepicker.min.css"%>
+<%=javascript_include_tag "bootstrap-datetimepicker.min.js"%>
+<div class="container col-md-8">
+
+<%= form_for(@new_active_batch, html: {class: "form-horizontal", role: "form"}) do |f| %>
+  <div class="col-md-offset-2"><legend>创建一批激活码</legend></div>
+  
+  <div class="col-md-2"></div>
+  <div class="form-group col-md-3">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" name="active_batch[all_platform]" id='all_platform' >
+        全部平台
+      </label>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+
+  <div class="form-group">
+  	<label for="code_type" class="col-md-2 control-label">平台</label>
+    <%= platform_check_box_group_tag %>
+  </div>
+  <div class="clearfix"></div>
+  
+  <!-- 名字 -->
+   <div class="form-group col-md-6">
+    <%= f.label "名字", class: "col-md-4 control-label", for: "name"%>  
+    <div class="col-md-8">
+      <%= f.text_field :name, class: "col-md-10 form-control", id: "name", placeholder: "本奖励码批次名"%>
+    </div>
+  </div>
+  <div class="form-group col-md-6">
+    <label for="size" class="col-md-4 control-label">数量</label>
+    <div class="col-md-8">
+      <input name="size" id="size" class="form-control" placeholder="生成领奖码数量">
+    </div>
+  </div>
+
+  <!-- 兑奖码类型 -->
+  <div class="form-group col-md-6">
+    <label for="code_type" class="col-md-4 control-label">类型</label>
+    <div class="col-md-8">
+      <%= select_tag("active_batch[active_type_id]", options_from_collection_for_select(ActiveType.all, "id", "name"), class: "form-control") %>
+    </div>
+  </div>
+  <div class="form-group col-md-6">
+    <%= f.label "奖励", class: "col-md-4 control-label", for: "reward"%>  
+    <div class="col-md-8">
+      <%= select_tag("active_batch[reward_id]", options_from_collection_for_select(Reward.all.order("id asc"), "id", "name"), class: "form-control") %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+
+  <div class="form-group col-md-6">
+    <label class="col-md-4 control-label" for="begin_time">有效期开始</label>
+    <div class="col-md-8">
+      <input type="text" value="2014-05-01" class="form-control" id="begin_time" name="active_batch[begin_time]" data-date-format="yyyy-mm-dd">
+    </div>
+  </div>
+  <div class="form-group col-md-6">
+    <label class="col-md-4 control-label" for="end_time">有效期截止</label>
+    <div class="col-md-8">
+      <input type="text" value="2015-01-01" class="form-control" id="end_time" name="active_batch[end_time]" data-date-format="yyyy-mm-dd">
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+  <div class="form-group col-md-3">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" name="active_batch[is_muti]" id='is_muti' >
+        多次使用
+      </label>
+    </div>
+  </div>
+  <div class="form-group col-md-6">
+    <label class="col-md-4 control-label" for="lim_times">使用次数</label>
+    <div class="col-md-8">
+      <input type="text" value="1" class="form-control" id="lim_times" name="active_batch[lim_times]" disabled>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+
+
+  <div class="form-group">
+  	<%= f.label "描述", class: "col-md-2 control-label", for: "desc"%>	
+  	<div class="col-md-9">
+  		<%= f.text_field :desc, class: "col-md-10 form-control", id: "desc", placeholder: "本次另加码用途描述"%>
+  	</div>
+  </div>
+  <div class="text-center">
+    <%= f.submit "创建", class: "btn btn-info" %>
+  </div>
+<% end %>
+</div>
+<script type="text/javascript">
+	$(function(){
+    $('#begin_time').datetimepicker();
+    $('#end_time').datetimepicker();
+    $('#is_muti').bind('click', function(){
+      var checked = $('#is_muti').attr('checked')
+      console.log($('#lim_times')[0])
+      if(checked) {
+        $('#lim_times').attr('disabled', false)
+      }else {
+        $('#lim_times').attr('disabled', true)
+      }
+    })
+    $('#all_platform').bind('click', function(){
+      var checked = $('#all_platform').attr('checked')
+      console.log($('#all_platform')[0])
+      if(checked) {
+        $('#ppp_').attr('disabled', false)
+      }else {
+        $('#ppp_').attr('disabled', true)
+      }
+    })
+  })
+</script>

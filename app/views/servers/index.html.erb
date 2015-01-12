@@ -1,0 +1,96 @@
+<div class="row">
+	<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
+		<div class="jumbotron">
+			<div class="container">
+				<h2>一共有<%= @servers.size %>个服务器</h2>
+			</div>
+		</div> <!-- jumbotron over -->
+		
+		<!-- 显示所有服务器 -->
+		<div class="panel panel-default" style="padding: 10px 10px 10px 10px">
+			<legend>已有的服务器列表</legend>		
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>平台</th>
+						<th>名字</th>
+						<th>状态</th>
+						<th>ip</th>
+						<th>端口</th>
+						<th>使用状态</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%= content_tag_for :tr, @servers do |server| %>
+					<td><%= link_to server.platform.name, platform_path(server.platform) %></td>
+					<td><%= link_to server.name, platform_server_path(server.platform, server) %></td>
+					<td><%= server.server_state.name %></td>
+					<td><%= server.ip %></td>
+					<td><%= server.port %></td>
+					<td><%= work_state_select_tag server.work_state %></td>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- 增加服务器 -->		
+	<%= form_for(@new_server, html: {class: "form-horizontal"}) do |f| %>
+		<div class="panel panel-default" style="padding: 10px 10px 10px 10px">
+			<legend>创建一个新的服务器</legend>
+			<!-- <div class=""> -->
+				<div class="col-md-6 form-group" >
+					<label for="platform_id" class="col-md-4 control-label">平台</label>
+					<div class="col-md-8">
+						<%= f.select :platform_id, Platform.all.collect{|p|[p.name, p.id]},{}, {class: "form-control", id: "platform_id"} %>
+					</div>
+				</div>
+				<div class="col-md-6 form-group">
+					<label for="server_state_id" class="col-md-2 control-label">状态</label>
+					<div class="col-md-8">
+						<%= f.select :server_state_id, ServerState.all.collect{|p|[p.name, p.id]},{}, {class: "form-control", id: "server_state_id"} %>
+					</div>
+				</div>
+				<div class="col-md-6 form-group">
+					<label class="col-md-4 control-label" for="work_state">工作状态</label>
+					<div class="col-md-8">
+						<%= work_state_select_tag %>
+					</div>
+				</div>
+				<!-- </div> -->
+				<div class="clearfix"></div>
+				
+			<div class="form-group">
+				<label for="name" class="col-md-2 control-label">名字</label>
+				<div class="col-md-8">						
+					<input type="text" id="name" name="server[name]" placeholder="服务器名字" class="form-control">
+				</div>
+			</div>
+			<div class="form-group">
+		    <label for="ip" class="col-sm-2 control-label">IP</label>
+		    <div class="col-md-8">
+		      <input type="ip" class="form-control" id="ip" placeholder="ip地址" name="server[ip]">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="port" class="col-sm-2 control-label">端口号</label>
+		    <div class="col-md-8">
+		      <input type="number" class="form-control" id="ip" placeholder="端口号" name="server[port]">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="desc" class="col-sm-2 control-label">描述</label>
+		    <div class="col-md-8">
+		      <input type="text" class="form-control" id="desc" placeholder="描述" name="server[desc]">
+		    </div>
+		  </div>
+		  <div class="text-center">
+		  	<input type="submit" class="btn btn-info" value="提交">
+		  </div>
+		</div>
+		<% end %>
+		
+		  
+
+	</div>
+
+</div>

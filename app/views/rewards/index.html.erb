@@ -1,0 +1,51 @@
+<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
+	<table class="table table-bordered">
+		<legend>已有的兑奖码</legend>
+		<thead>
+			<tr>
+				<th>名字</th>
+				<th>奖励</th>
+				<th>描述</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<%= content_tag_for(:tr, @rewards) do |reward| %>
+				<%= form_for(reward, url: reward_path(reward)) do |f| %>
+				<td><%= f.text_field :name, class: "form-control" %></td>
+				<td><%= f.text_field :reward, class: "form-control" %></td>
+				<td><%= f.text_field :desc, class: "form-control" %></td>
+				<td><button type="submit" class="btn btn-primary">修改</button></td>
+				<% end %>
+			<% end %>
+		</tbody>
+	</table>
+
+	<%= form_for(@new_reward, html: {class: "form-horizontal"}) do |f| %>
+	<legend>新建兑奖码</legend>
+	<div class="form-group">
+		<label class="col-md-2 control-label" for="name">名字</label>
+		<div class="col-md-8">
+			<input class="form-control" id="name" name="reward[name]" placeholder="兑奖码名字">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label" for="reward">奖品</label>
+		<div class="col-md-8">
+			<input class="form-control" id="reward" name="reward[reward]" placeholder="奖品配置，如：gc-1000-1;e-10001-1">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label" for="desc">描述</label>
+		<div class="col-md-8">
+			<input class="form-control" id="desc" name="reward[desc]" placeholder="该项兑奖码描述">
+		</div>
+	</div>
+	<div class="text-center"><button type="submit" class="btn btn-primary">提交</button></div>
+
+	<% end %>
+
+
+
+</div>
+
