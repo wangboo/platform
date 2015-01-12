@@ -1,0 +1,4 @@
+module ActiveTypesHelper
+
+
+end

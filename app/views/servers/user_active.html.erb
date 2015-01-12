@@ -1,0 +1,74 @@
+<%= javascript_include_tag "jquery.flot.min.js" %>
+<%= javascript_include_tag "jquery.flot.time.min" %>
+
+<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+	<div class="jumbotron">
+		<div class="container">
+			<h2><%= "#{@server.platform.name} : #{@server.name}" %></h2>
+			<!-- <h4 id="server-info">当前在线人数：（正在查询), 总在线时长：（正在计算）,总请求次数：（增在计算）</h4> -->
+			<p><%= @server.desc %></p>
+		</div>
+	</div>
+	
+<div class="demo-container">
+	<div id="placeholder" class="demo-placeholder"></div>
+</div>
+	<div class="text-center" style="padding-bottom: 20px">
+		<%= link_to "返回", platform_server_path(@server.platform, @server), class: "btn btn-info" %>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	
+	function xFormatter(val, axis) {
+		return val+"点"
+	}
+
+	$(function() {
+		var d1 = []
+		<% @data.each_with_index do |v ,index|%>		
+		<%= "d1.push([#{index},#{v}])" %>
+		<% end %>
+		
+		$.plot("#placeholder", [{
+			data: d1,
+			line: { steps: true},
+			label: "时段活跃量"
+		}],{
+			xaxis: {
+				tickSize: 1,
+				tickFormatter: xFormatter
+			}
+		});
+	})
+</script>
+
+<style type="text/css">
+	.demo-container {
+	box-sizing: border-box;
+	width: 850px;
+	height: 450px;
+	padding: 20px 15px 15px 15px;
+	margin: 15px auto 30px auto;
+	border: 1px solid #ddd;
+	background: #fff;
+	background: linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+	box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+	-o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}	
+
+.demo-placeholder {
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	line-height: 1.2em;
+}
+</style>

@@ -1,0 +1,56 @@
+<div class="container">
+	<div class="row">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
+
+			<div class="panel panel-default" style="padding: 10px 10px 10px 10px">
+				<table class="table table-bordered">
+					<legend>已经存在的平台</legend>
+					<thead>
+						<tr>
+							<th>平台名</th>					
+							<th>mask</th>					
+							<th>描述</th>
+							<th>更新路径</th>
+						</tr>
+					</thead>
+					<tbody>
+						<%= content_tag_for :tr, @platforms do |item| %>
+							<td><%= link_to item.name, platform_path(item) %></td>
+							<td><%= item.mask %></td>
+							<td><%= item.desc %></td>
+							<td><%= item.download_url.slice(0, 10) << "..." if item.download_url %></td>
+						<% end %>
+					</tbody>
+				</table>
+			</div>
+			<!-- 创建表单 -->
+			<%= form_for(@new_platform, html: {class: "form-horizontal"}) do |f| %>
+				<div class="panel panel-default" style="padding: 10px 10px 10px 10px">
+					<legend>创建一个新的平台</legend>
+					<div class="form-group">
+						<label for="name" class="control-label col-md-2">名字</label>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="name" placeholder="平台名字"  name="platform[name]">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="desc" class="control-label col-md-2">mask</label>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="desc" placeholder="mask" name="platform[mask]">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="desc" class="control-label col-md-2">描述</label>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="desc" placeholder="平台描述" name="platform[desc]">
+						</div>
+					</div>
+					<div class="text-center">
+						<input value="提交" type="submit" class="btn btn-info">
+					</div>
+				</div>				
+			<% end %>
+
+		</div>
+	</div>
+</div>

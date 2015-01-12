@@ -1,0 +1,26 @@
+<div class="col-md-3">
+
+
+<ul class="nav nav-pills nav-stacked" role="tablist">
+	<li>
+  	<h4>奖品</h4>
+  </li>
+	<li class="divider"></li>
+  <li class="<%= "active" if action_name == 'reward_to_user_view' %>">
+  	<%= link_to "指定用户", tools_path(@platform) %>
+  </li>
+  <li class="<%= "active" if action_name == 'reward_to_condition_view' %>">
+  	<%= link_to "指定条件", tools_reward_to_condition_view_path(@platform) %>
+  </li>
+  <li><h4>公告</h4></li>
+  <li class="divider"></li>
+  <li class="<%= "active" if action_name == 'notice_view' %>">
+    <%= link_to "发布公告", tools_notice_view_path(@platform) %>
+  </li>
+  <li><h4>滚动消息</h4></li>
+  <li class="divider"></li>
+  <li class="<%= "active" if action_name == 'scroll_msg_view' %>">
+    <%= link_to "发布消息", tools_scroll_msg_path(@platform) %>
+  </li>
+</ul>
+</div>

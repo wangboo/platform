@@ -1,0 +1,30 @@
+
+<div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+<% @errors.each do |error| %>
+<div class="panel panel-default">
+	<div class="panel-heading col-md-12">
+			<div class="col-md-6">
+				<h5><%= error.username%>&nbsp;&nbsp;at&nbsp;&nbsp;
+					<%= error.created_at.strftime('%Y-%m-%d %H:%M:%S') %></h5>
+			</div>
+			<div class="pull-right">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<%= link_to "解决", "#{error_log_resove_path}?id=#{error.id}&cur_page=#{@cur_page}", class: "btn btn-warning" %>
+				<%= link_to "解决类似(#{error.same_num})", "#{error_log_resove_path}?id=#{error.id}&cur_page=#{@cur_page}&same=1", class: "btn btn-primary" %>
+			</div>
+			<div class="pull-right">
+				<% name = error.server ? error.server.name : error.server_id %>
+				<h5><%= name %></h5>
+			</div>
+	</div>
+	<div class="panel-body">
+		<% error.error.split(/\n/).each do |txt|%>
+			<div><%= txt %></div>
+		<% end %>
+	</div>
+</div>
+<% end %>
+</div>
+
+<%= error_page_padding @cur_page, @page %>
+

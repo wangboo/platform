@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RubyGems 镜像 - 淘宝网</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/bootstrap.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="/master.css" type="text/css" media="screen">
+    <link rel="shortcut icon" href="/favicon.png" />
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta content='True' name='HandheldFriendly' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="keywords" content="Ruby Gems, Gem, RubyGems 中国, RubyGems 镜像, Gem 镜像" />
+  </head>
+  <body>
+    <div id="mainbox" class="container">
+      <h1>RubyGems 镜像 <i>- 淘宝网</i></h1>
+      <div class="box summary">
+        <h5>为什么有这个？</h5>
+        <div class="content">
+          <p>由于国内网络原因（你懂的），导致 <a href="http://rubygems.org" target="_blank">rubygems.org</a> 存放在 Amazon S3 上面的资源文件间歇性连接失败。所以你会与遇到 <code>gem install rack</code> 或 <code>bundle install</code> 的时候半天没有响应，具体可以用 <code>gem install rails -V</code> 来查看执行过程。</p>
+        </div>
+      </div>
+
+      <div class="box sync_info">
+        这是一个完整 rubygems.org 镜像，你可以用此代替官方版本，同步频率目前为<span class="time">15分钟一次</span>以保证尽量与官方服务同步。<br />
+      </div>
+
+      <div class="box">
+        <h5>如何使用？</h5>
+        <div class="highlight">
+          <pre><span class="nv">$ </span>gem sources --remove https://rubygems.org/
+<span class="nv">$ </span>gem sources -a https://ruby.taobao.org/
+<span class="nv">$ </span>gem sources -l
+*** CURRENT SOURCES ***
+
+https://ruby.taobao.org
+<span class="c"># 请确保只有 ruby.taobao.org</span>
+<span class="nv">$ </span>gem install rails</pre>
+        </div>
+
+        <h5>如果你是用 Bundle (Rails 项目)</h5>
+        <div class="highlight">
+          <pre><span class="n">source</span> <span class="s1">'https://ruby.taobao.org/'</span>
+<span class="n">gem</span> <span class="s1">'rails'</span><span class="p">,</span> <span class="s1">'4.1.0'</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span></pre>
+        </div>
+      </div>
+
+      <div class="box ruby_list">
+        <h5>Ruby 源代码镜像</h5>
+        <div id="other_links" style="margin-bottom:20px;">
+          <a href="/mirrors/ruby" class="btn">Ruby 源代码下载镜像</a>
+        </div>
+        <p>本镜像来源于 <a href="http://cache.ruby-lang.org" target="_blank">cache.ruby-lang.org</a> 用于改善国内 Ruby 安装的速度。</p>
+        <ul style="font-size:14px;margin:10px 40px 30px 40px;">
+          <li><a href="/mirrors/ruby/ruby-2.1.4.tar.gz">ruby-2.1.4.tar.gz</a></li>
+          <li><a href="/mirrors/ruby/2.0/ruby-2.0.0-p451.tar.gz">ruby-2.0.0-p451.tar.gz</a></li>
+          <li><a href="/mirrors/ruby/1.9/ruby-1.9.3-p545.tar.gz">ruby-1.9.3-p545.tar.gz</a></li>
+          <li><a href="/mirrors/ruby/1.9/ruby-1.9.2-p320.tar.gz">ruby-1.9.2-p320.tar.gz</a></li>
+          <li><a href="/mirrors/ruby/1.8/ruby-1.8.7-p358.tar.gz">ruby-1.8.7-p358.tar.gz</a></li>
+        </ul>
+        <p>修改 RVM ，改用本站作为下载源, 提高安装速度。</p>
+        <h6>For Mac</h6>
+        <div class="highlight"><pre><span class="nv">$ </span>sed -i .bak <span class="s1">'s!cache.ruby-lang.org/pub/ruby!ruby.taobao.org/mirrors/ruby!'</span> <span class="nv">$rvm_path</span>/config/db</pre></div>
+        <h6>For Linux</h6>
+        <div class="highlight"><pre><span class="nv">$ </span>sed -i <span class="s1">'s!cache.ruby-lang.org/pub/ruby!ruby.taobao.org/mirrors/ruby!'</span> <span class="nv">$rvm_path</span>/config/db</pre></div>
+      </div>
+      
+      <div class="box">
+        <h5>常见问题</h5>
+        <ol>
+          <li>
+            <p>Q: 某些时候 <code>gem install rails --pre</code> （安装 preview 版本的 Gem）无法正确安装？</p>
+            <p>A: 由于淘宝镜像这边没有实现 /api 下面的协议，而安装 pre 版本需要这些东西检查依赖，所以如果你需要这类安装需求的时候，请临时切换回官方的 RubyGems 源。</p>
+          </li>
+          <li>
+            <p>Q: 为何我新发布的 Gem 在淘宝源上面无法安装？</p>
+            <p>A: 由于同步是定期执行的，新发布的 Gem 可能没有那么快同步过来，你需要稍等一段时间后才能使用。</p>
+          </li>
+          <li>
+            <p>Q: 已经换成淘宝源了，但 <code>bundle install</code> 或 <code>gem install xxx</code> 的时候卡住很久不动？</p>
+            <p>A: 这有可能是你网络问题，或者没有正确的好 gem 的源，你可以尝试 <code>gem install xxx -V</code> 并把执行过程的结果在 Ruby China 上面发帖求助。</p>
+          </li>
+          <li>
+            <p>Q: <code>gem install xxx</code> 的时候遇到错误信息包含：“Error fetching data: Errno::ETIMEDOUT: Operation timed out - connect(2)”</p>
+            <p>A: 网络问题导致请求淘宝服务器被连接重置了，在遇到此类情况的时候，你可以尝试换一台机器或网络尝试安装，看是否还有同样的问题，以确定是淘宝镜像服务器的问题还是你的环境问题，如果你换了环境仍然有问题，请上 Ruby China 发帖求助。</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <div class="pull-right">
+          <a href="http://taobao.com" target="_blank"><img src="///rubygems-china.oss.aliyuncs.com/public/T1ogqgXfXeXXXXXXXX-168-42.png" style="width:80px;" /></a>
+        </div>
+        服务由 <a href="http://taobao.com" target="_blank">淘宝网</a> 提供, 如遇到问题请联系: <a href="mailto:huacnlee@gmail.com">huacnlee@gmail.com</a>
+      </div>
+    </footer>
+  </body>
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-27931865-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+</html>

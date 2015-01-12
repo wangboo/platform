@@ -1,0 +1,49 @@
+<div class="col-xs-8 col-sm-10 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+	<div class="jumbotron">
+		<div class="container">
+			<h3><%= @platform.name %>的版本集合</h3>
+			<p>到目前为止一共发布了<%= @versions.size %>个版本</p>
+			<p>				
+				<%= link_to "我要发布", new_version_path(@platform), class: "btn btn-primary btn-lg" %>
+			</p>
+		</div>
+
+	</div>
+
+	<div class="panel panel-info">
+		  <div class="panel-heading">
+				<h3 class="panel-title">历史版本集合</h3>
+		  </div>
+		  <div class="panel-body">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>编号</th>
+							<th>版本号</th>
+							<th>app版本号</th>
+							<th>diff</th>
+							<th>remove</th>
+							<th>flist</th>
+							<th>修改</th>
+							<th>时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% count = @versions.size %>
+						<%= content_tag_for(:tr, @versions) do |version| %>
+							<td><%= count %></td>
+							<td><a href="/app/res/bak/SXCQ/<%= version.version %>.apk"><%= version.version %></a></td>
+							<td><%= version.app_version %></td>
+							<td><%= link_to "差异", diff_version_path(version) %></td>
+							<td>(未完待续)</td>
+							<td><%= link_to "flist", flist_version_path(version) %></td>
+							<td><%= link_to "修改", edit_version_path(version) %></td>
+							<td><%= version.created_at.strftime "%Y-%m-%d %H:%m:%S" %></td>
+						<% count -= 1 %>
+						<% end %>
+					</tbody>
+				</table>
+		  </div>
+	</div>
+
+</div>
