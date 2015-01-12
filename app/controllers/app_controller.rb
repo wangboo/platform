@@ -154,17 +154,12 @@ def login
   resp_app_s account_id: account_id, sort_id: account.aid
 end
 
-<<<<<<< HEAD
-=======
-
 def verify
   Rails.logger.debug "params=#{params}"
   resp = ::AnyServer.verify params
   Rails.logger.debug "resp=#{resp}"
   return render json: resp
 end
-
-
 
 def verify_sign
   Rails.logger.debug "params=#{params}"
@@ -177,8 +172,6 @@ def uc_verify_sign
   return render json: resp
 end
 
-
->>>>>>> 833f4aad7b008cbeb5e43c400df3a893a2d85921
 # 用UC account创建一个账号
 def android_uc
   resp = U9Server.login params[:sid]
@@ -193,16 +186,6 @@ def android_uc
   end
   [user, account_id]
 end
-<<<<<<< HEAD
-def verify
-  Rails.logger.debug "params=#{params}"
-  resp = AnyServer.verify params
-  Rails.logger.debug "resp=#{resp}"
-  return render json: resp
-end
-=======
-
->>>>>>> 833f4aad7b008cbeb5e43c400df3a893a2d85921
 #   随机用户
 def random_user
   while(true)
