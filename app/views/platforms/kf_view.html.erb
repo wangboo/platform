@@ -1,0 +1,24 @@
+<div class="col-md-offset-2 col-md-8">
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading"> <h4><%= @platform.name %> 开服策略</h4></div>
+			<div class="panel-body">
+				<div class="col-md-12" style="margin: 10px 0 10px 0">
+					设置该平台推荐服务器(修改及生效)&nbsp;&nbsp;&nbsp;&nbsp;
+					<%= select_tag "kf", options_from_collection_for_select(@platform.servers, "id", "name"), selected: @platform.rmd_id%>
+				</div>
+				<div class="col-md-12" style="margin: 10px 0 10px 0">
+					<button id="update_all" class="btn btn-warning">如果可以，将该登陆服务器设置为所有平台推荐服务器</button>
+				</div>
+			</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	$("#kf").change(function() {
+		var kw_id = $("#kf:selected")
+		console.log(kw_id)
+	})
+})
+</script>

@@ -45,6 +45,5 @@ module Jiyu
     require "#{config.root}/app/models/any/any_pay.rb"
     require 'net/ssh'
     require 'net/scp'
-
   end
 end
