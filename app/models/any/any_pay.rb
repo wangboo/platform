@@ -44,22 +44,22 @@ class AnyPayServer
         data["result"] = "SUCCESS"
         infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: data}
         uri = "http://#{server_id}/jiyu/admin/tools/anysdk"
-        resp = HTTParty.post("http://jytest.tuziyouxi.com:8080/jiyu/admin/tools/anysdk", infos)
-        Rails.logger.debug("game server resp = #{resp}")
-        if resp=="ok"
+        resp = HTTParty.post("http://#{params[:server_id]}/jiyu/admin/tools/anysdk", infos)
+        Rails.logger.debug("game 1111 server resp = #{resp}")
+        if resp.to_s=="ok"
           data['add_money']=1
         else
           data['add_money']=0
         end
         data.delete("result")
         ChargeInfo.create data
-        if resp == "ok"
-            "ok"
+        if resp.to_s == "ok"
+           return "ok"
         else
-            "fail"
+            return "fail"
         end     
       else
-        "fail"
+        return "fail"
       end
     elsif charge_info.add_money == 0
         if sign == md5
@@ -67,20 +67,20 @@ class AnyPayServer
           data['result']="SUCCESS"
           infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: data}
           uri = "http://#{server_id}/jiyu/admin/tools/anysdk" 
-          resp = HTTParty.post("http://jytest.tuziyouxi.com:8080/jiyu/admin/tools/anysdk", infos)
-          Rails.logger.debug("game server resp = #{resp}")
+          resp = HTTParty.post("http://#{params[:server_id]}/jiyu/admin/tools/anysdk", infos)
+          Rails.logger.debug("game 22222 server resp = #{resp},resp.class=#{resp.class}")
           data.delete("result")
-          if resp=="ok"
-           # charge_info.add_money = 1
-            ChargeInfo.update("add_money",1)
-            "ok" 
+          if resp.to_s=="ok"
+            charge_info.add_money = 1
+            charge_info.save
+            return "ok" 
           end
-          "fail"
+          return "fail"
         else
-         "fail"
+         return "fail"
         end
     else
-      "ok"
+      return "ok"
     end    
   end
 
@@ -105,7 +105,7 @@ class AnyPayServer
         if sign == md5
           hash_data['result']="SUCCESS"
           infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
-          resp = HTTParty.post("http://jytest.tuziyouxi.com:8080/jiyu/admin/tools/ucsdk", infos)
+          resp = HTTParty.post("http://#{params[:server_id]}/jiyu/admin/tools/ucsdk", infos)
           if resp.to_s=="ok"
             # UcChargeInfo.create
             hash_data['add_money']=1
@@ -118,7 +118,7 @@ class AnyPayServer
           Rails.logger.debug "hash_data2222=#{hash_data}"
           hash_data.permit!
           UcChargeInfo.create hash_data
-          if resp == "ok"
+          if resp.to_s == "ok"
              return "ok"
           else
              return "fail"
@@ -130,13 +130,14 @@ class AnyPayServer
         if sign == md5
           hash_data['result']="SUCCESS"
             infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
-          resp = HTTParty.post("http://jytest.tuziyouxi.com:8080/jiyu/admin/tools/ucsdk", infos)
-          if resp=="ok"
+          resp = HTTParty.post("http://#{params[:server_id]}/jiyu/admin/tools/ucsdk", infos)
+          if resp.to_s=="ok"
             Rails.logger.debug "hash_data=#{hash_data}"
             hash_data.delete("result")
             hash_data.delete("controller")
             hash_data.delete("action")
-            UcChargeInfo.update("add_money",1)
+            charge_info.add_money = 1
+            charge_info.save
              return "ok"
           end
           return "fail"
