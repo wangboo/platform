@@ -2,7 +2,7 @@
 # 工具
 class ToolsController < ApplicationController
 	include ToolsHelper
-	before_action :tools_before_action
+	before_action :tools_before_action, except: [:web_console]
 
 	@@check_server_fields = %w(ssh_user ssh_pwd project_path mysql_user mysql_pwd mysql_database mysql_host)
 
@@ -172,6 +172,9 @@ class ToolsController < ApplicationController
 		end 
 		msg || "send_cmd to #{server.ip} and nothing return"
 	end 
+
+	def web_console
+	end
 
 end 
 

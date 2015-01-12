@@ -9,7 +9,6 @@ class PlatformsController < ApplicationController
       platform.save
       format.html{redirect_to platforms_path}
     end
-    
   end
 
   def show
@@ -28,6 +27,10 @@ class PlatformsController < ApplicationController
     # @platform.rmd_id = params[:platform][:rmd_id]
     @platform.update platform_params
     render action: :show
+  end
+
+  def kf_view
+    @platform = Platform.find(params[:platform_id])
   end
 
   def delete

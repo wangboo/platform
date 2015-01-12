@@ -42,6 +42,9 @@ gem 'puma'
 # gem 'net/ssh'
 gem 'net-scp'
 gem 'net-ssh'
+group :development do
+  gem 'web-console', '~> 2.0'
+end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

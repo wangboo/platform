@@ -82,7 +82,8 @@
 				<div class="container">
 					<h2><%= @platform.name %>&nbsp;&nbsp;&nbsp;&nbsp;一共有<%= @platform.servers.size %>台服务器</h2>					
 					<%= link_to "版本管理", version_path(@platform), class: "btn btn-info" %>
-					<%= link_to "管理工具", tools_path(@platform), class: "btn btn-primary" %>
+					<%= link_to "GM工具", tools_path(@platform), class: "btn btn-primary" %>
+					<%= link_to "开服工具", platform_kf_path(@platform), class: "btn btn-default" %>
 				</div>
 			</div><!-- jumbotron over -->
 			<table class="table table-bordered">

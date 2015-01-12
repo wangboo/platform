@@ -102,6 +102,7 @@ Rails.application.routes.draw do
   # 平台
   resources :platforms do
     resources :servers
+    get '/kf', action: :kf_view, as: "kf"
   end
 
   get "/platforms/:id/tools" => "tools#reward_to_user_view", as: "tools"
@@ -125,7 +126,7 @@ Rails.application.routes.draw do
   get "/ajax/server/info" => "servers#server_info", as: "ajax_server_info"
   # 删除verion中的一项
   get '/ajax/version/:id/del_diff' => "versions#del_diff_item", as: "ajax_version_del_diff_item"
-
-  get "/love" => "servers#love"
+  # 调试工具
+  get '/web-console' => "tools#web_console"
 
 end
