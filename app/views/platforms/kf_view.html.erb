@@ -5,20 +5,64 @@
 			<div class="panel-body">
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
 					设置该平台推荐服务器(修改及生效)&nbsp;&nbsp;&nbsp;&nbsp;
-					<%= select_tag "kf", options_from_collection_for_select(@platform.servers, "id", "name"), selected: @platform.rmd_id%>
+					<%= @platform.servers.collect do |s|
+						str = "<div class='col-md-12'><div class='col-md-4'>"
+						str << if s.id == @platform.rmd_id
+							%(<input type='radio' id='kf' name='kf' value='#{s.id}' checked> #{s.name})
+						else
+							"<input type='radio' id='kf' name='kf' value='#{s.id}'> #{s.name}"
+						end
+						str << "</div><div class='col-md-8'>"
+						#  0 可见&可用，1可见&不可用，2不可见&不可用
+						str << [
+							"<input type='radio' name='#{s.id}' value='0'>可见&nbsp;&nbsp;&nbsp;&nbsp;",
+							"<input type='radio' name='#{s.id}' value='1'>可见，不可进入(维护)&nbsp;&nbsp;&nbsp;&nbsp;",
+							"<input type='radio' name='#{s.id}' value='2'>不可见"
+						].each_with_index.collect{|a,i|if i==s.work_state then a.gsub(/>/, " checked>") else a end}.join
+						str << "</div></div>"
+					end.join.html_safe %>
+
 				</div>
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
-					<button id="update_all" class="btn btn-warning">如果可以，将该登陆服务器设置为所有平台推荐服务器</button>
+					<button id="update_rmd_all" class="btn btn-warning">如果可以，将该推荐服务器设置为所有平台推荐服务器</button>
+				</div>
+				<div class="col-md-12" style="margin: 10px 0 10px 0">
+					<button id="update_all" class="btn btn-danger">如果可以，将该平台下配置同步到所有平台</button>
 				</div>
 			</div>
 	</div>
 </div>
 
 <script type="text/javascript">
+function send(url, data) {
+	$.ajax({
+			type: "POST",
+			url: url,
+			beforeSend: function(xhr){
+				xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+				xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
+			},
+			data: JSON.stringify(data),
+		}).success(function(data){
+			alert(data.rst)
+		})
+}
 $(function() {
-	$("#kf").change(function() {
-		var kw_id = $("#kf:selected")
-		console.log(kw_id)
+	$("input[name='kf']").change(function() {
+		var kf_id = $("input[name='kf']:checked").val()
+		send("<%= platform_kf_path(@platform) %>", {kf_id: kf_id})
+	});
+	[<%= @platform.servers.map{|s|"'#{s.id}'"}.join(",").html_safe %>].forEach(function(id){
+		$("input[name='"+id+"']").change(function() {
+			var kf = $("input[name='"+id+"']:checked")
+			send("<%= platform_kf_ws_path(@platform) %>", {s_id: kf.attr('name'), ws: kf.val()})	
+		})
+	})
+	$("#update_rmd_all").click(function() {
+		send("<%= platform_kf_rmd_all_path(@platform) %>",{})
+	})
+	$("#update_all").click(function() {
+		send("<%= platform_kf_all_path(@platform) %>",{})
 	})
 })
 </script>

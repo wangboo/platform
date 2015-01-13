@@ -102,7 +102,14 @@ Rails.application.routes.draw do
   # 平台
   resources :platforms do
     resources :servers
-    get '/kf', action: :kf_view, as: "kf"
+    get '/kf', action: :kf_view, as: "kf_view"
+    post '/kf', action: :kf, as: "kf"
+    # 改变server_state
+    post '/kf_ws', action: :kf_ws, as: "kf_ws"
+    # 将推荐服务器设置为所有平台的推荐
+    post '/kf_rmd_all', action: :kf_all_rmd_the_same, as: "kf_rmd_all"
+    # 将该平台的所有配置设置为所有平台的配置
+    post '/kf_all', action: :kf_all_the_same, as: "kf_all"
   end
 
   get "/platforms/:id/tools" => "tools#reward_to_user_view", as: "tools"

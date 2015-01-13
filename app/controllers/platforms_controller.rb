@@ -31,6 +31,52 @@ class PlatformsController < ApplicationController
 
   def kf_view
     @platform = Platform.find(params[:platform_id])
+    # end
+  end
+
+  def kf
+    platform = Platform.find(params[:platform_id])
+    server = Server.find(params[:kf_id])
+    platform.rmd_id = server.id
+    platform.save
+    render json: {rst: "ok"}
+  end
+
+  # 改变服务器状态
+  def kf_ws
+    # platform = Platform.find(params[:platform_id])
+    server = Server.find(params[:s_id])
+    work_state = params[:ws].to_i
+    return render json: {rst: "work_state=#{work_state}不合法"} unless [0,1,2].include?(work_state)
+    server.work_state = work_state
+    server.save 
+    render json: {rst: "ok"}
+  end
+
+  # 将推荐服务器设置为所有平台的推荐
+  def kf_all_rmd_the_same
+    platform = Platform.find(params[:platform_id])
+    return render json: {rst: "该平台推荐服务器还未设置"} unless platform.rmd_id 
+    server = Server.find(platform.rmd_id)
+    # Rails.logger.debug "server = #{server.name}"
+    msg = []
+    Server.where(ip: server.ip, port: server.port).each do |s|
+      # Rails.logger.debug "set #{s.name} is rmd_id to platform #{s.platform.name}"
+      s.platform.rmd_id = s.id
+      s.work_state = server.work_state
+      s.platform.save
+      s.save
+      msg << "#{s.platform.name}"
+    end
+    render json: {rst: "#{msg.join(",")} => ok"}
+  end
+  # 将该平台的所有配置设置为所有平台的配置
+  def kf_all_the_same
+    platform = Platform.find(params[:platform_id])
+    platform.servers.each do |ps|
+      Server.where(ip: ps.ip, port: ps.port).update_all(work_state: ps.work_state)
+    end
+    kf_all_rmd_the_same
   end
 
   def delete
