@@ -27,32 +27,24 @@ class AppController < AppSideController
 
     # 子查询可用的服务器列表
     data = {}
-    data[:list] = if platform
-    # platform.servers[0..2].collect{|server|server.to_app_hash}
-    platform.available_servers.collect{|server|server.to_app_hash}
-  else
-    []
-  end
+    data[:list] = platform.available_servers.collect{|server|server.to_app_hash}
 
-  # Rails.logger.debug(server_user.last_login)
-  # 常用服务器列表
-  # Rails.logger.debug("server_user.last_login_ids=#{server_user.last_login_ids}")
-  # data[:last] = server_user.last_login_ids.collect{|id|Server.find(id).to_app_hash}
-  data[:last] = server_user.last_servers_data
-  # 推荐
-  unless server_user.has_login_his?
-    data[:rmd] = platform.rmd_id
+    # Rails.logger.debug(server_user.last_login)
+    # 常用服务器列表
+    data[:last] = server_user.last_servers_data
+    # 推荐
+    if data[:last].empty? and platform.rmd_id
+      data[:last] = Server.find(platform.rmd_id).to_app_hash
+      data[:rmd] = 0
+    end
+    # 白名单测试
+    # unless white_list.include? request.remote_ip
+    #   data[:list].each{|d|d[:state] = 1}
+    #   data[:last] = []
+    #   data[:rmd] = []
+    # end
+    resp_app_s data
   end
-  # 白名单测试
-  unless white_list.include? request.remote_ip
-    data[:list].each{|d|d[:state] = 1}
-    data[:last] = []
-    data[:rmd] = []
-  end
-
-  # data[:last] = Server.find(server_user.last_login_ids).collect{|server|server.to_app_hash}
-  resp_app_s data
-end
 
 # 记录手机登陆服务器
 # 入参id服务器id，username用户名

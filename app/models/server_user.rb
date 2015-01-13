@@ -34,11 +34,11 @@ class ServerUser
 
   # 最近登陆的服务器id集合
   def last_login_ids
-    last_login[0..2].collect{|item|item[0]}
+    last_login[0..2].map{|item|item[0]}
   end
 
   def last_servers_data
-    last_login_ids.collect{|id|Server.find(id)}.select{|s|s.visible?}.collect{|s|s.to_app_hash}
+    last_login_ids.map{|id|Server.find(id)}.select{|s|s.visible?}.map{|s|s.to_app_hash}
   end
 
 end
