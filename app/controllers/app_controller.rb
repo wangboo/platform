@@ -49,13 +49,12 @@ class AppController < AppSideController
 # 记录手机登陆服务器
 # 入参id服务器id，username用户名
 def server_login
-  # server_id = params[:id]
-  # username = params[:username]
-  # return resp_app_f '入参不正确' unless server_id and username
-  # user = ServerUser.where(username: username).first
-  # return resp_app_f "用户名#{username}不存在" unless user
-  # return resp_app_f "服务器#{server_id}不存在" unless Server.where(zone_id: server_id)
-  # user.update_last_login server_id
+  server_id, username = params[:id], params[:username]
+  return resp_app_f '入参不正确' unless server_id and username
+  user = ServerUser.where(username: username).first
+  return resp_app_f "用户名#{username}不存在" unless user
+  return resp_app_f "服务器#{server_id}不存在" unless Server.find(server_id)
+  user.update_last_login server_id
   resp_app_s
 end
 

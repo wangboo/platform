@@ -46,7 +46,7 @@ class Server
       port: port, 
       show: server_state.show, 
       state: work_state, 
-      id: self.zone_id, 
+      id: self.id.to_s, 
       desc: desc
     }
   end
