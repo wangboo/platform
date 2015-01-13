@@ -48,6 +48,19 @@ class ServersController < ApplicationController
     render json: rst
   end
 
+  def usersize
+    server = Server.find(params[:id])
+    url = "http://#{server.ip}:#{server.port}/jiyu/admin/master/cmd?pwd=w231520&cmd=usersize"
+    Rails.logger.debug "req = #{url}"
+    rst = HTTParty.get(url)
+    Rails.logger.debug("usersize : #{rst}, server = #{server.name}")
+    if rst.code == 200
+      render json: {ok: true, size: rst['size']}
+    else 
+      render json: {ok: false}
+    end
+  end
+
   # 报表服务
   # 用户区间
   def user_range

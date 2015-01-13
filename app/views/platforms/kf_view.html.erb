@@ -28,7 +28,7 @@
 								"<option value='#{ss.id}'>#{ss.name}</option>"
 							end
 						end.join.html_safe
-						str << "</select></div><div class='col-md-4'>服务器人数查询中。。。</div></div>"
+						str << "</select></div><div class='col-md-4' id='ren_#{s.id}'>服务器人数查询中。。。</div></div>"
 					end.join.html_safe %>
 					
 				</div>
@@ -43,7 +43,7 @@
 </div>
 
 <script type="text/javascript">
-function send(url, data) {
+function send(url, data, cb) {
 	$.ajax({
 			type: "POST",
 			url: url,
@@ -53,10 +53,26 @@ function send(url, data) {
 			},
 			data: JSON.stringify(data),
 		}).success(function(data){
-			alert(data.rst)
+			if(cb){
+				cb(data)
+			}else {
+				alert(data.rst)	
+			}
 		})
 }
 $(function() {
+	[<%= @platform.servers.map{|s|"'ren_#{s.id}'"}.join(",").html_safe %>].forEach(function(id){
+		var id = id.replace("ren_", "")
+		send("/server/"+id+"/usersize", {}, function(data) {
+			if(data.ok) {
+				$("#ren_"+id).text("服务器当前人数：" + data.size)
+			}else {
+				$("#ren_"+id).text("查询失败")
+			}
+			
+		})
+		
+	})
 	$("input[name='kf']").change(function() {
 		var kf_id = $("input[name='kf']:checked").val()
 		send("<%= platform_kf_path(@platform) %>", {kf_id: kf_id})

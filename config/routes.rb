@@ -136,6 +136,8 @@ Rails.application.routes.draw do
   # 删除verion中的一项
   get '/ajax/version/:id/del_diff' => "versions#del_diff_item", as: "ajax_version_del_diff_item"
   # 调试工具
-  get '/web-console' => "tools#web_console"
+  get '/web-console' => "tools#web_console" 
+  # 游戏玩家用户数
+  post '/server/:id/usersize' => "servers#usersize", as: "ajax_server_usersize"
 
 end
