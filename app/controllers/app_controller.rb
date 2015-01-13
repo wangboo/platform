@@ -15,6 +15,7 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
+    return resp_app_f "霸王别姬不删档测试将于1月15日10：00开启" if mask == 'ANDROID-QIHU'
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
