@@ -6,20 +6,29 @@
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
 					设置该平台推荐服务器(修改及生效)&nbsp;&nbsp;&nbsp;&nbsp;
 					<%= @platform.servers.collect do |s|
-						str = "<div class='col-md-12'><div class='col-md-4'>"
+						str = "<div class='col-md-12'><div class='col-md-3'>"
 						str << if s.id == @platform.rmd_id
 							%(<input type='radio' id='kf' name='kf' value='#{s.id}' checked> #{s.name})
 						else
 							"<input type='radio' id='kf' name='kf' value='#{s.id}'> #{s.name}"
 						end
-						str << "</div><div class='col-md-8'>"
+						str << "</div><div class='col-md-6'>"
 						#  0 可见&可用，1可见&不可用，2不可见&不可用
 						str << [
 							"<input type='radio' name='#{s.id}' value='0'>可见&nbsp;&nbsp;&nbsp;&nbsp;",
 							"<input type='radio' name='#{s.id}' value='1'>可见，不可进入(维护)&nbsp;&nbsp;&nbsp;&nbsp;",
 							"<input type='radio' name='#{s.id}' value='2'>不可见"
 						].each_with_index.collect{|a,i|if i==s.work_state then a.gsub(/>/, " checked>") else a end}.join
-						str << "</div></div>"
+						str << "</div><div class='col-md-3'>"
+						str << "<select id='server_state_#{s.id}'>"
+						str << @all_states.map do |ss|
+							if s.server_state.id == ss.id
+								"<option value='#{ss.id}' selected>#{ss.name}</option>"
+							else
+								"<option value='#{ss.id}'>#{ss.name}</option>"
+							end
+						end.join.html_safe
+						str << "</select></div></div>"
 					end.join.html_safe %>
 
 				</div>
@@ -57,12 +66,20 @@ $(function() {
 			var kf = $("input[name='"+id+"']:checked")
 			send("<%= platform_kf_ws_path(@platform) %>", {s_id: kf.attr('name'), ws: kf.val()})	
 		})
-	})
+	});
 	$("#update_rmd_all").click(function() {
 		send("<%= platform_kf_rmd_all_path(@platform) %>",{})
-	})
+	});
 	$("#update_all").click(function() {
 		send("<%= platform_kf_all_path(@platform) %>",{})
+	});
+	// 服务器server_state
+	[<%= @platform.servers.map{|s|"'server_state_#{s.id}'"}.join(",").html_safe %>].forEach(function(id){
+		$("#"+id).change(function(){
+			var state_id = $("#"+id+" option:checked").val()
+			var sid = id.replace("server_state_",'')
+			send("<%= platform_kf_ss_path(@platform) %>", {state_id: state_id, s_id: sid})
+		})
 	})
 })
 </script>

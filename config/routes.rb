@@ -106,6 +106,8 @@ Rails.application.routes.draw do
     post '/kf', action: :kf, as: "kf"
     # 改变server_state
     post '/kf_ws', action: :kf_ws, as: "kf_ws"
+    # 设置游戏server_state状态
+    post "kf_ss", action: :kf_server_state, as: "kf_ss"
     # 将推荐服务器设置为所有平台的推荐
     post '/kf_rmd_all', action: :kf_all_rmd_the_same, as: "kf_rmd_all"
     # 将该平台的所有配置设置为所有平台的配置

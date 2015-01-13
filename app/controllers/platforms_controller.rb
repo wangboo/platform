@@ -31,6 +31,7 @@ class PlatformsController < ApplicationController
 
   def kf_view
     @platform = Platform.find(params[:platform_id])
+    @all_states = ServerState.all
     # end
   end
 
@@ -39,6 +40,15 @@ class PlatformsController < ApplicationController
     server = Server.find(params[:kf_id])
     platform.rmd_id = server.id
     platform.save
+    render json: {rst: "ok"}
+  end
+
+  # 设置游戏server_state状态
+  def kf_server_state
+    server = Server.find(params[:s_id])
+    server_state = ServerState.find(params[:state_id])
+    server.server_state_id = server_state.id
+    server.save
     render json: {rst: "ok"}
   end
 
@@ -64,6 +74,7 @@ class PlatformsController < ApplicationController
       # Rails.logger.debug "set #{s.name} is rmd_id to platform #{s.platform.name}"
       s.platform.rmd_id = s.id
       s.work_state = server.work_state
+      s.server_state_id = server.server_state_id
       s.platform.save
       s.save
       msg << "#{s.platform.name}"
@@ -74,7 +85,7 @@ class PlatformsController < ApplicationController
   def kf_all_the_same
     platform = Platform.find(params[:platform_id])
     platform.servers.each do |ps|
-      Server.where(ip: ps.ip, port: ps.port).update_all(work_state: ps.work_state)
+      Server.where(ip: ps.ip, port: ps.port).update_all(work_state: ps.work_state, server_state_id: ps.server_state_id)
     end
     kf_all_rmd_the_same
   end
