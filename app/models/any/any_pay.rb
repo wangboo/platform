@@ -101,11 +101,13 @@ class AnyPayServer
     private_key = "a6fb07456626474f9ed441b455dc9922"
     md5 = Digest::MD5.hexdigest (md5_str+private_key)
     charge_info = UcChargeInfo.find_by orderId:hash_data["orderId"]
+    server_id=params["data"]["callbackInfo"].match(/serverId=(.*)$/)[1]
+    Rails.logger.debug "server_id = #{server_id}"
       if !charge_info
         if sign == md5
           hash_data['result']="SUCCESS"
           infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
-          resp = HTTParty.post("http://#{params[:server_id]}/jiyu/admin/tools/ucsdk", infos)
+          resp = HTTParty.post("http://#{server_id}/jiyu/admin/tools/ucsdk", infos)
           if resp.to_s=="ok"
             # UcChargeInfo.create
             hash_data['add_money']=1
@@ -130,7 +132,8 @@ class AnyPayServer
         if sign == md5
           hash_data['result']="SUCCESS"
             infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
-          resp = HTTParty.post("http://#{params[:server_id]}/jiyu/admin/tools/ucsdk", infos)
+	    Rails.logger.debug "infos = #{infos}"
+          resp = HTTParty.post("http://#{server_id}/jiyu/admin/tools/ucsdk", infos)
           if resp.to_s=="ok"
             Rails.logger.debug "hash_data=#{hash_data}"
             hash_data.delete("result")

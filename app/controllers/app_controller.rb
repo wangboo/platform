@@ -100,7 +100,10 @@ def validate_code
   return  resp_app_f "该兑奖码已经过期" if batch.end_time and batch.end_time < now
 
   # 该兑换批次的大区列表中不包含用户所在大区
-  return resp_app_f '您的平台不能使用该兑奖码' unless batch.all_platform and batch.platforms.any?{|p|p.mask == platform.mask}
+  unless batch.all_platform
+    return resp_app_f '您的平台不能使用该兑奖码' unless batch.platforms.any?{|p|p.mask == platform.mask}
+  end
+  #return resp_app_f '您的平台不能使用该兑奖码' unless batch.all_platform and batch.platforms.any?{|p|p.mask == platform.mask}
 
   active_code.server_user = user
   active_code.use_flag = true
