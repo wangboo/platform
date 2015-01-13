@@ -4,9 +4,9 @@
 		<div class="panel-heading"> <h4><%= @platform.name %> 开服策略</h4></div>
 			<div class="panel-body">
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
-					设置该平台推荐服务器(修改及生效)&nbsp;&nbsp;&nbsp;&nbsp;
+					设置该平台推荐服务器(修改及生效)&nbsp;&nbsp;&nbsp;&nbsp;在线用户数10s刷新一次
 					<%= @platform.servers.collect do |s|
-						str = "<div class='col-md-12'><div class='col-md-2'>"
+						str = "<div class='col-md-12' style='margin: 5px 0px 5px 0px'><div class='col-md-2'>"
 						str << if s.id == @platform.rmd_id
 							%(<input type='radio' id='kf' name='kf' value='#{s.id}' checked> #{s.name})
 						else
@@ -60,7 +60,7 @@ function send(url, data, cb) {
 			}
 		})
 }
-$(function() {
+function refreshUser() {
 	[<%= @platform.servers.map{|s|"'ren_#{s.id}'"}.join(",").html_safe %>].forEach(function(id){
 		var id = id.replace("ren_", "")
 		send("/server/"+id+"/usersize", {}, function(data) {
@@ -69,10 +69,16 @@ $(function() {
 			}else {
 				$("#ren_"+id).text("查询失败")
 			}
-			
 		})
-		
 	})
+}
+// 10s 刷新一次
+setInterval(refreshUser, 10000)
+
+$(function() {
+
+	refreshUser()
+
 	$("input[name='kf']").change(function() {
 		var kf_id = $("input[name='kf']:checked").val()
 		send("<%= platform_kf_path(@platform) %>", {kf_id: kf_id})
