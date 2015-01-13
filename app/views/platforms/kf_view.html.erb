@@ -1,4 +1,4 @@
-<div class="col-md-offset-2 col-md-8">
+<div class="col-md-offset-2 col-md-10 col-lg-8">
 	<div class="panel panel-default">
 		<!-- Default panel contents -->
 		<div class="panel-heading"> <h4><%= @platform.name %> 开服策略</h4></div>
@@ -6,20 +6,20 @@
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
 					设置该平台推荐服务器(修改及生效)&nbsp;&nbsp;&nbsp;&nbsp;
 					<%= @platform.servers.collect do |s|
-						str = "<div class='col-md-12'><div class='col-md-3'>"
+						str = "<div class='col-md-12'><div class='col-md-2'>"
 						str << if s.id == @platform.rmd_id
 							%(<input type='radio' id='kf' name='kf' value='#{s.id}' checked> #{s.name})
 						else
 							"<input type='radio' id='kf' name='kf' value='#{s.id}'> #{s.name}"
 						end
-						str << "</div><div class='col-md-6'>"
+						str << "</div><div class='col-md-5'>"
 						#  0 可见&可用，1可见&不可用，2不可见&不可用
 						str << [
 							"<input type='radio' name='#{s.id}' value='0'>可见&nbsp;&nbsp;&nbsp;&nbsp;",
 							"<input type='radio' name='#{s.id}' value='1'>可见，不可进入(维护)&nbsp;&nbsp;&nbsp;&nbsp;",
 							"<input type='radio' name='#{s.id}' value='2'>不可见"
 						].each_with_index.collect{|a,i|if i==s.work_state then a.gsub(/>/, " checked>") else a end}.join
-						str << "</div><div class='col-md-3'>"
+						str << "</div><div class='col-md-1'>"
 						str << "<select id='server_state_#{s.id}'>"
 						str << @all_states.map do |ss|
 							if s.server_state.id == ss.id
@@ -28,9 +28,9 @@
 								"<option value='#{ss.id}'>#{ss.name}</option>"
 							end
 						end.join.html_safe
-						str << "</select></div></div>"
+						str << "</select></div><div class='col-md-4'>服务器人数查询中。。。</div></div>"
 					end.join.html_safe %>
-
+					
 				</div>
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
 					<button id="update_rmd_all" class="btn btn-warning">如果可以，将该推荐服务器设置为所有平台推荐服务器</button>

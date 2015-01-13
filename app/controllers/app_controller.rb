@@ -34,7 +34,7 @@ class AppController < AppSideController
     data[:last] = server_user.last_servers_data
     # 推荐
     if data[:last].empty? and platform.rmd_id
-      data[:last] = Server.find(platform.rmd_id).to_app_hash
+      data[:last] = [Server.find(platform.rmd_id).to_app_hash]
       data[:rmd] = 0
     end
     # 白名单测试
