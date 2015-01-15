@@ -121,7 +121,7 @@ class AnyPayServer
           hash_data.permit!
           UcChargeInfo.create hash_data
           if resp.to_s == "ok"
-             return "ok"
+             return "SUCCESS"
           else
              return "fail"
           end
@@ -141,14 +141,14 @@ class AnyPayServer
             hash_data.delete("action")
             charge_info.add_money = 1
             charge_info.save
-             return "ok"
+             return "SUCCESS"
           end
           return "fail"
         else
           return "fail"
         end
       else
-        return "ok"
+        return "SUCCESS"
       end
   end
 end
