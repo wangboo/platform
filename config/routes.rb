@@ -121,6 +121,11 @@ Rails.application.routes.draw do
   get "/platforms/:id/tools/reward/to_condition" => "tools#reward_to_condition_view", as: "tools_reward_to_condition_view"
   # 管理平台  发奖品 指定条件
   post "/platforms/:id/tools/reward/to_condition" => "tools#reward_to_condition", as: "tools_reward_to_condition"
+
+  get "/platforms/:id/tools/reward/to_platform" => "tools#reward_to_platform_view", as: "tools_reward_to_platform_view"
+
+  post "/platforms/:id/tools/reward/to_platform" => "tools#reward_to_platform", as: "tools_reward_to_platform"
+
   # 公告
   get "/platforms/:id/tools/notice" => "tools#notice_view", as: "tools_notice_view"
   # 发公告

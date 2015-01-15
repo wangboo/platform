@@ -25,7 +25,7 @@ class ServerUser
     end
 		item[1] += 1
 		last_login.unshift(item)
-		save
+		self.save
   end
 
   def has_login_his?
