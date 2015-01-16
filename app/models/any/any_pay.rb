@@ -20,6 +20,9 @@ class AnyPayServer
   end
 
   def self.verify_sign params
+    if params["pay_status"].to_s != "1"
+      return "ok"
+    end
     sign, user_id, amount ,server_id= params["sign"], params["user_id"], params["amount"],params["server_id"]
     keys = [:order_id,:product_count,:amount,:pay_status,:pay_time,:user_id,:order_type,:game_user_id,:server_id,:product_name,:product_id,:private_data,:channel_number,:sign,:source]
     keys.delete :sign
@@ -88,6 +91,9 @@ class AnyPayServer
     Rails.logger.debug "prams = #{params}"
     # body= params['body']
     hash_data = params['data']
+    if hash_data["orderStatus"].to_s != "S"
+      return "SUCCESS"
+    end
     sign = params['sign']
     # hash_data=JSON.parse("#{data}")
     Rails.logger.debug "hash_data111 = #{hash_data}"
