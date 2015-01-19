@@ -245,4 +245,11 @@ def data
   resp_app_s platform.json_data
 end
 
+# 通过账号查询平台
+def find_platform
+  user = ServerUser.where(username: params[:username]).first
+  return resp_app_f "账号不存在" unless user 
+  resp_app_s mask: user.platform.mask
+end
+
 end
