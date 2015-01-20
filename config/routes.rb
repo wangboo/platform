@@ -44,8 +44,8 @@ Rails.application.routes.draw do
   # 查询大区信息
   get '/app/data'   => "app#data"
 
+  get '/app/find_platform' => 'app#find_platform'
   post '/app/find_platform' => 'app#find_platform'
-
 
   # web端服务
   # 服务器列表
