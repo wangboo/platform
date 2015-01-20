@@ -39,7 +39,7 @@ class AnyPayServer
     
     product_id = params['product_id']
     list = [10,30,50,100,200,500,1000,2000]
-    if amount.to_i != list.get(product_id -1)
+    if amount.to_i != list.get(product_id.to_i -1)
         data['add_money']=0
         ChargeInfo.create data
         return "ok"
