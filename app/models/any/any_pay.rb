@@ -37,6 +37,14 @@ class AnyPayServer
     #保存anysdk传过来的参数信息
     data = keys.reduce({}){|s,a|s[a]=params[a];s}
     
+    product_id = params['product_id']
+    list = [10,30,50,100,200,500,1000,2000]
+    if amount.to_i != list.get(product_id -1)
+        data['add_money']=0
+        ChargeInfo.create data
+        return "ok"
+    end
+
     Rails.logger.debug "sign=#{sign}"
     Rails.logger.debug "md5=#{md5}"
     charge_info = ChargeInfo.find_by order_id:params["order_id"]
@@ -95,7 +103,18 @@ class AnyPayServer
       return "SUCCESS"
     end
     sign = params['sign']
-    # hash_data=JSON.parse("#{data}")
+
+    product_id = params["data"]["callbackInfo"].match(/productId=(.*)$/)[1]
+    list = [10,30,50,100,200,500,1000,2000]
+    if amount.to_i != list.get(product_id.to_i -1)
+        hash_data['add_money']=0
+        hash_data.delete("controller")
+        hash_data.delete("action")
+        hash_data.permit!
+        UcChargeInfo.create hash_data
+        return "SUCCESS"
+    end
+
     Rails.logger.debug "hash_data111 = #{hash_data}"
       #hash_data={a=>b,c=>d}
     md5_str = ""
