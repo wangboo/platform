@@ -107,8 +107,11 @@ class AnyPayServer
     product_id = params["data"]["callbackInfo"].match(/productId=(.*)$/)[1]
     list = [10,30,50,100,200,500,1000,2000]
     if amount.to_i != list.get(product_id.to_i -1)
-        data['add_money']=0
-        ChargeInfo.create data
+        hash_data['add_money']=0
+        hash_data.delete("controller")
+        hash_data.delete("action")
+        hash_data.permit!
+        UcChargeInfo.create hash_data
         return "SUCCESS"
     end
 
