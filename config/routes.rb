@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   post "/app/verify" => "app#verify"
   post "/app/verify_pay" => "app#verify_sign"
   post "/app/uc_verify_pay" => "app#uc_verify_sign"
+
+  post "/app/haima_verify_pay" => "haima#verify_pay"
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
   
@@ -45,6 +47,8 @@ Rails.application.routes.draw do
   get '/app/data'   => "app#data"
 
   post '/app/find_platform' => 'app#find_platform'
+
+  get '/app/getOrderNo' => 'app#get_order_no'
 
 
   # web端服务
