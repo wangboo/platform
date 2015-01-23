@@ -20,6 +20,18 @@ class JiyuOrder
  		"http://#{server.ip}:#{server.port}/jiyu/admin/tools/haimaCharge"
  	end
 
+ 	def itools_url
+ 		server = Server.find(server_id)
+ 		"http://#{server.ip}:#{server.port}/jiyu/admin/tools/haimaCharge"
+ 	end
+
+ 	# 1-8 充值，9月卡
+ 	def validate_charge money
+		@hash ||= {'1' => 10, '2' => 30, '3' => 50, '4' => 100, '5' => 200, '6' => 500, '7' => 10000, 
+			'8' => 20000, '9' => 25}
+		@hash[product_id] == money
+	end
+
  	def self.prefix
  		"XY"
  	end

@@ -32,8 +32,16 @@ Rails.application.routes.draw do
   post "/app/verify" => "app#verify"
   post "/app/verify_pay" => "app#verify_sign"
   post "/app/uc_verify_pay" => "app#uc_verify_sign"
-
+  # 海马支付
   post "/app/haima_verify_pay" => "haima#verify_pay"
+  # itools 支付
+  post "/app/itools_verify_pay" => "itools#verify_pay"
+  # i4 支付
+  post "/app/i4_verify_pay" => "i4#verify_pay"
+  # 百度支付
+  get "/app/baidu_verify_pay" => "baidu#verify_pay"
+
+  post "/app/pp_verify_pay"   => 'pp#verify_pay'
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
   
