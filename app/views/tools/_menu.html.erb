@@ -12,6 +12,9 @@
   <li class="<%= "active" if action_name == 'reward_to_condition_view' %>">
   	<%= link_to "指定条件", tools_reward_to_condition_view_path(@platform) %>
   </li>
+  <li class="<%= "active" if action_name == 'reward_to_platform_view' %>">
+    <%= link_to "指定平台", tools_reward_to_platform_view_path(@platform) %>
+  </li>
   <li><h4>公告</h4></li>
   <li class="divider"></li>
   <li class="<%= "active" if action_name == 'notice_view' %>">

@@ -1,0 +1,73 @@
+
+<%= render partial: "menu" %>
+
+<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 
+	col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 ">
+
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">执行结果</h4>
+      </div>
+      <div class="modal-body">
+        <p id="rst_title"></p>
+        <p id="rst_message"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="panel panel-info">
+	  <div class="panel-heading">
+			<h3 class="panel-title">发放奖品</h3>
+	  </div>
+	  <div class="panel-body">
+			<form class="form-horizontal">
+				<%= base_form_field %>
+				<div class="form-group col-md-12">
+			    <label for="to_platform" class="col-md-3 control-label">平台</label>
+			    <div class="col-md-6">
+			      <%= select_tag("to_platform", options_from_collection_for_select(Platform.all, "id", "name"), class: "form-control") %>
+			    </div>
+			  </div>
+				<div class="text-center">
+					<button id="send" type="button" class="btn btn-primary">提交</button>
+				</div>
+			</form>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#damgerAlter").alert('close')
+	$("#send").bind('click', function(){
+		var params = {}
+		params.reward = $("#reward").val()
+		params.servers = $("#server option:selected").val()
+		params.title = $("#title").val()
+		params.message = $("#content").val()
+		params.name = $("#sender_name").val()
+		params.to_platform = $("#to_platform option:checked").val()
+		params.platform = "<%= @platform.id %>"
+		// console.log("to", params.to_platform)
+		$.ajax({
+			type: "POST",
+			url: "<%= tools_reward_to_platform_path(@platform) %>",
+			beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+			data: params,
+		}).success(function(data){
+			$("#rst_title").text(data.rst)
+			$("#rst_message").text(data.msgs)
+			$('#myModal').modal('show');
+		}).error(function(){
+			$("#result").text("网络请求失败")
+			$('#myModal').modal('show');
+		})
+	})
+})
+</script>

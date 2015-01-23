@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   post "/app/verify" => "app#verify"
   post "/app/verify_pay" => "app#verify_sign"
   post "/app/uc_verify_pay" => "app#uc_verify_sign"
+
+  post "/app/haima_verify_pay" => "haima#verify_pay"
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
   
@@ -43,6 +45,10 @@ Rails.application.routes.draw do
   get '/app/errlog' => "app#errlog"
   # 查询大区信息
   get '/app/data'   => "app#data"
+
+  post '/app/find_platform' => 'app#find_platform'
+
+  get '/app/getOrderNo' => 'app#get_order_no'
 
 
   # web端服务
@@ -121,6 +127,11 @@ Rails.application.routes.draw do
   get "/platforms/:id/tools/reward/to_condition" => "tools#reward_to_condition_view", as: "tools_reward_to_condition_view"
   # 管理平台  发奖品 指定条件
   post "/platforms/:id/tools/reward/to_condition" => "tools#reward_to_condition", as: "tools_reward_to_condition"
+
+  get "/platforms/:id/tools/reward/to_platform" => "tools#reward_to_platform_view", as: "tools_reward_to_platform_view"
+
+  post "/platforms/:id/tools/reward/to_platform" => "tools#reward_to_platform", as: "tools_reward_to_platform"
+
   # 公告
   get "/platforms/:id/tools/notice" => "tools#notice_view", as: "tools_notice_view"
   # 发公告

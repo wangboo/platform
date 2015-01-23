@@ -41,6 +41,27 @@ class ToolsController < ApplicationController
 	def reward_to_user_view 
 	end
 
+	def reward_to_platform_view
+	end
+
+	# 发奖给指定平台的人
+	def reward_to_platform
+		names = params[:names]
+		to_platform = Platform.find(params[:to_platform])
+		msgs = []
+		@servers.each do |s|
+			sync s
+			p = send_mail(s, type: "reward", prefix: to_platform.mask)
+			p.force_encoding("utf-8")
+			msgs << "#{s.name} - #{s.ip} - #{p}"
+		end
+		render json: {rst: "处理成功", msgs: msgs}
+	rescue => e
+		Rails.logger.error e.message
+		Rails.logger.error e.backtrace.join("\n")
+		render json: {rst: "发奖失败 #{e.message}", msgs: []}
+	end
+
 	# 给指定人发奖品
 	def reward_to_user
 		names = params[:names]
@@ -165,6 +186,7 @@ class ToolsController < ApplicationController
 
 	def send_cmd server, config
 	  dir = server.project_path
+	  Rails.logger.debug("server.ip = #{server.ip}, server.ssh_user = #{server.ssh_user}")
 	  msg = nil
 	  Net::SSH.start(server.ip, server.ssh_user, password: server.ssh_pwd) do |ssh|
 	  	Rails.logger.debug "ruby #{dir}script/command_center.rb \"#{config.to_query}\""
