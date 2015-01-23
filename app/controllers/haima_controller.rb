@@ -27,10 +27,10 @@ class HaimaController < AppSideController
 			return render json: "SUCCESS"
 		end
 		# 产品-钱 校验
-		# unless charge_hash[jiyu_order.product_id] * 100 == data['money']
-		# 	Rails.logger.debug "商品id和money不对应"
-		# 	return render json: "SUCCESS"
-		# end
+		unless jiyu_order.validate_charge(data['money'].to_i/100)
+			Rails.logger.debug "商品id和money不对应"
+			return render json: "SUCCESS"
+		end
 		Rails.logger.debug "post #{jiyu_order.haima_url}"
 		data['game_user_id'] = jiyu_order.role_id
 		data['product_id'] = jiyu_order.product_id
@@ -52,9 +52,6 @@ class HaimaController < AppSideController
 	end	
 
 	private
-	def charge_hash
-		{1 => 10, 2 => 30, 3 => 50, 4 => 100, 5 => 200, 6 => 500, 7 => 10000, 8 => 20000}
-	end
 	def api_key
 		"NEU0Qzg4OUMxNzI1NDBEN0RCODc3RDYwREM0OUQ1REUzMUI3OTA4Q09UZ3pOek0yTVRBeE9UTXpNekUwTkRZeE1Tc3hPRFF6TlRNME9UYzROVGN6TmpZd05qQTVOelEyTURZd016Z3lNRGt6TlRjMk16VTFNVGM9"
 	end

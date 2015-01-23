@@ -137,6 +137,12 @@ class AppController < AppSideController
     case params[:mask]
     when 'ANDROID-UC'
       user, account_id = android_uc
+    when 'IOS-ICE'
+      user, account_id = ios_i4
+    # when 'IOS-BAIDU'
+      # user, account_id = ios_baidu
+    when 'IOS-PP'
+      user, account_id = ios_pp  
     else
       # 默认用sid创建一个账号
       user = QicUser.find_or_create_by(username: params[:sid]) do |u|
@@ -184,6 +190,41 @@ class AppController < AppSideController
     end
     [user, account_id]
   end
+
+  def ios_i4
+    begin
+      body = HTTParty.post("https://pay.i4.cn/member_third.action", token: params[:token]).body
+      return [-1, 0] unless JSON.parse(body)['status'] == 0
+    rescue
+      return [-1, 0]
+    end
+    user = QicUser.find_or_create_by(username: params[:sid]) do |u|
+      u.password = params[:password]
+    end
+    [user, params[:sid]]
+  end
+  
+  # pp助手
+  def ios_pp
+    resp = PPController.login params[:token]
+    resp = JSON.parse resp
+    Rails.logger.debug "resp = #{resp}"
+    unless resp['state']['code'] == 1
+      resp_app_f "登陆失败"
+      return [-1, 0]
+    end
+    account_id = resp['data']['accountId']
+    user = QicUser.find_or_create_by(username: account_id) do |u|
+      u.username = account_id
+      u.password = params[:password]
+    end
+    [user, account_id]
+  end
+
+  # 百度登陆
+  # def ios_baidu
+  # end
+
   #   随机用户
   def random_user
     while(true)
@@ -255,7 +296,9 @@ class AppController < AppSideController
   # role_id, product_id, server_id, platform
   def get_order_no
     return resp_app_f "找不到对应的服务器" unless Server.where(id: params[:serverId]).exists?
-    resp_app_s order_id: JiyuOrder.generate_order(params[:userId], params[:productId], params[:serverId], params[:platform]).order_id
+    order_id = JiyuOrder.generate_order(params[:userId], params[:productId], params[:serverId], params[:platform]).order_id
+    Rails.logger.debug "create order #{order_id}"
+    resp_app_s order_id: order_id
   end
 
 end
