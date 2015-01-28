@@ -1,13 +1,6 @@
 # 前端App Controller
 class AppSideController < ActionController::Base
 
-	# after_action :resp_app_side
-
-	# def resp_app_side
-	# 	Rails.logger.debug 'resp_app_side'
-	# 	# render json: {hello: :world}
-	# end
-
 	# 应答app端成功
 	def resp_app_s *data
 		resp = resp_pkg

@@ -40,8 +40,13 @@ Rails.application.routes.draw do
   post "/app/i4_verify_pay" => "i4#verify_pay"
   # 百度支付
   get "/app/baidu_verify_pay" => "baidu#verify_pay"
-
+  # pp助手
   post "/app/pp_verify_pay"   => 'pp#verify_pay'
+  # xy 支付
+  post '/app/xy_verify_pay'  => 'xy#verify_pay'
+  # ky 支付
+  post '/app/ky_verify_pay'  =>  'ky#verify_pay'
+
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
   
@@ -144,6 +149,10 @@ Rails.application.routes.draw do
   get "/platforms/:id/tools/notice" => "tools#notice_view", as: "tools_notice_view"
   # 发公告
   post "/platforms/:id/tools/notice" => "tools#create_notice", as: "tools_create_notice"
+  # 查询公告
+  get "/platforms/:id/tools/notice_modify" => "tools#notice_modify_view", as: "tools_notice_modify_view"
+  # 公告
+  # post "/platforms/:id/tools/notice" => "tools#create_notice", as: "tools_create_notice"
   # 公告
   get "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg_view", as: "tools_scroll_msg_view"
   # 发公告

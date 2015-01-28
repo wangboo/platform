@@ -143,6 +143,8 @@ class AppController < AppSideController
       # user, account_id = ios_baidu
     when 'IOS-PP'
       user, account_id = ios_pp  
+    when 'IOS-KY'
+      user, account_id = ios_ky
     else
       # 默认用sid创建一个账号
       user = QicUser.find_or_create_by(username: params[:sid]) do |u|
@@ -206,7 +208,7 @@ class AppController < AppSideController
   
   # pp助手
   def ios_pp
-    resp = PPController.login params[:token]
+    resp = PpController.login params[:token]
     resp = JSON.parse resp
     Rails.logger.debug "resp = #{resp}"
     unless resp['state']['code'] == 1
@@ -216,6 +218,21 @@ class AppController < AppSideController
     account_id = resp['data']['accountId']
     user = QicUser.find_or_create_by(username: account_id) do |u|
       u.username = account_id
+      u.password = params[:password]
+    end
+    [user, account_id]
+  end
+
+  def ios_ky
+    resp = KyController.login params[:token]
+    resp = JSON.parse resp
+    Rails.logger.debug "resp = #{resp}"
+    unless resp['code'] == 0
+      resp_app_f "登陆失败"
+      return [-1, 0]
+    end
+    account_id = resp['data']['guid']
+    user = QicUser.find_or_create_by(username: account_id) do |u|
       u.password = params[:password]
     end
     [user, account_id]
