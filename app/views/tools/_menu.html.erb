@@ -1,4 +1,4 @@
-<div class="col-md-3">
+<div class="col-md-2">
 
 
 <ul class="nav nav-pills nav-stacked" role="tablist">
@@ -19,6 +19,9 @@
   <li class="divider"></li>
   <li class="<%= "active" if action_name == 'notice_view' %>">
     <%= link_to "发布公告", tools_notice_view_path(@platform) %>
+  </li>
+  <li class="<%= "active" if action_name == 'notice_modify_view' %>">
+    <%= link_to "修改公告", tools_notice_modify_view_path(@platform) %>
   </li>
   <li><h4>滚动消息</h4></li>
   <li class="divider"></li>

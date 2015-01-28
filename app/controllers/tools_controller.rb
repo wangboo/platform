@@ -133,6 +133,24 @@ class ToolsController < ApplicationController
 		render json: {rst: "发奖失败 #{e.message}", msgs: []}
 	end
 
+	def notice_modify_view
+		@query_server = if params[:query_server_id]
+			Rails.logger.debug "params[:query_server_id] = #{params[:query_server_id]}"
+			Server.find(params[:query_server_id])
+		else
+			@servers.first
+		end
+		Rails.logger.debug "@query_server = #{@query_server}"
+		@data = HTTParty.get(@query_server.query_notice_url).body
+		@data = JSON.parse @data
+	rescue
+		@data = []
+	end
+
+	def notice_modify
+		
+	end
+
 	def scroll_msg_view
 	end
 

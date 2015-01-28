@@ -1,0 +1,75 @@
+<%= render partial: "menu" %>
+<div class="col-md-10">
+	<div class="lab"></div>
+	<div class="panel panel-default">
+		  <div class="panel-heading">
+				<h3 class="panel-title">
+					<% @servers.each do |s| 
+						if @query_server.id == s.id %>
+							<a href="<%= tools_notice_modify_view_path(@platform) %>?query_server_id=<%= s.id %>" class="btn btn-info active"><%= s.name %></a>
+						<% else %>
+							<a href="<%= tools_notice_modify_view_path(@platform) %>?query_server_id=<%= s.id %>" class="btn btn-default"><%= s.name %></a>
+					<% end;end %>
+				</h3>
+		  </div>
+		  <div class="panel-body">
+		  <table class='table'>
+		  	<tr>
+		  		<td width="50">排序</td>
+		  		<td width="100">标题</td>
+		  		<td width="150">活动范围</td>
+		  		<td width="100">开始时间</td>
+		  		<td width="100">结束时间</td>
+		  		<td>内容(请编辑好复制到此)</td>
+		  		<td>修改</td>
+		  		<td>删除</td>
+		  	</tr>
+		  	<% @data.each_with_index do |d, i| %>
+		  	<tr>
+		  		<td><input id="noticeId_<%=i%>" value="<%= d['noticeId']%>" style="width: 50px"></td>
+					<td><textarea id="title_<%=i%>" style="width: 150px"><%= d['title'] %></textarea></td>
+					<td><textarea id="range_<%=i%>" style="width: 100px"><%= d['range'] %></textarea></td>
+					<td><textarea id="beginDate_<%=i%>" style="width: 100px"><%= Time.at(d['beginDate'].to_i/1000).strftime("%Y-%m-%d %H:%M:%S")%></textarea></td>
+					<td><textarea id="endDate_<%=i%>" style="width: 100px"><%= Time.at(d['endDate'].to_i/1000).strftime("%Y-%m-%d %H:%M:%S") %></textarea></td>
+					<td><textarea id="details_<%=i%>" style="width: 300px,height: 100px"><%= d['details'] %></textarea></td>
+					<td><button class="btn btn-info" id="modify_<%=i%>" index="<%=i%>">修改</a></td>
+					<td><button class="btn btn-danger" index="<%=i%>">删除</a></td>
+				</tr>
+			<% end %>
+			</table>
+		  </div>
+	</div>
+</div>
+<script type="text/javascript">
+var sid = "<%= @query_server.id %>";
+var post = function(url, data) {
+	$.ajax({
+			type: "POST",
+			url: url,
+			beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+			data: JSON.stringify(data),
+		}).success(function(data){
+			alter(data.msg)
+		}).error(function(){
+			alter("网络传输失败")
+		})
+};
+
+([<%= @data.size.times.map{|a|"'#{a}'"}.join(",").html_safe %>]).forEach(function(i) {
+	$("#modify_"+i).click(function() {
+		console.log("i = " + i)
+		var data = {}
+		// var index = $("#modify_"+i).attr("index")
+		data.noticeId = $("#noticeId_"+i).val()
+		data.title = $("#title_"+i).text()
+		data.range = $("#range_"+i).text()
+		data.beginDate = $("#beginDate_"+i).text()
+		data.endDate = $("#endDate_"+i).text()
+		data.details = $("#details_"+i).text()
+		console.log("data = ", data)
+	})	
+
+
+})
+
+</script>
