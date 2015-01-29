@@ -59,10 +59,9 @@ Rails.application.routes.draw do
   # 查询大区信息
   get '/app/data'   => "app#data"
 
-  post '/app/find_platform' => 'app#find_platform'
+  post '/app/find_platform/:username' => 'app#find_platform'
 
   get '/app/getOrderNo' => 'app#get_order_no'
-
 
   # web端服务
   # 服务器列表
