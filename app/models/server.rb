@@ -39,6 +39,10 @@ class Server
     work_state == 0 or work_state == 1
   end
 
+  def query_notice_url
+    "http://#{ip}:#{port}/jiyu/admin/tools/queryNotice"
+  end
+
   def to_app_hash
     {
       name: name, 
