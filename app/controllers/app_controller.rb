@@ -5,11 +5,7 @@ class AppController < AppSideController
   end
 
   def un_block_list
-<<<<<<< HEAD
-    ['ANDROID-MZW', 'ANDROID-HUAWEI']
-=======
     ['ANDROID-HUAWEI','ANDROID-MZW']
->>>>>>> b85b2744c71af5884c2726f55cda1694fd5fd05c
   end
   # 服务器列表
   # 入参 mask平台标记，username用户名
@@ -22,12 +18,8 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-<<<<<<< HEAD
     #return resp_app_f "霸王别姬将于1月27日1:00-2:00维护" if true 
     #return resp_app_f "霸王别姬将于1月27日1:00-2:00维护" unless un_block_list.include? mask
-=======
-    #return resp_app_f "霸王别姬服务器于17：00-18：00进行维护。" if true
->>>>>>> b85b2744c71af5884c2726f55cda1694fd5fd05c
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
