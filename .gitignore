@@ -23,3 +23,4 @@ Gemfile.lock
 vendor
 vender
 /lib/haima/ob/*
+/lib/haima/demo
