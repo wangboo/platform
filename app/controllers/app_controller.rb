@@ -119,11 +119,12 @@ class AppController < AppSideController
 
   # 登陆
   def login
+    Rails.logger.debug "params ===#{params}"
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
     mac, device, version = (params[:device_info] or "0;0;0").split(";")
     # 平台统计账号
-    account = Account.find_or_create_by(account_id: params[:sid], channel_id: platform.channel_id) do |a|
+    account = Account.find_or_create_by(account_id: params[:uid], channel_id: platform.channel_id) do |a|
       a.channel_name  = platform.channel_name
       a.platform      = platform.platform
       a.vers          = platform.vers
@@ -134,17 +135,20 @@ class AppController < AppSideController
     end
     account.last_time = Time.now
     account.save
+    Rails.logger.debug "mask=#{params[:mask]}"
     case params[:mask]
     when 'ANDROID-UC'
       user, account_id = android_uc
     when 'IOS-ICE'
       user, account_id = ios_i4
-    # when 'IOS-BAIDU'
+      # when 'IOS-BAIDU'
       # user, account_id = ios_baidu
     when 'IOS-PP'
-      user, account_id = ios_pp  
+      user, account_id = ios_pp
     when 'IOS-KY'
       user, account_id = ios_ky
+    when 'GB'
+      user,account_id = game_begin
     else
       # 默认用sid创建一个账号
       user = QicUser.find_or_create_by(username: params[:sid]) do |u|
@@ -193,6 +197,25 @@ class AppController < AppSideController
     [user, account_id]
   end
 
+  def game_begin
+    begin
+      body = GameBeginController.login params
+      unless JSON.parse(body)['Result'].to_i == 1
+        resp_app_f "登陆失败"
+        return [-1, 0] 
+      end  
+    rescue
+      resp_app_f "登陆失败"
+      return [-1, 0]
+    end
+    Rails.logger.debug "params username=#{params[:uid]}"
+    user = QicUser.find_or_create_by(username: params[:uid]) do |u|
+      u.username= params[:uid]
+      # u.password = params[:password]
+    end
+    [user, params[:uid]]
+  end
+
   def ios_i4
     begin
       body = HTTParty.post("https://pay.i4.cn/member_third.action", token: params[:token]).body
@@ -205,7 +228,7 @@ class AppController < AppSideController
     end
     [user, params[:sid]]
   end
-  
+
   # pp助手
   def ios_pp
     resp = PpController.login params[:token]
@@ -306,7 +329,7 @@ class AppController < AppSideController
   # 通过账号查询平台
   def find_platform
     user = ServerUser.where(username: params[:username]).first
-    return resp_app_f "账号不存在" unless user 
+    return resp_app_f "账号不存在" unless user
     resp_app_s mask: user.platform.mask
   end
 
