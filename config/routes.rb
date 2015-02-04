@@ -47,6 +47,8 @@ Rails.application.routes.draw do
   # ky 支付
   post '/app/ky_verify_pay'  =>  'ky#verify_pay'
 
+  get '/app/gb_verify_pay' => 'game_begin#verify_pay'
+
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
   
