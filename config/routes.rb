@@ -153,7 +153,7 @@ Rails.application.routes.draw do
   # 查询公告
   get "/platforms/:id/tools/notice_modify" => "tools#notice_modify_view", as: "tools_notice_modify_view"
   # 公告
-  # post "/platforms/:id/tools/notice" => "tools#create_notice", as: "tools_create_notice"
+  post "/platforms/:id/tools/notice_modify" => "tools#notice_modify", as: "tools_notice_modify"
   # 公告
   get "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg_view", as: "tools_scroll_msg_view"
   # 发公告
