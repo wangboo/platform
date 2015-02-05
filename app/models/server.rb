@@ -43,6 +43,10 @@ class Server
     "http://#{ip}:#{port}/jiyu/admin/tools/queryNotice"
   end
 
+  def update_notice_url
+    "http://#{ip}:#{port}/jiyu/admin/tools/modifyNotice"
+  end
+
   def to_app_hash
     {
       name: name, 

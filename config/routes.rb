@@ -61,10 +61,9 @@ Rails.application.routes.draw do
   # 查询大区信息
   get '/app/data'   => "app#data"
 
-  post '/app/find_platform' => 'app#find_platform'
+  post '/app/find_platform/:username' => 'app#find_platform'
 
   get '/app/getOrderNo' => 'app#get_order_no'
-
 
   # web端服务
   # 服务器列表
@@ -154,7 +153,7 @@ Rails.application.routes.draw do
   # 查询公告
   get "/platforms/:id/tools/notice_modify" => "tools#notice_modify_view", as: "tools_notice_modify_view"
   # 公告
-  # post "/platforms/:id/tools/notice" => "tools#create_notice", as: "tools_create_notice"
+  post "/platforms/:id/tools/notice_modify" => "tools#notice_modify", as: "tools_notice_modify"
   # 公告
   get "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg_view", as: "tools_scroll_msg_view"
   # 发公告
