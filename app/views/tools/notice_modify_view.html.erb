@@ -30,7 +30,7 @@
 		  		<input type="hidden" value="<%= d['noticeId'] %>" id="noticeId_<%=i%>">
 		  		<td><input id="sort_<%=i%>" value="<%= d['sort']%>" style="width: 50px"></td>
 					<td><textarea id="title_<%=i%>" style="width: 150px"><%= d['title'] %></textarea></td>
-					<td><textarea id="valid_<%=i%>" style="width: 150px"><%= d['isValid'] %></textarea></td>
+					<td><textarea id="valid_<%=i%>" style="width: 50px"><%= d['isValid'] %></textarea></td>
 					<td><textarea id="range_<%=i%>" style="width: 100px"><%= d['range'] %></textarea></td>
 					<td><textarea id="beginDate_<%=i%>" style="width: 100px"><%= Time.at(d['beginDate'].to_i/1000).strftime("%Y-%m-%d %H:%M:%S")%></textarea></td>
 					<td><textarea id="endDate_<%=i%>" style="width: 100px"><%= Time.at(d['endDate'].to_i/1000).strftime("%Y-%m-%d %H:%M:%S") %></textarea></td>
