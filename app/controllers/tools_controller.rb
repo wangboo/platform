@@ -156,6 +156,9 @@ class ToolsController < ApplicationController
 		return render json: {msg: "结束时间格式不对"} unless params[:endDate].match(/^\d{4}\-\d\d\-\d\d \d\d:\d\d:\d\d$/)
 		data[:beginDate] 	= DateTime.strptime(data[:beginDate], "%Y-%m-%d %H:%M:%S").to_time.to_i * 1000
 		data[:endDate] 		= DateTime.strptime(data[:endDate], "%Y-%m-%d %H:%M:%S").to_time.to_i * 1000
+		data[:title] = CGI::escape data[:title]
+		data[:range] = CGI::escape data[:range]
+		data[:details] = CGI::escape data[:details]
 		# logger.debug "#{server.update_notice_url} data = #{data}"
 		resp = HTTParty.post(server.update_notice_url, body: data).body
 		render json: {msg: "ok"}
