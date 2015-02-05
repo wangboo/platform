@@ -150,12 +150,15 @@ class ToolsController < ApplicationController
 	# 提交公告改动
 	def notice_modify
 		server = Server.find(params[:sid])
-		data = params.permit(:noticeId, :sort, :range, :title, :details, :beginDate, :endDate)
+		data = params.permit(:noticeId, :sort, :range, :title, :details, :beginDate, :endDate, :isValid)
 		logger.debug "before data = #{data} #{params[:beginDate].match(/^\d{4}\-\d\d\-\d\d \d\d:\d\d:\d\d$/)} -- "
 		return render json: {msg: "开始时间格式不对"} unless params[:beginDate].match(/^\d{4}\-\d\d\-\d\d \d\d:\d\d:\d\d$/)
 		return render json: {msg: "结束时间格式不对"} unless params[:endDate].match(/^\d{4}\-\d\d\-\d\d \d\d:\d\d:\d\d$/)
-		data[:beginDate] 	= DateTime.strptime(data[:beginDate], "%Y-%m-%d %H:%M:%S").to_time.to_i * 1000
-		data[:endDate] 		= DateTime.strptime(data[:endDate], "%Y-%m-%d %H:%M:%S").to_time.to_i * 1000
+		data[:beginDate] 	= DateTime.strptime(data[:beginDate], "%Y-%m-%d %H:%M:%S").to_time.to_i * 1000 - 8.hours.to_i * 1000
+		data[:endDate] 		= DateTime.strptime(data[:endDate], "%Y-%m-%d %H:%M:%S").to_time.to_i * 1000 - 8.hours.to_i * 1000
+		data[:title] = CGI::escape data[:title]
+		data[:range] = CGI::escape data[:range]
+		data[:details] = CGI::escape data[:details]
 		# logger.debug "#{server.update_notice_url} data = #{data}"
 		resp = HTTParty.post(server.update_notice_url, body: data).body
 		render json: {msg: "ok"}
