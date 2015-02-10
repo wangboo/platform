@@ -17,6 +17,7 @@
 		  	<tr>
 		  		<td width="50">排序</td>
 		  		<td width="100">标题</td>
+		  		<td width="100">可用为1</td>
 		  		<td width="150">活动范围</td>
 		  		<td width="100">开始时间</td>
 		  		<td width="100">结束时间</td>
@@ -26,8 +27,10 @@
 		  	</tr>
 		  	<% @data.each_with_index do |d, i| %>
 		  	<tr>
-		  		<td><input id="noticeId_<%=i%>" value="<%= d['noticeId']%>" style="width: 50px"></td>
+		  		<input type="hidden" value="<%= d['noticeId'] %>" id="noticeId_<%=i%>">
+		  		<td><input id="sort_<%=i%>" value="<%= d['sort']%>" style="width: 50px"></td>
 					<td><textarea id="title_<%=i%>" style="width: 150px"><%= d['title'] %></textarea></td>
+					<td><textarea id="valid_<%=i%>" style="width: 50px"><%= d['isValid'] %></textarea></td>
 					<td><textarea id="range_<%=i%>" style="width: 100px"><%= d['range'] %></textarea></td>
 					<td><textarea id="beginDate_<%=i%>" style="width: 100px"><%= Time.at(d['beginDate'].to_i/1000).strftime("%Y-%m-%d %H:%M:%S")%></textarea></td>
 					<td><textarea id="endDate_<%=i%>" style="width: 100px"><%= Time.at(d['endDate'].to_i/1000).strftime("%Y-%m-%d %H:%M:%S") %></textarea></td>
@@ -47,11 +50,12 @@ var post = function(url, data) {
 			type: "POST",
 			url: url,
 			beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-			data: JSON.stringify(data),
+			data: data,
 		}).success(function(data){
-			alter(data.msg)
+			console.log("data = ", data)
+			alert(data.msg)
 		}).error(function(){
-			alter("网络传输失败")
+			alert("网络传输失败")
 		})
 };
 
@@ -61,12 +65,16 @@ var post = function(url, data) {
 		var data = {}
 		// var index = $("#modify_"+i).attr("index")
 		data.noticeId = $("#noticeId_"+i).val()
-		data.title = $("#title_"+i).text()
-		data.range = $("#range_"+i).text()
-		data.beginDate = $("#beginDate_"+i).text()
-		data.endDate = $("#endDate_"+i).text()
-		data.details = $("#details_"+i).text()
+		data.sort = $("#sort_"+i).val()
+		data.title = $("#title_"+i).val()
+		data.range = $("#range_"+i).val()
+		data.beginDate = $("#beginDate_"+i).val()
+		data.endDate = $("#endDate_"+i).val()
+		data.details = $("#details_"+i).val()
+		data.isValid = $("#valid_"+i).val()
+		data.sid = sid
 		console.log("data = ", data)
+		post("<%= tools_notice_modify_path(@platform) %>", data)
 	})	
 
 
