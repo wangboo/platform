@@ -50,6 +50,7 @@ class GameBeginController < AppSideController
 		data = keys.reduce({}){|s,a|s[a]=params[a];s}
 		md5 = md5_digest GB_GAME_PAY_KEY,md5_str
 		charge_info = GbChargeInfo.find_by OrderId:params["OrderId"]
+		Rails.logger.debug "data=#{data}"
 		if !charge_info
 			if md5.to_s == params['Sign'].to_s
 				#调游戏后台服务器
