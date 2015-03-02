@@ -85,7 +85,7 @@ class PlatformsController < ApplicationController
   def kf_all_the_same
     platform = Platform.find(params[:platform_id])
     platform.servers.each do |ps|
-      Server.where(ip: ps.ip, port: ps.port).update_all(work_state: ps.work_state, server_state_id: ps.server_state_id)
+      Server.where(ip: ps.ip, port: ps.port).update_all(work_state: ps.work_state, server_state_id: ps.server_state_id, zone_id: ps.zone_id)
     end
     kf_all_rmd_the_same
   end
