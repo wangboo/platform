@@ -75,6 +75,7 @@ class PlatformsController < ApplicationController
       s.platform.rmd_id = s.id
       s.work_state = server.work_state
       s.server_state_id = server.server_state_id
+      s.zone_id = server.zone_id
       s.platform.save
       s.save
       msg << "#{s.platform.name}"
