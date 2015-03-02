@@ -21,6 +21,8 @@ class Server
   field :mysql_pwd
   field :mysql_host
   field :mysql_database
+  # 内网网卡ip
+  field :local_ip
   # 隶属于平台
   belongs_to :platform
   # 推荐
@@ -47,6 +49,10 @@ class Server
     "http://#{ip}:#{port}/jiyu/admin/tools/modifyNotice"
   end
 
+  def ar_option 
+    {adapter: "mysql2", host: local_ip, username: mysql_user, password: mysql_pwd, database: mysql_database}
+  end
+
   def to_app_hash
     {
       name: name, 
@@ -55,7 +61,8 @@ class Server
       show: server_state.show, 
       state: work_state, 
       id: self.id.to_s, 
-      desc: desc
+      desc: desc,
+      zone_id: zone_id
     }
   end
 
