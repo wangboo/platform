@@ -121,7 +121,9 @@ Rails.application.routes.draw do
   resources :month_rewards
   # 平台
   resources :platforms do
-    resources :servers
+    resources :servers do 
+      get '/charge', action: :charge_info, as: "charge_info"
+    end
     get '/kf', action: :kf_view, as: "kf_view"
     post '/kf', action: :kf, as: "kf"
     # 改变server_state

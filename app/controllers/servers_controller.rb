@@ -29,7 +29,7 @@ class ServersController < ApplicationController
 
   def server_params 
     params.require("server").permit(:name, :desc, :ip, :port, :platform_id, :server_state_id, :work_state, :zone_id,
-      :ssh_user, :ssh_pwd, :project_path, :mysql_user, :mysql_pwd, :mysql_database, :mysql_host)
+      :ssh_user, :ssh_pwd, :project_path, :mysql_user, :mysql_pwd, :mysql_database, :mysql_host, :local_ip)
   end
 
   # 服务器在线人数, json请求
@@ -59,6 +59,11 @@ class ServersController < ApplicationController
     else 
       render json: {ok: false}
     end
+  end
+
+  def charge_info
+    @server = Server.find(params[:server_id])
+    
   end
 
   # 报表服务

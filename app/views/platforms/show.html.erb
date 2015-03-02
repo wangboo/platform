@@ -94,6 +94,7 @@
 						<th>端口</th>
 						<th>工作状态</th>
 						<th>显示状态</th>
+						<th>充值统计</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -103,6 +104,7 @@
 					<td><%= server.port %></td>
 					<td><%= work_state_name server %></td>
 					<td><%= server.server_state.name %></td>
+					<td><%= link_to "点我", platform_server_charge_info_path(@platform, server) %></td>
 					<% end %>
 				</tbody>
 			</table>

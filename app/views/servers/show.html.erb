@@ -36,6 +36,12 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="control-label col-md-2" for="update_local_ip">局域网ip</label>
+							<div class="col-md-10">
+								<input class="form-control" id="update_local_ip" name="server[local_ip]" value="<%= @server.local_ip %>">
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="control-label col-md-2" for="update_port">端口</label>
 							<div class="col-md-10">
 								<input class="form-control" id="update_port" name="server[port]" value="<%= @server.port %>">
