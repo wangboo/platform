@@ -38,21 +38,12 @@ class AnyPayServer
     data = keys.reduce({}){|s,a|s[a]=params[a];s}
     
     product_id = params['product_id']
-<<<<<<< HEAD
-    #list = [10,30,50,100,200,500,1000,2000]
-    #if amount.to_i != list[product_id.to_i -1]
-    #    data['add_money']=0
-    #    ChargeInfo.create data
-    #    return "ok"
-    #end
-=======
-    list = [10,30,50,100,200,500,1000,2000]
+    list = [10,30,50,100,200,500,1000,2000,25]
     if amount.to_i != list[product_id.to_i -1]
         data['add_money']=0
         ChargeInfo.create data
         return "ok"
     end
->>>>>>> b85b2744c71af5884c2726f55cda1694fd5fd05c
 
     Rails.logger.debug "sign=#{sign}"
     Rails.logger.debug "md5=#{md5}"
@@ -114,17 +105,7 @@ class AnyPayServer
     sign = params['sign']
 
     product_id = params["data"]["callbackInfo"].match(/ProductId=(.*)$/)[1]
-    list = [10,30,50,100,200,500,1000,2000]
-<<<<<<< HEAD
-    #if amount.to_i != list[product_id.to_i -1]
-    #    hash_data['add_money']=0
-    #    hash_data.delete("controller")
-    #    hash_data.delete("action")
-    #    hash_data.permit!
-    #    UcChargeInfo.create hash_data
-    #    return "SUCCESS"
-    #end
-=======
+    list = [10,30,50,100,200,500,1000,2000,25]
     if amount.to_i != list[product_id.to_i -1]
         hash_data['add_money']=0
         hash_data.delete("controller")
@@ -133,7 +114,6 @@ class AnyPayServer
         UcChargeInfo.create hash_data
         return "SUCCESS"
     end
->>>>>>> b85b2744c71af5884c2726f55cda1694fd5fd05c
 
     Rails.logger.debug "hash_data111 = #{hash_data}"
       #hash_data={a=>b,c=>d}
