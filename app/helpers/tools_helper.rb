@@ -56,6 +56,7 @@ module ToolsHelper
 		fields = [
 			['title', '公告标题', '公告标题'],
 			['range', '活动范围', '公告显示活动范围'],
+			['sort', '排序值', '排序越大显示在越前面']
 		]
 		form_field_builder fields
 	end
