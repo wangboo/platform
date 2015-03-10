@@ -159,7 +159,8 @@ class ToolsController < ApplicationController
 		data[:title] = CGI::escape data[:title]
 		data[:range] = CGI::escape data[:range]
 		data[:details] = CGI::escape data[:details]
-		# logger.debug "#{server.update_notice_url} data = #{data}"
+		data[:sort] = data[:sort].to_i 
+		logger.debug "#{server.update_notice_url} data = #{data}"
 		resp = HTTParty.post(server.update_notice_url, body: data).body
 		render json: {msg: "ok"}
 	rescue => e 
