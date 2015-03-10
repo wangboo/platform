@@ -74,4 +74,8 @@ class Server
     "http://#{ip}:#{port}/jiyu/admin/master/dailyChargeInfo"
   end
 
+  def charge_info_user_url
+    "http://#{ip}:#{port}/jiyu/admin/master/userChargeInfo"
+  end
+
 end

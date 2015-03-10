@@ -116,10 +116,18 @@ class ServersController < ApplicationController
 
   def charge_info
     @server = Server.find(params[:server_id])
-    logger.debug "url = #{@server.daily_charge_info_url}"
+    # logger.debug "url = #{@server.daily_charge_info_url}"
     @info = HTTParty.post(@server.daily_charge_info_url).body
     @info = JSON.parse(@info)
     @info['sum'] = @info['daily'].reduce(0){|s,a|s+=a['totle']}
+  end
+
+  def charge_info_user
+    @server = Server.find(params[:server_id])
+    @info = HTTParty.post(@server.charge_info_user_url, body: {userId: params[:user_id]}).body
+    @info = JSON.parse(@info)
+    logger.debug "@info = #{@info}"
+    @name = params[:name]
   end
 
 end
