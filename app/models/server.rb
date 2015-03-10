@@ -70,4 +70,8 @@ class Server
     {mysql_user: mysql_user, mysql_pwd: mysql_pwd, mysql: mysql_host, mysql_db: mysql_database}
   end
 
+  def daily_charge_info_url
+    "http://#{ip}:#{port}/jiyu/admin/master/dailyChargeInfo"
+  end
+
 end
