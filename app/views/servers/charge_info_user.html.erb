@@ -3,7 +3,7 @@
 
 <div class="col-md-10 col-md-offset-1">
 	<div class="well">
-		<h3>服务器：《<%= @server.name%>》总充值 <%= @info['sum'] %> 元</h3>
+		<h3>服务器：《<%= @server.name%>》, 玩家： <%= params[:name]%> 账号：<%= params[:acc]%> </h3>
 	</div>
 	<div class="col-md-10 col-md-offset-1">
 		<h5>日充值报表</h5>
@@ -13,23 +13,15 @@
 		<h4>玩家充值报表</h4>
 		<table class="table" >
 			<tr>
-				<th>id</th>
-				<th>名字</th>
 				<th>等级</th>
-				<th>账号</th>
-				<th>充值次数</th>
-				<th>充值总额</th>
-				<th>详情</th>
+				<th>充值金额</th>
+				<th>时间</th>
 			</tr>
-			<% @info['user'].each do |i| %>
+			<% @info['charge'].each do |i| %>
 			<tr>
-				<td><%= i['id'] %></td>
-				<td><%= i['name'] %></td>
 				<td><%= i['lev'] %></td>
-				<td><%= i['acc'] %></td>
-				<td><%= i['pay_times'] %></td>
 				<td><%= i['p'] %></td>
-				<td><a href="/platforms/<%= @server.platform_id %>/servers/<%= @server.id %>/charge/user/<%= i['id'] %>?name=<%= i['name'] %>&amp;acc=<%= i['acc'] %>">详情</a></td>
+				<td><%= i['pt'] %></td>
 			</tr>
 			<% end %>
 		</table>
@@ -40,10 +32,10 @@
 $(function() {
 	<% 
 	def daily_item_to_js item
-     time = DateTime.strptime(item['day'], "%Y-%m-%d").to_time.to_i * 1000
-     "[#{time},#{item['totle']}]"
+     time = DateTime.strptime(item['d'], "%Y%m%d").to_time.to_i * 1000
+     "[#{time},#{item['t']}]"
   end %>
-	data = [<%= @info['daily'].collect{|i|daily_item_to_js(i)}.join(",") %>]
+	data = [<%= @info['online'].collect{|i|daily_item_to_js(i)}.join(",") %>]
 	$.plot(
 		$("#daily"), 
 		[data], 
