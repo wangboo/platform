@@ -22,3 +22,5 @@ Gemfile.lock
 /lib/properties.rb
 vendor
 vender
+/lib/haima/ob/*
+/lib/haima/demo

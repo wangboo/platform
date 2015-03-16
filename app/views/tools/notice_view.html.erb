@@ -67,7 +67,7 @@ $(function(){
 	$("#sendReward").bind('click', function(){
 		var params = {};
 		params.servers = $("#server option:selected").val();
-		(['begin_date','end_date','details','title','range']).forEach(function(id){
+		(['begin_date','end_date','details','title','range','sort']).forEach(function(id){
 			params[id] = $("#"+id).val()
 		})
 		console.log(params)

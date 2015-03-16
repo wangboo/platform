@@ -15,8 +15,8 @@ class ChargeInfo
  	field :product_id, 			type: String#商品id,支付时传入的product_id 参数
  	field :private_data, 		type: String#自定义参数，调用客户端支付函数时传入的EXT参数，透传给游戏服务器
  	field :channel_number, 	type: String#渠道编号
- 	field :sign, 						type: String#签名串，验签参考签名算法
- 	field :source, 					type: String#渠道服务器通知 AnySDK 时请求的参数
- 	field :add_money,				type: Integer#游戏服务器是否已经充值0没有，1已充值
- 	
+ 	field :sign, 			type: String#签名串，验签参考签名算法
+ 	field :source, 			type: String#渠道服务器通知 AnySDK 时请求的参数
+	field :enhanced_sign 
+ 	field :add_money,		type: Integer#游戏服务器是否已经充值0没有，1已充值
 end
