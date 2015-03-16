@@ -103,7 +103,7 @@ class AnyPayServer
       return "SUCCESS"
     end
     sign = params['sign']
-    amount = params[:amount]
+    amount = hash_data[:amount]
     product_id = params["data"]["callbackInfo"].match(/ProductId=(.*)$/)[1]
     list = [10,30,50,100,200,500,1000,2000,25]
     if amount.to_i != list[product_id.to_i-1]
@@ -125,6 +125,7 @@ class AnyPayServer
     Rails.logger.debug "md5_str=#{md5_str}"
     private_key = "a6fb07456626474f9ed441b455dc9922"
     md5 = Digest::MD5.hexdigest (md5_str+private_key)
+    #sign = md5 = 0
     charge_info = UcChargeInfo.find_by orderId:hash_data["orderId"]
     server_id=params["data"]["callbackInfo"].match(/serverId=(.*)$/)[1]
     Rails.logger.debug "server_id = #{server_id}"
