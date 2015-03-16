@@ -156,8 +156,8 @@ class AnyPayServer
       elsif charge_info.add_money == 0
         if sign == md5
           hash_data['result']="SUCCESS"
-            infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
-	    Rails.logger.debug "infos = #{infos}"
+          infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
+	        Rails.logger.debug "infos = #{infos}"
           resp = HTTParty.post("http://#{server_id}/jiyu/admin/tools/ucsdk", infos)
           if resp.to_s=="ok"
             Rails.logger.debug "hash_data=#{hash_data}"
