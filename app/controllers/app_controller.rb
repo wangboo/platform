@@ -5,7 +5,8 @@ class AppController < AppSideController
   end
 
   def un_block_list
-    ['ANDROID-HUAWEI']
+    ['ANDROID-HUAWEI','ANDROID-AM']
+    #['ANDROID-UC']
   end
   def block_list
     ['IOS-KY']
@@ -21,7 +22,8 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    #return resp_app_f "霸王别姬在0:00-2:00之间维护，请小伙伴耐心等待" if true 
+    #return resp_app_f "霸王别姬在16:00-18:00之间维护，请小伙伴耐心等待" if true 
+    #return resp_app_f "霸王别姬在0:00-3:00之间维护，请小伙伴耐心等待" unless un_block_list.include? mask
     #return resp_app_f "霸王别姬在0:00-2:00之间维护，请小伙伴耐心等待" unless un_block_list.include? mask
     #return resp_app_f "霸王别姬将于2月5日10:00开启公测" if block_list.include? mask
     return resp_app_f "入参不正确" unless username and mask
