@@ -8,6 +8,7 @@ class Account
 	field :platform,		type: Integer
 	field :vers
 	field :account_id
+	field :bpuid
 	field :create_time, type: Time, default: ->{Time.now}
 	field :first_time, 	type: Time, default: ->{Time.now}
 	field :last_time, 	type: Time
