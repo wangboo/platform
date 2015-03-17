@@ -163,11 +163,13 @@ class AppController < AppSideController
       end
       account_id = params[:sid]
     end
+		logger.debug "user=#{user}, account = #{account_id}"
     if user == -1 then
       return
     end
     account.account_id=account_id
     account.save
+		logger.debug "save account #{account}"
     # 默认的处理方式
     resp_app_s account_id: account_id, sort_id: account.aid
   end
@@ -176,7 +178,7 @@ class AppController < AppSideController
   #保存minisdk的bpuid
   def login_mini
     bpUID=params['bpUID']
-    account = Account.find_by account:params['accountId']
+    account = Account.find_by account_id: params['accountId']
     if nil !=account
       account.bpuid = bpUID
       account.save
@@ -185,13 +187,9 @@ class AppController < AppSideController
   end
   #获取Uid给游戏服务器使用
   def get_uid
-    account=Account.find_by account:params['accountId']
-    if nil != account
-      pbUID=account.bpuid
-    else
-      bpUID = 0
-    end
-    render json: bpUID
+    account=Account.find_by account_id: params['accountId']
+		logger.debug "account = #{account}, #{account.to_json}"
+    render json: (account.bpuid or '0')
   end
 
 
