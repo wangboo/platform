@@ -28,6 +28,10 @@ Rails.application.routes.draw do
   get "/app/regist" => "app#regist"
   # 登陆
   get "/app/login" => "app#login"
+  #mini login
+  get "/app/login_mini" => "app#login_mini"
+  #获取Uid
+  get "app/get_uid" => "app#get_uid"
   #any sdk
   post "/app/verify" => "app#verify"
   post "/app/verify_pay" => "app#verify_sign"

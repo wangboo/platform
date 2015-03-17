@@ -170,6 +170,29 @@ class AppController < AppSideController
     resp_app_s account_id: account_id, sort_id: account.aid
   end
 
+# app_controller.rb
+  #保存minisdk的bpuid
+  def login_mini
+    bpUID=params['bpUID']
+    account = Account.find_by account:params['accountId']
+    if nil !=account
+      account.bpuid = bpUID
+      account.save
+    end
+    render json: "ok"
+  end
+  #获取Uid给游戏服务器使用
+  def get_uid
+    account=Account.find_by account:params['accountId']
+    if nil != account
+      pbUID=account.bpuid
+    else
+      bpUID = 0
+    end
+    render json: bpUID
+  end
+
+
   def verify
     Rails.logger.debug "params=#{params}"
     resp = ::AnyServer.verify params
