@@ -166,6 +166,8 @@ class AppController < AppSideController
     if user == -1 then
       return
     end
+    account.account_id=account_id
+    account.save
     # 默认的处理方式
     resp_app_s account_id: account_id, sort_id: account.aid
   end
