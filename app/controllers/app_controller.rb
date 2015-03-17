@@ -5,7 +5,11 @@ class AppController < AppSideController
   end
 
   def un_block_list
-    ['ANDROID-HUAWEI','ANDROID-MZW']
+    ['ANDROID-HUAWEI','ANDROID-AM']
+    #['ANDROID-UC']
+  end
+  def block_list
+    ['IOS-KY']
   end
   # 服务器列表
   # 入参 mask平台标记，username用户名
@@ -18,7 +22,10 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    #return resp_app_f "霸王别姬服务器于17：00-18：00进行维护。" if true
+    #return resp_app_f "霸王别姬在16:00-18:00之间维护，请小伙伴耐心等待" if true 
+    #return resp_app_f "霸王别姬在0:00-3:00之间维护，请小伙伴耐心等待" unless un_block_list.include? mask
+    #return resp_app_f "霸王别姬在0:00-2:00之间维护，请小伙伴耐心等待" unless un_block_list.include? mask
+    #return resp_app_f "霸王别姬将于2月5日10:00开启公测" if block_list.include? mask
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
@@ -28,7 +35,6 @@ class AppController < AppSideController
       # Rails.logger.debug("创建用户：#{user}")
       user.platform = platform
     end
-
     # 子查询可用的服务器列表
     data = {}
     data[:list] = platform.available_servers.collect{|server|server.to_app_hash}
@@ -163,6 +169,29 @@ class AppController < AppSideController
     # 默认的处理方式
     resp_app_s account_id: account_id, sort_id: account.aid
   end
+
+# app_controller.rb
+  #保存minisdk的bpuid
+  def login_mini
+    bpUID=params['bpUID']
+    account = Account.find_by account:params['accountId']
+    if nil !=account
+      account.bpuid = bpUID
+      account.save
+    end
+    render json: "ok"
+  end
+  #获取Uid给游戏服务器使用
+  def get_uid
+    account=Account.find_by account:params['accountId']
+    if nil != account
+      pbUID=account.bpuid
+    else
+      bpUID = 0
+    end
+    render json: bpUID
+  end
+
 
   def verify
     Rails.logger.debug "params=#{params}"

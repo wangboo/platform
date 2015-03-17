@@ -25,7 +25,7 @@ class HaimaController < AppSideController
       order_id:           data['exorderno'],
       platform_order_id:  data['transid'],
       state:              data[	'result'] == '0',
-      money:              data['money'],
+      money:              data['money'].to_i / 100,
       params:             params.to_json
     )
     IOSChargeInfo.charge payment, proc{|m|success m}, proc{|m|fail m}

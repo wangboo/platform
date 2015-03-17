@@ -24,7 +24,7 @@ class AnyPayServer
       return "ok"
     end
     sign, user_id, amount ,server_id= params["sign"], params["user_id"], params["amount"],params["server_id"]
-    keys = [:order_id,:product_count,:amount,:pay_status,:pay_time,:user_id,:order_type,:game_user_id,:server_id,:product_name,:product_id,:private_data,:channel_number,:sign,:source]
+    keys = [:order_id,:product_count,:amount,:pay_status,:pay_time,:user_id,:order_type,:game_user_id,:server_id,:product_name,:product_id,:private_data,:channel_number,:sign,:source, :enhanced_sign]
     keys.delete :sign
     data = keys.reduce({}){|s,a|s[a]=params[a];s}
     keys << :sign
@@ -38,8 +38,8 @@ class AnyPayServer
     data = keys.reduce({}){|s,a|s[a]=params[a];s}
     
     product_id = params['product_id']
-    list = [10,30,50,100,200,500,1000,2000]
-    if amount.to_i != list[product_id.to_i -1]
+    list = [10,30,50,100,200,500,1000,2000,25]
+    if amount.to_i != list[product_id.to_i-1]
         data['add_money']=0
         ChargeInfo.create data
         return "ok"
@@ -103,10 +103,10 @@ class AnyPayServer
       return "SUCCESS"
     end
     sign = params['sign']
-
-    product_id = params["data"]["callbackInfo"].match(/productId=(.*)$/)[1]
-    list = [10,30,50,100,200,500,1000,2000]
-    if amount.to_i != list[product_id.to_i -1]
+    amount = hash_data[:amount]
+    product_id = params["data"]["callbackInfo"].match(/ProductId=(.*)$/)[1]
+    list = [10,30,50,100,200,500,1000,2000,25]
+    if amount.to_i != list[product_id.to_i-1]
         hash_data['add_money']=0
         hash_data.delete("controller")
         hash_data.delete("action")
@@ -125,6 +125,7 @@ class AnyPayServer
     Rails.logger.debug "md5_str=#{md5_str}"
     private_key = "a6fb07456626474f9ed441b455dc9922"
     md5 = Digest::MD5.hexdigest (md5_str+private_key)
+    #sign = md5 = 0
     charge_info = UcChargeInfo.find_by orderId:hash_data["orderId"]
     server_id=params["data"]["callbackInfo"].match(/serverId=(.*)$/)[1]
     Rails.logger.debug "server_id = #{server_id}"
@@ -156,8 +157,8 @@ class AnyPayServer
       elsif charge_info.add_money == 0
         if sign == md5
           hash_data['result']="SUCCESS"
-            infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
-	    Rails.logger.debug "infos = #{infos}"
+          infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
+	        Rails.logger.debug "infos = #{infos}"
           resp = HTTParty.post("http://#{server_id}/jiyu/admin/tools/ucsdk", infos)
           if resp.to_s=="ok"
             Rails.logger.debug "hash_data=#{hash_data}"

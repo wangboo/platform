@@ -117,7 +117,7 @@ class ToolsController < ApplicationController
 	# 发公告
 	def create_notice
 		msgs = ""
-		args = params.permit(:begin_date,:end_date,:details,:title,:range)
+		args = params.permit(:begin_date,:end_date,:details,:title,:range, :sort)
 		args[:title] 		= CGI::escape args[:title]
 		args[:details] 	= CGI::escape args[:details]
 		args[:range] 		= CGI::escape args[:range]
