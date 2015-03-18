@@ -189,7 +189,12 @@ class AppController < AppSideController
   def get_uid
     account=Account.find_by account_id: params['accountId']
 		logger.debug "account = #{account}, #{account.to_json}"
-    render json: (account.bpuid or '0')
+    if nil == account or account.bpuid == 0
+      render json: "0"
+    else
+      render json: account.bpuid
+    end
+    # render json: (account.bpuid or '0')
   end
 
 
