@@ -197,6 +197,10 @@ class AppController < AppSideController
     Rails.logger.debug "params=#{params}"
     resp = ::AnyServer.verify params
     Rails.logger.debug "resp=#{resp}"
+    data = resp['common']
+    Account.find_or_create_by(account_id: data['uid']) do |a|
+      a.channel_id  = data['channel']
+    end
     return render json: resp
   end
 
