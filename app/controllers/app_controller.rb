@@ -24,8 +24,8 @@ class AppController < AppSideController
     mask = params[:mask]
     #return resp_app_f "霸王别姬在16:00-18:00之间维护，请小伙伴耐心等待" if true 
     #return resp_app_f "霸王别姬在0:00-3:00之间维护，请小伙伴耐心等待" unless un_block_list.include? mask
-    #return resp_app_f "霸王别姬在0:00-2:00之间维护，请小伙伴耐心等待" unless un_block_list.include? mask
-    #return resp_app_f "霸王别姬将于2月5日10:00开启公测" if block_list.include? mask
+    #logger.debug "remote_ip = #{request.remote_ip}"
+    #return resp_app_f "霸王别姬将于3月18日9:00-10:00维护" unless white_list.include? request.remote_ip
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
@@ -188,7 +188,7 @@ class AppController < AppSideController
   #获取Uid给游戏服务器使用
   def get_uid
     account=Account.find_by account_id: params['accountId']
-		logger.debug "account = #{account}, #{account.to_json}"
+    return render json: '0' unless account
     render json: (account.bpuid or '0')
   end
 
