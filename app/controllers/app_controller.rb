@@ -189,7 +189,10 @@ class AppController < AppSideController
   def get_uid
     account=Account.find_by account_id: params['accountId']
 		logger.debug "account = #{account}, #{account.to_json}"
-    render json: (account.bpuid or '0')
+		if nil==account
+		render json: "0"
+		end
+    render json: account.bpuid
   end
 
 
@@ -197,6 +200,11 @@ class AppController < AppSideController
     Rails.logger.debug "params=#{params}"
     resp = ::AnyServer.verify params
     Rails.logger.debug "resp=#{resp}"
+		data=resp['common']
+		Rails.logger.debug "data==#{data}"
+		Account.find_or_create_by(account_id: data['uid']) do |a|
+			a.channel_id=data['channel']
+		end
     return render json: resp
   end
 

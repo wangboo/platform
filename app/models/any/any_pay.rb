@@ -45,8 +45,8 @@ class AnyPayServer
         return "ok"
     end
 
-    Rails.logger.debug "sign=#{sign}"
-    Rails.logger.debug "md5=#{md5}"
+    #Rails.logger.debug "sign=#{sign}"
+    #Rails.logger.debug "md5=#{md5}"
     charge_info = ChargeInfo.find_by order_id:params["order_id"]
     # data["result"] = "SUCCESS"
     if !charge_info
