@@ -22,7 +22,7 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    #return resp_app_f "霸王别姬在16:00-18:00之间维护，请小伙伴耐心等待" if true 
+    #return resp_app_f "霸王别姬在16:00-18:00之间维护，请小伙伴耐心等待" if true
     #return resp_app_f "霸王别姬在0:00-3:00之间维护，请小伙伴耐心等待" unless un_block_list.include? mask
     #return resp_app_f "霸王别姬在0:00-2:00之间维护，请小伙伴耐心等待" unless un_block_list.include? mask
     #return resp_app_f "霸王别姬将于2月5日10:00开启公测" if block_list.include? mask
@@ -155,6 +155,8 @@ class AppController < AppSideController
       user, account_id = ios_ky
     when 'GB'
       user,account_id = game_begin
+    when 'IOS-TONGBU'
+      user,account_id = ios_tongbu
     else
       # 默认用sid创建一个账号
       user = QicUser.find_or_create_by(username: params[:sid]) do |u|
@@ -234,13 +236,27 @@ class AppController < AppSideController
     [user, account_id]
   end
 
+  def ios_tongbu
+   sid, token = params[:sid], params[:token]
+   user = if TongbuController.login token
+      QicUser.find_or_create_by(username: sid)
+  else
+   resp_app_f "验证失败"
+   -1
+  end
+   [user, sid]
+  rescue => e
+    resp_app_f _m: "验证失败 #{e}"
+    [-1, 0]
+  end
+
   def game_begin
     begin
       body = GameBeginController.login params
       unless JSON.parse(body)['Result'].to_i == 1
         resp_app_f "登陆失败"
-        return [-1, 0] 
-      end  
+        return [-1, 0]
+      end
     rescue
       resp_app_f "登陆失败"
       return [-1, 0]

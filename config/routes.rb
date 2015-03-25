@@ -50,12 +50,14 @@ Rails.application.routes.draw do
   post '/app/xy_verify_pay'  => 'xy#verify_pay'
   # ky 支付
   post '/app/ky_verify_pay'  =>  'ky#verify_pay'
+  # tongbu 支付
+  get '/app/tongbu_verify_pay' => 'tongbu#verify_pay'
 
   get '/app/gb_verify_pay' => 'game_begin#verify_pay'
 
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
-  
+
   get "/app/random" => "app#random_user"
 
   # 服务端验证账号和token
@@ -74,7 +76,7 @@ Rails.application.routes.draw do
   get "/login"   => 'auth#login'
 
   get "/servers" => "servers#index", as: "server_index"
-  # 新建服务器 
+  # 新建服务器
   post "/servers" => "servers#create"
   # 服务器，查看用户区间
   get "/servers/:id/user_range" => "servers#user_range", as: "server_user_range"
@@ -111,7 +113,7 @@ Rails.application.routes.draw do
   # 兑奖码
   resources :rewards
   # 兑奖码批次
-  resources :active_batches do 
+  resources :active_batches do
     # get '/download', action: "download"
   end
 
@@ -125,7 +127,7 @@ Rails.application.routes.draw do
   resources :month_rewards
   # 平台
   resources :platforms do
-    resources :servers do 
+    resources :servers do
       get '/charge', action: :charge_info, as: "charge_info"
       get '/charge/user/:user_id', action: :charge_info_user, as: "charge_info_user"
     end
@@ -172,7 +174,7 @@ Rails.application.routes.draw do
   # 删除verion中的一项
   get '/ajax/version/:id/del_diff' => "versions#del_diff_item", as: "ajax_version_del_diff_item"
   # 调试工具
-  get '/web-console' => "tools#web_console" 
+  get '/web-console' => "tools#web_console"
   # 游戏玩家用户数
   post '/server/:id/usersize' => "servers#usersize", as: "ajax_server_usersize"
 
