@@ -37,7 +37,7 @@ class AppController < AppSideController
     end
     # 子查询可用的服务器列表
     data = {}
-    data[:list] = platform.available_servers.collect{|server|server.to_app_hash}
+    data[:list] = platform.available_servers.sort{|a,b|b.zone_id <=> a.zone_id}.collect{|server|server.to_app_hash}
 
     # Rails.logger.debug(server_user.last_login)
     # 常用服务器列表
@@ -191,13 +191,14 @@ class AppController < AppSideController
   def get_uid
     account=Account.find_by account_id: params['accountId']
     return render json: '0' unless account
+    return render json: "0" if account.bpuid.empty?
     render json: (account.bpuid or '0')
   end
 
 
   def verify
     Rails.logger.debug "params=#{params}"
-    resp = ::AnyServer.verify params
+    resp = ::Any.verify params
     Rails.logger.debug "resp=#{resp}"
     data = resp['common']
     Account.find_or_create_by(account_id: data['uid']) do |a|
@@ -208,7 +209,7 @@ class AppController < AppSideController
 
   def verify_sign
     Rails.logger.debug "params=#{params}"
-    resp = AnyPayServer.verify_sign params
+    resp = AnyPay.verify_sign params
     return render json: resp
   end
 

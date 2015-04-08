@@ -16,7 +16,7 @@ end
 # Dir.foreach(File.expand_path('../../app/utils',__FILE__)) do |file|
 #   require file;puts "require #{file}" if file =~ /\.rb$/
 # end
- 
+
 module Jiyu
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -41,8 +41,6 @@ module Jiyu
     config.assets.precompile += %w[*.png *.jpg *.jpeg *.gif]
     config.autoload_paths += %W(#{config.root}/app/utils/ #{config.root}/app/models/u9/)
     require "#{config.root}/app/models/u9/u9.rb"
-    require "#{config.root}/app/models/any/any.rb"
-    require "#{config.root}/app/models/any/any_pay.rb"
     require 'net/ssh'
     require 'net/scp'
   end

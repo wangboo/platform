@@ -31,10 +31,12 @@ Rails.application.routes.draw do
   #mini login
   get "/app/login_mini" => "app#login_mini"
   #获取Uid
+  get  "app/get_uid" => "app#get_uid"
   post "app/get_uid" => "app#get_uid"
   #any sdk
   post "/app/verify" => "app#verify"
   post "/app/verify_pay" => "app#verify_sign"
+  get "/app/verify_pay" => 'app#verify_sign'
   post "/app/uc_verify_pay" => "app#uc_verify_sign"
   # 海马支付
   post "/app/haima_verify_pay" => "haima#verify_pay"

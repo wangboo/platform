@@ -1,6 +1,7 @@
 require 'digest/md5'
 require 'json'
-class AnyPayServer
+
+class AnyPay
   def self.sort_params params
     md5_str = ""
     params.keys.sort.each do |key|
@@ -25,9 +26,11 @@ class AnyPayServer
     end
     sign, user_id, amount ,server_id= params["sign"], params["user_id"], params["amount"],params["server_id"]
     keys = [:order_id,:product_count,:amount,:pay_status,:pay_time,:user_id,:order_type,:game_user_id,:server_id,:product_name,:product_id,:private_data,:channel_number,:sign,:source, :enhanced_sign]
-    keys.delete :sign
-    data = keys.reduce({}){|s,a|s[a]=params[a];s}
-    keys << :sign
+    #keys.delete :sign
+    #data = keys.reduce({}){|s,a|s[a]=params[a];s}
+    #keys << :sign
+    exclude = ['action', 'controller', 'sign']
+    data = params.delete_if{|k,v|exclude.include? k}
     md5_str = data.to_a.sort{|v0,v1|v0[0]<=>v1[0]}.collect{|v|v[1]}.join
     private_key="351E7847A962A88D83FB9232C43BF1A7"
     Rails.logger.debug("md5_str = #{md5_str}")
@@ -36,7 +39,7 @@ class AnyPayServer
 # <<<<<<< Updated upstream
     #保存anysdk传过来的参数信息
     data = keys.reduce({}){|s,a|s[a]=params[a];s}
-    
+
     product_id = params['product_id']
     list = [10,30,50,100,200,500,1000,2000,25]
     if amount.to_i != list[product_id.to_i-1]
@@ -45,8 +48,8 @@ class AnyPayServer
         return "ok"
     end
 
-    #Rails.logger.debug "sign=#{sign}"
-    #Rails.logger.debug "md5=#{md5}"
+    Rails.logger.debug "sign=#{sign}"
+    Rails.logger.debug "md5=#{md5}"
     charge_info = ChargeInfo.find_by order_id:params["order_id"]
     # data["result"] = "SUCCESS"
     if !charge_info
@@ -68,7 +71,7 @@ class AnyPayServer
            return "ok"
         else
             return "fail"
-        end     
+        end
       else
         return "fail"
       end
@@ -77,14 +80,14 @@ class AnyPayServer
           #调游戏后台服务器
           data['result']="SUCCESS"
           infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: data}
-          uri = "http://#{server_id}/jiyu/admin/tools/anysdk" 
+          uri = "http://#{server_id}/jiyu/admin/tools/anysdk"
           resp = HTTParty.post("http://#{params[:server_id]}/jiyu/admin/tools/anysdk", infos)
           Rails.logger.debug("game 22222 server resp = #{resp},resp.class=#{resp.class}")
           data.delete("result")
           if resp.to_s=="ok"
             charge_info.add_money = 1
             charge_info.save
-            return "ok" 
+            return "ok"
           end
           return "fail"
         else
@@ -92,7 +95,7 @@ class AnyPayServer
         end
     else
       return "ok"
-    end    
+    end
   end
 
   def self.uc_verify_pay params

@@ -98,7 +98,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<%= content_tag_for :tr, @platform.servers do |server| %>
+					<%= content_tag_for :tr, @platform.servers.sort{|a,b|b.zone_id <=> a.zone_id} do |server| %>
 					<td><%= link_to server.name, platform_server_path(@platform, server) %></td>
 					<td><%= server.ip %></td>
 					<td><%= server.port %></td>

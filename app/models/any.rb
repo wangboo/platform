@@ -1,5 +1,5 @@
 require 'digest/md5'
-class AnyServer
+class Any
 	include HTTParty
 	@default_options = {}
 	@default_options[:headers] = {"Content-Type" => "application/x-www-form-urlencoded;charset=utf-8"}
