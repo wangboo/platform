@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   #获取Uid
   get  "app/get_uid" => "app#get_uid"
   post "app/get_uid" => "app#get_uid"
+  # 天拓支付
+  get '/app/tt_verify_pay' => 'tt#verify_pay'
+  post '/app/tt_verify_pay' => 'tt#verify_pay'
   #any sdk
   post "/app/verify" => "app#verify"
   post "/app/verify_pay" => "app#verify_sign"

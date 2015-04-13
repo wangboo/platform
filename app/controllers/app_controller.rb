@@ -37,7 +37,7 @@ class AppController < AppSideController
     end
     # 子查询可用的服务器列表
     data = {}
-    data[:list] = platform.available_servers.sort{|a,b|b.zone_id <=> a.zone_id}.collect{|server|server.to_app_hash}
+    data[:list] = platform.available_servers.sort{|a,b|(b.zone_id||0) <=> (a.zone_id||0)}.collect{|server|server.to_app_hash}
 
     # Rails.logger.debug(server_user.last_login)
     # 常用服务器列表

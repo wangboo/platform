@@ -62,7 +62,7 @@
 						<label class="col-md-2 control-label" for="platform_rmd_id">推荐服务器</label>
 					<div class="col-md-4">
 					<%=select_tag "platform[rmd_id]", options_from_collection_for_select(@platform.servers.where(work_state: 0), "id", "name"),selected: [@rmd.try(:id), @rmd.try(:name)], include_blank: "", class: "form-control" %>
-					
+
 					</div> -->
 					<div class="form-group col-md-3">
 						<button type="submit" class="btn btn-primary">修改</button>
@@ -71,7 +71,7 @@
 
 			  </div>
 		</div>
-		
+
 <!-- </form> -->
 	<% end %>
 
@@ -80,7 +80,7 @@
 			<!-- jumbotron -->
 			<div class="jumbotron">
 				<div class="container">
-					<h2><%= @platform.name %>&nbsp;&nbsp;&nbsp;&nbsp;一共有<%= @platform.servers.size %>台服务器</h2>					
+					<h2><%= @platform.name %>&nbsp;&nbsp;&nbsp;&nbsp;一共有<%= @platform.servers.size %>台服务器</h2>
 					<%= link_to "版本管理", version_path(@platform), class: "btn btn-info" %>
 					<%= link_to "GM工具", tools_path(@platform), class: "btn btn-primary" %>
 					<%= link_to "开服工具", platform_kf_view_path(@platform), class: "btn btn-default" %>
@@ -98,7 +98,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<%= content_tag_for :tr, @platform.servers.sort{|a,b|b.zone_id <=> a.zone_id} do |server| %>
+					<%= content_tag_for :tr, @platform.servers.sort{|a,b|(b.zone_id or 0) <=> (a.zone_id or 0)} do |server| %>
 					<td><%= link_to server.name, platform_server_path(@platform, server) %></td>
 					<td><%= server.ip %></td>
 					<td><%= server.port %></td>
@@ -111,5 +111,5 @@
 		</div>
 
 	</div>
-	
+
 </div>
