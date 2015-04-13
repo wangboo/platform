@@ -214,7 +214,7 @@ class AppController < AppSideController
   end
 
   def uc_verify_sign
-    resp = AnyPayServer.uc_verify_pay params
+    resp = AnyPay.uc_verify_pay params
     return render json: resp
   end
 

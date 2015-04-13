@@ -102,19 +102,24 @@ class AnyPay
     Rails.logger.debug "prams = #{params}"
     # body= params['body']
     hash_data = params['data']
+    hash_data = JSON.parse(params['data']) if params['data'].is_a?(String)
+    hash_data = hash_data.to_h
+    params['data'] = hash_data
     if hash_data["orderStatus"].to_s != "S"
+      Rails.logger.debug "订单状态不合法 #{hash_data["orderStatus"]}"
       return "SUCCESS"
     end
     sign = params['sign']
-    amount = hash_data[:amount]
+    amount = hash_data['amount']
     product_id = params["data"]["callbackInfo"].match(/ProductId=(.*)$/)[1]
     list = [10,30,50,100,200,500,1000,2000,25]
     if amount.to_i != list[product_id.to_i-1]
         hash_data['add_money']=0
         hash_data.delete("controller")
         hash_data.delete("action")
-        hash_data.permit!
+        #hash_data.permit!
         UcChargeInfo.create hash_data
+        Rails.logger.debug "金钱不合法 #{}"
         return "SUCCESS"
     end
 
@@ -147,7 +152,7 @@ class AnyPay
           hash_data.delete("controller")
           hash_data.delete("action")
           Rails.logger.debug "hash_data2222=#{hash_data}"
-          hash_data.permit!
+          #hash_data.permit!
           UcChargeInfo.create hash_data
           if resp.to_s == "ok"
              return "SUCCESS"
