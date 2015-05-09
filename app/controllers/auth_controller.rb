@@ -8,22 +8,22 @@ class AuthController < ApplicationController
 		end
 		@err = false
 		render :login, layout: false
-	end 
+	end
 
 	def logout
 		cookies[:bawang_auth] = nil
 		redirect_to auth_view_path
-	end 
+	end
 
 	# 验证账号密码
 	def validate
-		if params[:auth][:username] == 'bawang' and params[:auth][:password] == 'bawangniubi'
+		if params[:auth][:username] == 'bawang' and params[:auth][:password] == 'xiangyuniubi'
 			cookies[:bawang_auth] = {value: auth_key, expires: 8.hours.from_now}
 			redirect_to server_index_path
 		else
 			@err = true
 			render :login, layout: false
-		end 
-	end 
+		end
+	end
 
-end 
+end

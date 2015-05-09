@@ -12,17 +12,17 @@ class U9Server
 	end
 
 	def api_key
-		"a6fb07456626474f9ed441b455dc9922"
+		"39889cf08f1901acd5fc386a4773f2f3"
 	end
 
 	def cp_id
-		"47585"
+		"51991"
 	end
 
 	def p uri, service, data
 		txt = data.collect{|i|i.join("=")}.join << api_key
 		md5 = Digest::MD5.hexdigest txt
-		post '/account.verifySession', body: {id: Time.now.to_i, service: service,game: {gameId: game_id}, 
+		post '/account.verifySession', body: {id: Time.now.to_i, service: service,game: {gameId: game_id},
 			data: data, sign: md5}.to_json
 	end
 

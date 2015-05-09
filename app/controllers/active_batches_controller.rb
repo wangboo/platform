@@ -33,9 +33,11 @@ class ActiveBatchesController < ApplicationController
   def create
     params[:active_batch][:is_muti] = (params[:active_batch][:is_muti] == "on")
     param = active_batch_params
-    size = params[:size].to_i 
-    # params[:all_platform] = params[:all_platform]=='on' ? true : false 
-    param['all_platform'] = param['all_platform']=='on' ? true : false 
+    size = params[:size].to_i
+    # params[:all_platform] = params[:all_platform]=='on' ? true : false
+    param['all_platform'] = param['all_platform']=='on' ? true : false
+    param['begin_time'] = DateTime.strptime(param['begin_time'], "%Y-%m-%d")
+    param['end_time'] = DateTime.strptime(param['end_time'], "%Y-%m-%d")
     Rails.logger.debug "param = #{param}"
     active_batch = ActiveBatch.create(param)
     active_batch.generate_codes size
@@ -45,7 +47,7 @@ class ActiveBatchesController < ApplicationController
   # PATCH/PUT /active_batches/1
   # PATCH/PUT /active_batches/1.json
   def update
-    
+
   end
 
   # DELETE /active_batches/1
