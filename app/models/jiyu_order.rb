@@ -29,7 +29,7 @@ class JiyuOrder
 
  	# 1-8 充值，9月卡
  	def validate_charge money
-		@hash ||= {'1' => 10, '2' => 30, '3' => 50, '4' => 100, '5' => 200, '6' => 500, '7' => 1000, 
+		@hash ||= {'1' => 6, '2' => 30, '3' => 50, '4' => 100, '5' => 200, '6' => 500, '7' => 1000,
 			'8' => 2000, '9' => 25}
 		@hash[product_id] == money
 	end
@@ -52,7 +52,7 @@ class JiyuOrder
  		JiyuOrder.create(order_id: order_id, product_id: product_id, server_id: server_id, role_id: role_id)
  	end
 
- 	def self.suffix order 
+ 	def self.suffix order
  		Digest::MD5.hexdigest(order+JiyuOrder.private_key).chars.each_with_index.reduce(""){|s,e|if e[1]%4==0 then s<<e[0] else s end}
  	end
 

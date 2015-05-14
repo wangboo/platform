@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   post "/app/verify" => "app#verify"
   post "/app/verify_pay" => "app#verify_sign"
   get "/app/verify_pay" => 'app#verify_sign'
-  post "/app/uc_verify_pay" => "app#uc_verify_sign"
+  post "/app/uc_verify_pay" => "uc#uc_verify_sign"
   # 海马支付
   post "/app/haima_verify_pay" => "haima#verify_pay"
   # itools 支付

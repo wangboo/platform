@@ -213,11 +213,6 @@ class AppController < AppSideController
     return render json: resp
   end
 
-  def uc_verify_sign
-    resp = AnyPay.uc_verify_pay params
-    return render json: resp
-  end
-
   # 用UC account创建一个账号
   def android_uc
     resp = U9Server.login params[:sid]
