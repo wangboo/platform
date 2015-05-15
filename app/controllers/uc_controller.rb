@@ -11,7 +11,7 @@ class UcController < AppSideController
   end
 
   def uc_verify_sign
-    params['data'].gsub!("=>",":")
+    #params['data'].gsub!("=>",":")
     logger.debug params['data']
     hash_data = if params['data'].is_a?(String) then JSON.parse(params['data']) else params['data'].to_h end
    # hash_data = JSON.parse params['data']

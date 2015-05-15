@@ -1,7 +1,7 @@
 class AppController < AppSideController
 
   def white_list
-    ['218.17.158.222', '182.138.102.60']
+    ['182.138.102.60']
   end
 
   def un_block_list
@@ -22,10 +22,7 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    #return resp_app_f "霸王别姬在16:00-18:00之间维护，请小伙伴耐心等待" if true
-    #return resp_app_f "霸王别姬在0:00-3:00之间维护，请小伙伴耐心等待" unless un_block_list.include? mask
-    #logger.debug "remote_ip = #{request.remote_ip}"
-    #return resp_app_f "霸王别姬将于3月18日9:00-10:00维护" unless white_list.include? request.remote_ip
+    #return resp_app_f "西楚霸王将在16:00-17:00之间维护，请小伙伴耐心等待" unless white_list.include? request.remote_ip
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
