@@ -148,6 +148,8 @@ Rails.application.routes.draw do
     post '/kf_all', action: :kf_all_the_same, as: "kf_all"
   end
 
+  resources :bgm
+
   get "/platforms/:id/tools" => "tools#reward_to_user_view", as: "tools"
   # 管理平台  发奖品 给指定用户
   post "/platforms/:id/tools/reward/to_user" => "tools#reward_to_user", as: "tools_reward_to_user"

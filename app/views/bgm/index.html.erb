@@ -1,0 +1,48 @@
+<div class="container">
+	<div class="row">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
+
+			<div class="panel panel-default" style="padding: 10px 10px 10px 10px">
+				<table class="table table-bordered">
+					<legend>BGM账号</legend>
+					<thead>
+						<tr>
+							<th>账号</th>					
+							<th>密码</th>					
+						</tr>
+					</thead>
+					<tbody>
+						<%= content_tag_for :tr, @bgms do |item| %>
+							<td><%= item.username %></td>
+							<td><%= item.password %></td>
+						<% end %>
+					</tbody>
+				</table>
+			</div>
+			<!-- 创建表单 -->
+			<%= form_for :bgm, html: {class: "form form-horizontal"} do |f| %>
+			<!-- <form class="form form-horizontal" action="/bgm" method="post"> -->
+				<div class="panel panel-default" style="padding: 10px 10px 10px 10px">
+					<legend>创建一个新的账号</legend>
+					<div class="form-group">
+						<label for="username" class="control-label col-md-2">用户名</label>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="username" placeholder="用户名"  name="bgm[username]">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="password" class="control-label col-md-2">密码</label>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="password" placeholder="密码" name="bgm[password]">
+						</div>
+					</div>
+					<div class="text-center">
+						<input value="提交" type="submit" class="btn btn-info">
+					</div>
+				</div>				
+			<!-- </form> -->
+			<% end %>
+
+		</div>
+	</div>
+</div>
