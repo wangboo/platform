@@ -68,46 +68,53 @@ class AppController < AppSideController
   # 兑奖码
   # 服务入参 code兑奖码， 大区mask:platform, username用户名
   def validate_code
+    return validate_code_old unless params[:code] =~ /^[a-zA-Z]/
     return resp_app_f '服务入参不正确' unless params[:code] or  params[:platform] or params[:username] or params[:username].empty?
-    code = params[:code]
-    username = params[:username]
+    return resp_aff_f "缺少入参zoneId" unless params[:zoneId]
+
+    mask, zone_id,code,username = params[:platform], params[:zoneId].to_i,params[:code],params[:username]
     # 查找并检查大区和用户名
-    platform = Platform.where(mask: params[:platform]).first
+    platform = Platform.where(mask: mask).first
     return resp_app_f '大区不存在' unless platform
+    # server = platform.servers.where(zone_id: zone_id).first 
+    # return resp_app_f '服务器不存在' unless server 
     user = ServerUser.find_or_create_by(username: username, platform_id: platform.id)
     # return resp_app_f '用户名不存在' unless user
-
-    active_code = ActiveCode.where(code: params[:code]).first
+    active_code = ActiveCode.where(code: code).first
     return resp_app_f '该兑奖码不存在' unless active_code
     batch = active_code.active_batch
+    # 查询使用记录
+    record_size = UserAcRecord.where(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id).size
+    return resp_app_f "你已经使用过该类型激活码了" if record_size > 0 
 
-    # 该用户已经使用过该类型激活码了
-    return resp_app_f '您已经使用过该类型兑奖码' if user.used_batch_ids.include? batch.id
-    return resp_app_f '您已经使用过该类型兑奖码' if ActiveCode.where(server_user_id: user.id).collect{|code|code.active_batch.active_type_id}.include?(batch.active_type_id)
-    # 该兑换码已经使用过了
-    if batch.is_muti
-      return resp_app_f '该激活码次数已经用完' if active_code.times == 0
-      active_code.times -= 1
-      active_code.save
-    else
-      # 单次使用
-      return resp_app_f '该兑奖码已经使用过了' if active_code.use_flag
+    # 该兑换批次的大区列表中不包含用户所在大区
+    unless batch.all_platform
+      logger.debug "batch.platforms = #{batch.platform_masks}"
+      return resp_app_f '该平台不能使用该兑奖码' unless batch.platform_masks.include? mask
     end
+    # 判断服务器是否在允许列表中
+    unless batch.all_server
+      logger.debug "batch.zone_ids = #{batch.zone_ids} zone_id = #{zone_id}"
+      return resp_app_f '该服不能使用该兑奖码' unless batch.zone_ids.include? zone_id
+    end
+    # 过期判断
     now = Time.now
     return  resp_app_f "该兑奖码还没到日期，请在#{batch.begin_time.strftime('%Y年%m月%d日')}后再来兑换" if batch.begin_time and batch.begin_time > now
     return  resp_app_f "该兑奖码已经过期" if batch.end_time and batch.end_time < now
 
-    # 该兑换批次的大区列表中不包含用户所在大区
-    unless batch.all_platform
-      return resp_app_f '您的平台不能使用该兑奖码' unless batch.platforms.any?{|p|p.mask == platform.mask}
+    # 该兑换码已经使用过了
+    if batch.is_muti
+      return resp_app_f '该激活码次数已经用完' if active_code.times == 0
+      active_code.times -= 1
+    else
+      # 单次使用
+      return resp_app_f '该兑奖码已经使用过了' if active_code.use_flag
     end
-    #return resp_app_f '您的平台不能使用该兑奖码' unless batch.all_platform and batch.platforms.any?{|p|p.mask == platform.mask}
-
-    active_code.server_user = user
+    # 使用
     active_code.use_flag = true
     active_code.update
-    user.used_batch_ids << batch.id
-    user.save
+    UserAcRecord.create(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id, 
+      active_code_id: active_code.id, code: active_code.code)
     resp_app_s reward: batch.reward.reward
   end
 
@@ -382,5 +389,47 @@ class AppController < AppSideController
     Rails.logger.debug "create order #{order_id}"
     resp_app_s order_id: order_id
   end
+
+  private 
+  def validate_code_old
+  return resp_app_f '服务入参不正确' unless params[:code] or  params[:platform] or params[:username] or params[:username].empty?
+  code = params[:code]
+  username = params[:username]
+  # 查找并检查大区和用户名
+  platform = Platform.where(mask: params[:platform]).first
+  return resp_app_f '大区不存在' unless platform
+  user = ServerUser.find_or_create_by(username: username, platform_id: platform.id)
+  # return resp_app_f '用户名不存在' unless user
+
+  active_code = ActiveCode.where(code: params[:code]).first
+  return resp_app_f '该兑奖码不存在' unless active_code
+  batch = active_code.active_batch
+
+  # 该用户已经使用过该类型激活码了
+  return resp_app_f '您已经使用过该类型兑奖码' if user.used_batch_ids.include? batch.id
+  return resp_app_f '您已经使用过该类型兑奖码' if ActiveCode.where(server_user_id: user.id).collect{|code|code.active_batch.active_type_id}.include?(batch.active_type_id)
+  # 该兑换码已经使用过了
+  if batch.is_muti
+    return resp_app_f '该激活码次数已经用完' if active_code.times == 0
+    active_code.times -= 1
+    active_code.save
+  else
+    # 单次使用
+    return resp_app_f '该兑奖码已经使用过了' if active_code.use_flag
+  end
+  now = Time.now
+  return  resp_app_f "该兑奖码还没到日期，请在#{batch.begin_time.strftime('%Y年%m月%d日')}后再来兑换" if batch.begin_time and batch.begin_time > now
+  return  resp_app_f "该兑奖码已经过期" if batch.end_time and batch.end_time < now
+
+  # 该兑换批次的大区列表中不包含用户所在大区
+  # return resp_app_f '您的平台不能使用该兑奖码' unless batch.platforms.any?{|p|p.mask == platform.mask}
+
+  active_code.server_user = user
+  active_code.use_flag = true
+  active_code.update
+  user.used_batch_ids << batch.id
+  user.save
+  resp_app_s reward: batch.reward.reward
+end
 
 end
