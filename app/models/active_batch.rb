@@ -12,17 +12,22 @@ class ActiveBatch
   field :is_muti, type: Boolean, default: false 
   # 全部平台
   field :all_platform, type: Boolean, default: false
+  # 是否给指定平台下的所有服务器使用
+  field :all_server, type: Boolean 
+  # 指定使用的游戏服务器
+  field :zone_ids, type: Array
   # 该激活码能使用次数
   field :lim_times, type: Integer, default: 1
-  #所属服务器
-  has_many :servers
   #所属奖励
   belongs_to :reward
   #持有一个奖励码类型
   belongs_to :active_type
   #持有的兑奖码
   has_many :active_codes, dependent: :destroy
+  # 所属服务器集合
+  field :platform_masks, type: Array 
 
+  # 兼容
   has_and_belongs_to_many :platforms
   
   validates_presence_of :name, message: "必须输入批次名字"

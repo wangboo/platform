@@ -7,7 +7,7 @@
 			<p><%=@active_batch.desc %></p>
       <div class="col-md-12">
 				<div class="col-md-6">
-					<%= link_to "下载", active_batch_download_path(@active_batch), class: "btn btn-info" %>	
+					<%= link_to "下载", active_batch_download_path(@active_batch), class: "btn btn-info", target: "_blank"%>	
 				</div>
 				<div class="col-md-6">
 					<%= form_for(@active_batch, method: "delete") do |f| %>

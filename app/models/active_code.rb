@@ -11,8 +11,6 @@ class ActiveCode
   belongs_to :server_user
   #所属批次
   belongs_to :active_batch
-  # 兑奖码唯一
-  validates_uniqueness_of :code
 
 end
 
