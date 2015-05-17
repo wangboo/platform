@@ -22,7 +22,7 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    return resp_app_f "西楚霸王一测已经结束，5月17日上午10点二测华丽开启" unless white_list.include? request.remote_ip
+    #return resp_app_f "西楚霸王一测已经结束，5月17日上午10点二测华丽开启" unless white_list.include? request.remote_ip
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
@@ -76,8 +76,8 @@ class AppController < AppSideController
     # 查找并检查大区和用户名
     platform = Platform.where(mask: mask).first
     return resp_app_f '大区不存在' unless platform
-    # server = platform.servers.where(zone_id: zone_id).first 
-    # return resp_app_f '服务器不存在' unless server 
+    # server = platform.servers.where(zone_id: zone_id).first
+    # return resp_app_f '服务器不存在' unless server
     user = ServerUser.find_or_create_by(username: username, platform_id: platform.id)
     # return resp_app_f '用户名不存在' unless user
     active_code = ActiveCode.where(code: code).first
@@ -85,7 +85,7 @@ class AppController < AppSideController
     batch = active_code.active_batch
     # 查询使用记录
     record_size = UserAcRecord.where(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id).size
-    return resp_app_f "你已经使用过该类型激活码了" if record_size > 0 
+    return resp_app_f "你已经使用过该类型激活码了" if record_size > 0
 
     # 该兑换批次的大区列表中不包含用户所在大区
     unless batch.all_platform
@@ -113,7 +113,7 @@ class AppController < AppSideController
     # 使用
     active_code.use_flag = true
     active_code.update
-    UserAcRecord.create(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id, 
+    UserAcRecord.create(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id,
       active_code_id: active_code.id, code: active_code.code)
     resp_app_s reward: batch.reward.reward
   end
@@ -390,7 +390,7 @@ class AppController < AppSideController
     resp_app_s order_id: order_id
   end
 
-  private 
+  private
   def validate_code_old
   return resp_app_f '服务入参不正确' unless params[:code] or  params[:platform] or params[:username] or params[:username].empty?
   code = params[:code]
