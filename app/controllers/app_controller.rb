@@ -85,9 +85,9 @@ class AppController < AppSideController
     batch = active_code.active_batch
     # 查询使用记录
     record_size = UserAcRecord.where(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id).size
-    return resp_app_f "你已经使用过该类型激活码了" if record_size > 0 
+    return resp_app_f "你已经使用过该类型激活码了" if record_size > 0
     record_size = UserAcRecord.where(user_id: user.id, active_type_id: batch.active_type_id, zone_id: zone_id).size
-    return resp_app_f "你已经使用过该类型激活码了" if record_size > 0 
+    return resp_app_f "你已经使用过该类型激活码了" if record_size > 0
 
     # 该兑换批次的大区列表中不包含用户所在大区
     unless batch.all_platform
@@ -115,7 +115,7 @@ class AppController < AppSideController
     # 使用
     active_code.use_flag = true
     active_code.update
-    UserAcRecord.create(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id, 
+    UserAcRecord.create(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id,
       active_code_id: active_code.id, code: active_code.code, active_type_id: batch.active_type_id)
     resp_app_s reward: batch.reward.reward
   end
