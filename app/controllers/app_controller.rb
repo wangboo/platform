@@ -409,7 +409,7 @@ class AppController < AppSideController
 
   # 该用户已经使用过该类型激活码了
   return resp_app_f '您已经使用过该类型兑奖码' if user.used_batch_ids.include? batch.id
-  return resp_app_f '您已经使用过该类型兑奖码' if ActiveCode.where(server_user_id: user.id).collect{|code|code.active_batch.active_type_id}.include?(batch.active_type_id)
+  return resp_app_f '您已经使用过该类型兑奖码' if ActiveCode.where(server_user_id: user.id).collect{|code|code.active_batch.active_type.id}.include?(batch.active_type.id)
   # 该兑换码已经使用过了
   if batch.is_muti
     return resp_app_f '该激活码次数已经用完' if active_code.times == 0
