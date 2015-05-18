@@ -21,7 +21,7 @@ class ActiveBatch
   #所属奖励
   belongs_to :reward
   #持有一个奖励码类型
-  belongs_to :active_type
+  belongs_to :active_type, foreign_key: :active_type
   #持有的兑奖码
   has_many :active_codes, dependent: :destroy
   # 所属服务器集合
