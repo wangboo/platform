@@ -116,7 +116,7 @@ class AppController < AppSideController
     active_code.use_flag = true
     active_code.update
     UserAcRecord.create(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id, 
-      active_code_id: active_code.id, code: active_code.code, active_type_id: batch.active_type_id)
+      active_code_id: active_code.id, code: active_code.code, active_type_id: batch.active_type.id)
     resp_app_s reward: batch.reward.reward
   end
 
