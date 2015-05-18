@@ -22,7 +22,7 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    #return resp_app_f "西楚霸王一测已经结束，5月17日上午10点二测华丽开启" unless white_list.include? request.remote_ip
+    #return resp_app_f "西楚霸王在16:00-16:30维护" unless white_list.include? request.remote_ip
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
