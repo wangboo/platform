@@ -138,7 +138,7 @@ Rails.application.routes.draw do
     end
     get '/kf', action: :kf_view, as: "kf_view"
     post '/kf', action: :kf, as: "kf"
-    get '/kf_tf', action: :kf_tf, as: "kf_tf"
+    post '/kf_tf', action: :kf_tf, as: "kf_tf"
     # 改变server_state
     post '/kf_ws', action: :kf_ws, as: "kf_ws"
     # 设置游戏server_state状态

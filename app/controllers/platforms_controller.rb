@@ -93,12 +93,15 @@ class PlatformsController < ApplicationController
 
   # 停服
   def kf_tf 
+    return render json: {ok: false, msg: "密码错误"} unless params['pwd'] == 'w231520'
     @platform = Platform.find params[:platform_id]
-    puts "@platform = #{@platform}"
+    # rst = []
     @platform.servers.each do |s|
-      Thread.new{HTTParty.get(s.stop_server_url)}
+      Thread.new do 
+        HTTParty.get(s.stop_server_url)
+      end
     end
-    redirect_to(platform_kf_view_path(@platform))
+    render json: {ok: true, msg: "停服成功"}
   end
 
   def delete

@@ -5,7 +5,7 @@
 			<div class="panel-body">
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
 					设置该平台推荐服务器(修改及生效)&nbsp;&nbsp;&nbsp;&nbsp;在线用户数10s刷新一次
-					<%= link_to "一键停服", platform_kf_tf_path(@platform), class: "btn btn-danger" %>
+					<button id="tf_buttom" class="btn btn-danger" onclick="shutdown()">一键停服</button>
 					<%= @platform.servers.collect do |s|
 						str = "<div class='col-md-12' style='margin: 5px 0px 5px 0px'><div class='col-md-2'>"
 						str << if s.id == @platform.rmd_id
@@ -43,6 +43,26 @@
 	</div>
 </div>
 
+<div class="modal fade" id="shutdown_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">关闭服务器</h4>
+      </div>
+      <div class="modal-body">
+        <h4>注意，你的操作很危险！</h4>
+        <h5>请输入关服密码：</5>
+        <input type="password" id="password" placeholder="密码">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-danger" onclick="shutdown_commit()">停服</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script type="text/javascript">
 function send(url, data, cb) {
 	$.ajax({
@@ -75,6 +95,23 @@ function refreshUser() {
 				$("#ren_"+id).text("查询失败")
 			}
 		})
+	})
+}
+
+function shutdown() {
+	$("#shutdown_modal").modal("show")
+}
+
+function shutdown_commit() {
+	$("#shutdown_modal").modal("hide")
+	var password = $("#password").val()
+	var url = "<%= platform_kf_tf_path(@platform) %>"
+	//  + "?pwd=" + password
+	send(url, {pwd: password}, function(resp) {
+		if(resp.ok) {
+			refreshUser()
+		}
+		alert(resp.msg)
 	})
 }
 // 10s 刷新一次
