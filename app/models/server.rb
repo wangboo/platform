@@ -78,4 +78,8 @@ class Server
     "http://#{ip}:#{port}/jiyu/admin/master/userChargeInfo"
   end
 
+  def stop_server_url
+    "http://#{ip}:#{port}/jiyu/admin/master/shutdown?pwd=w231520&time=10"
+  end
+
 end

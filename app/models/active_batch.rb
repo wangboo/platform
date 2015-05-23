@@ -18,6 +18,7 @@ class ActiveBatch
   field :zone_ids, type: Array
   # 该激活码能使用次数
   field :lim_times, type: Integer, default: 1
+
   #所属奖励
   belongs_to :reward
   #持有一个奖励码类型
