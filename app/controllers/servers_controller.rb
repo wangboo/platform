@@ -55,7 +55,7 @@ class ServersController < ApplicationController
     rst = HTTParty.get(url)
     Rails.logger.debug("usersize : #{rst}, server = #{server.name}")
     if rst.code == 200
-      render json: {ok: true, size: rst['size']}
+      render json: {ok: true, size: rst['size'], shutdown: rst['shutdown']}
     else 
       render json: {ok: false}
     end

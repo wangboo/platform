@@ -5,6 +5,7 @@
 			<div class="panel-body">
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
 					设置该平台推荐服务器(修改及生效)&nbsp;&nbsp;&nbsp;&nbsp;在线用户数10s刷新一次
+					<%= link_to "一键停服", platform_kf_tf_path(@platform), class: "btn btn-danger" %>
 					<%= @platform.servers.collect do |s|
 						str = "<div class='col-md-12' style='margin: 5px 0px 5px 0px'><div class='col-md-2'>"
 						str << if s.id == @platform.rmd_id
@@ -65,7 +66,11 @@ function refreshUser() {
 		var id = id.replace("ren_", "")
 		send("/server/"+id+"/usersize", {}, function(data) {
 			if(data.ok) {
-				$("#ren_"+id).text("服务器当前人数：" + data.size)
+				if(data.shutdown) {
+					$("#ren_"+id).text("服务器当前人数：" + data.size + "(已关服)")
+				}else {
+					$("#ren_"+id).text("服务器当前人数：" + data.size)	
+				}
 			}else {
 				$("#ren_"+id).text("查询失败")
 			}

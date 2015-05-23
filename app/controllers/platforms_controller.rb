@@ -91,6 +91,16 @@ class PlatformsController < ApplicationController
     kf_all_rmd_the_same
   end
 
+  # 停服
+  def kf_tf 
+    @platform = Platform.find params[:platform_id]
+    puts "@platform = #{@platform}"
+    @platform.servers.each do |s|
+      Thread.new{HTTParty.get(s.stop_server_url)}
+    end
+    redirect_to(platform_kf_view_path(@platform))
+  end
+
   def delete
   end
 
