@@ -32,7 +32,8 @@ class AnyPay
     exclude = ['action', 'controller', 'sign']
     data = params.delete_if{|k,v|exclude.include? k}
     md5_str = data.to_a.sort{|v0,v1|v0[0]<=>v1[0]}.collect{|v|v[1]}.join
-    private_key="351E7847A962A88D83FB9232C43BF1A7"
+    #private_key="351E7847A962A88D83FB9232C43BF1A7"
+    private_key="371BB654EBE0C7E0165B0DC840F5A97C"
     Rails.logger.debug("md5_str = #{md5_str}")
     #md5_str = sort_params params
     md5 = md5_digest private_key,md5_str

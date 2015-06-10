@@ -1,7 +1,7 @@
 class AppController < AppSideController
 
   def white_list
-    ['182.138.102.60']
+    ['182.138.102.60', '110.184.65.95']
   end
 
   def un_block_list
@@ -9,7 +9,7 @@ class AppController < AppSideController
     #['ANDROID-UC']
   end
   def block_list
-    ['IOS-KY']
+    ['ANDROID-XICHU-MI', 'ANDROID-XICHU-BAIDU', 'ANDROID-XICHU-QIHU']
   end
   # 服务器列表
   # 入参 mask平台标记，username用户名
@@ -22,7 +22,8 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    #return resp_app_f "西楚霸王在16:00-17:00维护" unless white_list.include? request.remote_ip
+    #return resp_app_f "服务器在22:30 - 22:45 维护中" unless white_list.include? request.remote_ip
+    #return resp_app_f '不删档测试将于5月31日10:00开启' if block_list.include? mask
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
