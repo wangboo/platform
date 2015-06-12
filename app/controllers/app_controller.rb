@@ -22,11 +22,17 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    #return resp_app_f "服务器在22:30 - 22:45 维护中" unless white_list.include? request.remote_ip
-    #return resp_app_f '不删档测试将于5月31日10:00开启' if block_list.include? mask
+    
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
+
+    if manage = Manage.first
+      # ip限制
+      return resp_app_f manage.white_ips_notice if manage.white_ips_on and not manage.white_ips.include?(request.remote_ip)
+      # 平台限制
+      return resp_app_f manage.white_platform_notice if manage.white_platform_on and not manage.white_platform.include?(mask)
+    end
 
     #查找用户
     server_user = ServerUser.find_or_create_by(username: username) do |user|
@@ -201,7 +207,6 @@ class AppController < AppSideController
     return render json: "0" if account.bpuid.empty?
     render json: (account.bpuid or '0')
   end
-
 
   def verify
     Rails.logger.debug "params=#{params}"
