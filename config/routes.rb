@@ -115,6 +115,17 @@ Rails.application.routes.draw do
 
   get "/test" => "versions#test"
 
+  # 平台管理，开服，停服，ip白名单等
+  resources :manage
+  # ip白名单
+  post "/ajax/manage/update_white_ips" => "manage#update_white_ips", as: "manage_update_white_ips"
+  post "/ajax/manage/update_white_ips_on" => "manage#update_white_ips_on", as: "manage_update_white_ips_on"
+  post '/ajax/manage/update_white_ips_notice' => 'manage#update_white_ips_notice', as: "manage_update_white_ips_notice"
+
+  post "/ajax/manage/update_white_platform" => 'manage#update_white_platform', as: "manage_update_white_platform"
+  post "/ajax/manage/update_white_platform_all" => 'manage#update_white_platform_all', as: "manage_update_white_platform_all"
+  post "/ajax/manage/update_white_platform_on" => 'manage#update_white_platform_on', as: "manage_update_white_platform_on"
+  post '/ajax/manage/update_white_platform_notice' => 'manage#update_white_platform_notice', as: "manage_update_white_platform_notice"
 
   # 兑奖码
   resources :rewards
@@ -139,6 +150,7 @@ Rails.application.routes.draw do
     end
     get '/kf', action: :kf_view, as: "kf_view"
     post '/kf', action: :kf, as: "kf"
+    post '/kf_tf', action: :kf_tf, as: "kf_tf"
     # 改变server_state
     post '/kf_ws', action: :kf_ws, as: "kf_ws"
     # 设置游戏server_state状态

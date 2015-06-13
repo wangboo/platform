@@ -9,7 +9,7 @@ class AppController < AppSideController
     #['ANDROID-UC']
   end
   def block_list
-    ['IOS-KY']
+    ['ANDROID-XICHU-MI', 'ANDROID-XICHU-BAIDU', 'ANDROID-XICHU-QIHU']
   end
   # 服务器列表
   # 入参 mask平台标记，username用户名
@@ -22,11 +22,16 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    #return resp_app_f "不删档测试于6月10日上午11点开启" unless white_list.include? request.remote_ip
-    #return resp_app_f "巡秦记不删档测试首发6月10日11：00开启" if un_block_list.include? mask
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
+
+    if manage = Manage.first
+      # ip限制
+      return resp_app_f manage.white_ips_notice if manage.white_ips_on and not manage.white_ips.include?(request.remote_ip)
+      # 平台限制
+      return resp_app_f manage.white_platform_notice if manage.white_platform_on and not manage.white_platform.include?(mask)
+    end
 
     #查找用户
     server_user = ServerUser.find_or_create_by(username: username) do |user|
@@ -87,6 +92,8 @@ class AppController < AppSideController
     # 查询使用记录
     record_size = UserAcRecord.where(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id).size
     return resp_app_f "你已经使用过该类型激活码了" if record_size > 0
+    record_size = UserAcRecord.where(user_id: user.id, active_type_id: batch.active_type.id, zone_id: zone_id).size
+    return resp_app_f "你已经使用过该类型激活码了" if record_size > 0
 
     # 该兑换批次的大区列表中不包含用户所在大区
     unless batch.all_platform
@@ -115,7 +122,7 @@ class AppController < AppSideController
     active_code.use_flag = true
     active_code.update
     UserAcRecord.create(user_id: user.id, active_batch_id: batch.id, zone_id: zone_id,
-      active_code_id: active_code.id, code: active_code.code)
+      active_code_id: active_code.id, code: active_code.code, active_type_id: batch.active_type.id)
     resp_app_s reward: batch.reward.reward
   end
 
@@ -199,7 +206,6 @@ class AppController < AppSideController
     return render json: "0" if account.bpuid.empty?
     render json: (account.bpuid or '0')
   end
-
 
   def verify
     Rails.logger.debug "params=#{params}"
@@ -408,7 +414,7 @@ class AppController < AppSideController
 
   # 该用户已经使用过该类型激活码了
   return resp_app_f '您已经使用过该类型兑奖码' if user.used_batch_ids.include? batch.id
-  return resp_app_f '您已经使用过该类型兑奖码' if ActiveCode.where(server_user_id: user.id).collect{|code|code.active_batch.active_type_id}.include?(batch.active_type_id)
+  return resp_app_f '您已经使用过该类型兑奖码' if ActiveCode.where(server_user_id: user.id).collect{|code|code.active_batch.active_type.id}.include?(batch.active_type.id)
   # 该兑换码已经使用过了
   if batch.is_muti
     return resp_app_f '该激活码次数已经用完' if active_code.times == 0

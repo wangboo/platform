@@ -14,6 +14,13 @@ class AnyPay
     return md5_str
   end
 
+  def self.key mask 
+    @key ||= {
+      "ANDROID-XICHU-BIEJI-TMGP" => "43852A705E7B0A7C19938A2168029B68",
+    }
+    @key[mask] or "371BB654EBE0C7E0165B0DC840F5A97C"
+  end
+
   def self.md5_digest private_key,md5_str
     md5 = Digest::MD5.hexdigest md5_str
     re_md5= Digest::MD5.hexdigest(md5+private_key)
@@ -26,13 +33,11 @@ class AnyPay
     end
     sign, user_id, amount ,server_id= params["sign"], params["user_id"], params["amount"],params["server_id"]
     keys = [:order_id,:product_count,:amount,:pay_status,:pay_time,:user_id,:order_type,:game_user_id,:server_id,:product_name,:product_id,:private_data,:channel_number,:sign,:source, :enhanced_sign]
-    #keys.delete :sign
-    #data = keys.reduce({}){|s,a|s[a]=params[a];s}
-    #keys << :sign
     exclude = ['action', 'controller', 'sign']
     data = params.delete_if{|k,v|exclude.include? k}
     md5_str = data.to_a.sort{|v0,v1|v0[0]<=>v1[0]}.collect{|v|v[1]}.join
-    private_key="351E7847A962A88D83FB9232C43BF1A7"
+    
+    private_key = AnyPay.key params[:private_data]
     Rails.logger.debug("md5_str = #{md5_str}")
     #md5_str = sort_params params
     md5 = md5_digest private_key,md5_str
@@ -98,91 +103,91 @@ class AnyPay
     end
   end
 
-  def self.uc_verify_pay params
-    Rails.logger.debug "prams = #{params}"
-    # body= params['body']
-    hash_data = params['data']
-    hash_data = JSON.parse(params['data']) if params['data'].is_a?(String)
-    hash_data = hash_data.to_h
-    params['data'] = hash_data
-    if hash_data["orderStatus"].to_s != "S"
-      Rails.logger.debug "订单状态不合法 #{hash_data["orderStatus"]}"
-      return "SUCCESS"
-    end
-    sign = params['sign']
-    amount = hash_data['amount']
-    product_id = params["data"]["callbackInfo"].match(/ProductId=(.*)$/)[1]
-    list = [6,30,50,100,200,500,1000,2000,25]
-    if amount.to_i != list[product_id.to_i-1]
-        hash_data['add_money']=0
-        hash_data.delete("controller")
-        hash_data.delete("action")
-        #hash_data.permit!
-        UcChargeInfo.create hash_data
-        Rails.logger.debug "金钱不合法 #{}"
-        return "SUCCESS"
-    end
+  # def self.uc_verify_pay params
+  #   Rails.logger.debug "prams = #{params}"
+  #   # body= params['body']
+  #   hash_data = params['data']
+  #   hash_data = JSON.parse(params['data']) if params['data'].is_a?(String)
+  #   hash_data = hash_data.to_h
+  #   params['data'] = hash_data
+  #   if hash_data["orderStatus"].to_s != "S"
+  #     Rails.logger.debug "订单状态不合法 #{hash_data["orderStatus"]}"
+  #     return "SUCCESS"
+  #   end
+  #   sign = params['sign']
+  #   amount = hash_data['amount']
+  #   product_id = params["data"]["callbackInfo"].match(/ProductId=(.*)$/)[1]
+  #   list = [6,30,50,100,200,500,1000,2000,25]
+  #   if amount.to_i != list[product_id.to_i-1]
+  #       hash_data['add_money']=0
+  #       hash_data.delete("controller")
+  #       hash_data.delete("action")
+  #       #hash_data.permit!
+  #       UcChargeInfo.create hash_data
+  #       Rails.logger.debug "金钱不合法 #{}"
+  #       return "SUCCESS"
+  #   end
 
-    Rails.logger.debug "hash_data111 = #{hash_data}"
-      #hash_data={a=>b,c=>d}
-    md5_str = ""
-    hash_data.keys.sort.each do |key|
-       value = hash_data[key]
-       md5_str +=(key+"=#{hash_data[key]}")
-    end
-    Rails.logger.debug "md5_str=#{md5_str}"
-    private_key = "a6fb07456626474f9ed441b455dc9922"
-    md5 = Digest::MD5.hexdigest (md5_str+private_key)
-    #sign = md5 = 0
-    charge_info = UcChargeInfo.find_by orderId:hash_data["orderId"]
-    server_id=params["data"]["callbackInfo"].match(/serverId=(.*)$/)[1]
-    Rails.logger.debug "server_id = #{server_id}"
-      if !charge_info
-        if sign == md5
-          hash_data['result']="SUCCESS"
-          infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
-          resp = HTTParty.post("http://#{server_id}/jiyu/admin/tools/ucsdk", infos)
-          if resp.to_s=="ok"
-            # UcChargeInfo.create
-            hash_data['add_money']=1
-          else
-            hash_data['add_money']=0
-          end
-          hash_data.delete("result")
-          hash_data.delete("controller")
-          hash_data.delete("action")
-          Rails.logger.debug "hash_data2222=#{hash_data}"
-          #hash_data.permit!
-          UcChargeInfo.create hash_data
-          if resp.to_s == "ok"
-             return "SUCCESS"
-          else
-             return "fail"
-          end
-        else
-          "fail"
-        end
-      elsif charge_info.add_money == 0
-        if sign == md5
-          hash_data['result']="SUCCESS"
-          infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
-	        Rails.logger.debug "infos = #{infos}"
-          resp = HTTParty.post("http://#{server_id}/jiyu/admin/tools/ucsdk", infos)
-          if resp.to_s=="ok"
-            Rails.logger.debug "hash_data=#{hash_data}"
-            hash_data.delete("result")
-            hash_data.delete("controller")
-            hash_data.delete("action")
-            charge_info.add_money = 1
-            charge_info.save
-             return "SUCCESS"
-          end
-          return "fail"
-        else
-          return "fail"
-        end
-      else
-        return "SUCCESS"
-      end
-  end
+  #   Rails.logger.debug "hash_data111 = #{hash_data}"
+  #     #hash_data={a=>b,c=>d}
+  #   md5_str = ""
+  #   hash_data.keys.sort.each do |key|
+  #      value = hash_data[key]
+  #      md5_str +=(key+"=#{hash_data[key]}")
+  #   end
+  #   Rails.logger.debug "md5_str=#{md5_str}"
+  #   private_key = "a6fb07456626474f9ed441b455dc9922"
+  #   md5 = Digest::MD5.hexdigest (md5_str+private_key)
+  #   #sign = md5 = 0
+  #   charge_info = UcChargeInfo.find_by orderId:hash_data["orderId"]
+  #   server_id=params["data"]["callbackInfo"].match(/serverId=(.*)$/)[1]
+  #   Rails.logger.debug "server_id = #{server_id}"
+  #     if !charge_info
+  #       if sign == md5
+  #         hash_data['result']="SUCCESS"
+  #         infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
+  #         resp = HTTParty.post("http://#{server_id}/jiyu/admin/tools/ucsdk", infos)
+  #         if resp.to_s=="ok"
+  #           # UcChargeInfo.create
+  #           hash_data['add_money']=1
+  #         else
+  #           hash_data['add_money']=0
+  #         end
+  #         hash_data.delete("result")
+  #         hash_data.delete("controller")
+  #         hash_data.delete("action")
+  #         Rails.logger.debug "hash_data2222=#{hash_data}"
+  #         #hash_data.permit!
+  #         UcChargeInfo.create hash_data
+  #         if resp.to_s == "ok"
+  #            return "SUCCESS"
+  #         else
+  #            return "fail"
+  #         end
+  #       else
+  #         "fail"
+  #       end
+  #     elsif charge_info.add_money == 0
+  #       if sign == md5
+  #         hash_data['result']="SUCCESS"
+  #         infos = {headers: {'content-type'=>'application/json; charset=utf-8'}, query: hash_data}
+	 #        Rails.logger.debug "infos = #{infos}"
+  #         resp = HTTParty.post("http://#{server_id}/jiyu/admin/tools/ucsdk", infos)
+  #         if resp.to_s=="ok"
+  #           Rails.logger.debug "hash_data=#{hash_data}"
+  #           hash_data.delete("result")
+  #           hash_data.delete("controller")
+  #           hash_data.delete("action")
+  #           charge_info.add_money = 1
+  #           charge_info.save
+  #            return "SUCCESS"
+  #         end
+  #         return "fail"
+  #       else
+  #         return "fail"
+  #       end
+  #     else
+  #       return "SUCCESS"
+  #     end
+  # end
 end

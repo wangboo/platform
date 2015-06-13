@@ -19,7 +19,6 @@ class ErrorLogController < ApplicationController
 			err.same_num = ErrorLog.where(handled: false, error: /.*#{Regexp.quote(msg)}.*/).count
 			err
 		end
-
 	end
 
 	def resove
@@ -28,9 +27,9 @@ class ErrorLogController < ApplicationController
 			error = log.error.split(/\n/)[1]
 			# Rails.logger.debug("match err=#{error}, full=#{log.error}")
 			# Rails.logger.debug("size = #{ErrorLog.where(handled: false, error: /.*#{Regexp.quote(error)}.*/).count}")
-			size = ErrorLog.where(handled: false, error: /.*#{Regexp.quote(error)}.*/).update(handled: true)
+			ErrorLog.where(handled: false, error: /.*#{Regexp.quote(error)}.*/).delete
 		else
-			ErrorLog.where(id: params[:id]).update(handled: true)
+			ErrorLog.find(params[:id]).delete
 		end
 		redirect_to error_log_path, cur_page: params[:cur_page]
 	end

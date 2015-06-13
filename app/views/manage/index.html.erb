@@ -1,0 +1,80 @@
+<div class="col-md-8 col-md-offset-2">
+	<div class="panel panel-info">
+		<div class="panel-heading">登陆白名单管理(用;分隔)&nbsp;&nbsp;&nbsp;&nbsp;是否开启白名单&nbsp;<input type="checkbox" onclick="updateWhiteIpsOn()" id="whiteIPsOn" <%= @manage.white_ips_on ? "checked='checked'": "" %>></div>
+		<div class="panel-body">
+			<div class="col-md-12">
+			<div class="col-md-10">
+				<textarea id="whiteIPs" class="col-md-12"><%= @manage.white_ips.join(";") %></textarea>
+			</div>
+			<div class="div-col-md-2"><button class="btn btn-info" onclick="updateWhiteIps()">确定</button></div>
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-10">
+				<div class="input-group" style="padding-top: 10px">
+					<span class="input-group-addon">ip被禁止提示</span>
+					<input id="whiteIPNotice" class="form-control" value="<%= @manage.white_ips_notice %>">
+				</div>
+				</div>
+				<div class="col-md-2"><button class="btn btn-info" style="margin-top: 10px" onclick="whiteIPNotice()">确定</button></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-info">
+		<div class="panel-heading">登陆平台白名单限制&nbsp;&nbsp;&nbsp;&nbsp;是否开启白名单&nbsp;<input type="checkbox" onclick="updateWhitePlatformOn()" id="whiteIPsOn" <%= @manage.white_platform_on ? "checked='checked'": "" %>></div>
+		<div class="panel-body">
+			<div class="col-md-3"><button class="btn btn-default" onclick="updateWhitePlatformAll()">全选</button></div>
+			<% @platforms.each_with_index do |p, index| %>
+			<div class="col-md-3"><%= p.name %>&nbsp;<input type="checkbox" <%= @manage.white_platform.include?(p.mask) ? "checked='checked'": "" %> onclick="updateWhitePlatform('<%= p.mask %>')" id="platform_<%= index %>"></div>
+			<% end %>
+			<div class="col-md-12">
+				<div class="col-md-10">
+				<div class="input-group" style="padding-top: 10px">
+					<span class="input-group-addon">平台被禁止提示</span>
+					<input id="whitePlatformNotice" class="form-control" value="<%= @manage.white_platform_notice %>">
+				</div>
+				</div>
+				<div class="col-md-2"><button class="btn btn-info" style="margin-top: 10px" onclick="whitePlatformNotice()">确定</button></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function post(uri, data) {
+	$.ajax({ 
+		url: uri,
+		type: 'POST',
+		beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+		data: data,
+		success: function(response) {}
+		});
+}
+	function updateWhiteIps() {
+		var txt = $("#whiteIPs").val()
+		post("<%= manage_update_white_ips_path %>", {whiteIPs: txt})
+	}
+	function updateWhiteIpsOn() {
+		var checked = $("#whiteIPsOn").attr("checked") == "checked"
+		post("<%= manage_update_white_ips_on_path %>", {checked: checked})
+	}
+	function updateWhitePlatform(mask) {
+		post("<%= manage_update_white_platform_path %>", {mask: mask})
+	}
+	function updateWhitePlatformAll() {
+		$("input[id^='platform_']").attr("checked", "checked")
+		post("<%= manage_update_white_platform_all_path %>", {})
+	}
+	function updateWhitePlatformOn() {
+		var checked = $("#whiteIPsOn").attr("checked") == "checked"
+		post("<%= manage_update_white_platform_on_path %>", {checked: checked})
+	}
+	function whiteIPNotice() {
+		var notice = $("#whiteIPNotice").val()
+		post("<%= manage_update_white_ips_notice_path %>", {notice: notice})
+	}
+	function whitePlatformNotice() {
+		var notice = $("#whitePlatformNotice").val()
+		post("<%= manage_update_white_platform_notice_path %>", {notice: notice})
+	}
+</script>
