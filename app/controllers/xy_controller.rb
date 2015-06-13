@@ -1,5 +1,5 @@
 class XyController < AppSideController
-  
+
   def fail msg=nil
     Rails.logger.debug msg if msg
     render json: 'fail'
@@ -11,11 +11,11 @@ class XyController < AppSideController
   end
 
   def app_key
-    "7MN4iNzfm22ZyIOYTJwi9Sqbxhhz4AZI"
+    "E4f5PyXoWw5dmynUsRvBCVcFAqipwfKM"
   end
-  
+
   def pay_key
-    "0wSSJrEIu7IQksbELhVo6wuRyCfzHljz"
+    "T06UwWH0rbNIJGBcgubPMHHgN8PLRDYn"
   end
 
   def key_sorts

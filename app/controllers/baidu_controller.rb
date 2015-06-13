@@ -3,41 +3,41 @@ require 'base64'
 class BaiduController < AppSideController
 
 	def self.keys
-		@keys ||= [:AppId, :Act, :ProductName, :ConsumeStreamId, :CooOrderSerial, :Uin, 
-			:GoodsId, :GoodsInfo, :GoodsCount, :OriginalMoney, :OrderMoney, :Note, :PayStatus, 
+		@keys ||= [:AppId, :Act, :ProductName, :ConsumeStreamId, :CooOrderSerial, :Uin,
+			:GoodsId, :GoodsInfo, :GoodsCount, :OriginalMoney, :OrderMoney, :Note, :PayStatus,
 			:CreateTime]
 	end
 
 	def self.app_key
-		@app_key ||= "d7f85918aaed84a4ae1e82bb56414519e0944eb1368b8867"
+		@app_key ||= "8395360142b469f9ef9d0236d1ec82f93f4212705af8b63b"
 	end
 
 	def self.key_pairs
 		@pairs ||= {
 			app_id: 						:AppId,
 			act: 								:Act,
-			product_name: 			:ProductName, 
-			consume_stream_id: 	:ConsumeStreamId, 
-			coo_order_serial: 	:CooOrderSerial, 
-			uin: 								:Uin, 
-			goods_id: 					:GoodsId, 
-			goods_info: 				:GoodsInfo, 
-			goods_count: 				:GoodsCount, 
-			original_money: 		:OriginalMoney, 
-			order_money: 				:OrderMoney, 
-			note: 							:Note, 
-			pay_status: 				:PayStatus, 
+			product_name: 			:ProductName,
+			consume_stream_id: 	:ConsumeStreamId,
+			coo_order_serial: 	:CooOrderSerial,
+			uin: 								:Uin,
+			goods_id: 					:GoodsId,
+			goods_info: 				:GoodsInfo,
+			goods_count: 				:GoodsCount,
+			original_money: 		:OriginalMoney,
+			order_money: 				:OrderMoney,
+			note: 							:Note,
+			pay_status: 				:PayStatus,
 			create_time:  			:CreateTime
 		}
 	end
 
-	def fail msg=nil 
-		Rails.logger.debug msg if msg 
+	def fail msg=nil
+		Rails.logger.debug msg if msg
 		render json: '{"ErrorCode":"0","ErrorDesc":"接收失败"}'
 	end
 
-	def success msg=nil 
-		Rails.logger.debug msg if msg 
+	def success msg=nil
+		Rails.logger.debug msg if msg
 		render json: '{"ErrorCode":"1","ErrorDesc":"接收成功"}'
 	end
 

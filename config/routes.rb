@@ -57,7 +57,8 @@ Rails.application.routes.draw do
   post '/app/ky_verify_pay'  =>  'ky#verify_pay'
   # tongbu 支付
   get '/app/tongbu_verify_pay' => 'tongbu#verify_pay'
-
+  # iiapple
+  post '/app/iiapple_verify_pay' => 'iiapple#verify_pay'
   get '/app/gb_verify_pay' => 'game_begin#verify_pay'
 
   # flist 入参platform 平台码

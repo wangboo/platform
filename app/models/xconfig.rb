@@ -1,7 +1,7 @@
 class Xconfig
 
 	def self.bgm_ip
-		"http://10.8.163.17:9000"
+		"http://203.195.224.152:9000"
 	end
 
 	def self.bgm_ac_url

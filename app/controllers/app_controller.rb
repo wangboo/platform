@@ -1,11 +1,11 @@
 class AppController < AppSideController
 
   def white_list
-    ['182.138.102.60']
+    ['182.138.102.60', '182.139.182.238', '110.184.65.95']
   end
 
   def un_block_list
-    ['ANDROID-HUAWEI','ANDROID-AM']
+    ['IOS-XUNQIN-KY']
     #['ANDROID-UC']
   end
   def block_list
@@ -22,7 +22,8 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    #return resp_app_f "西楚霸王一测已经结束，5月17日上午10点二测华丽开启" unless white_list.include? request.remote_ip
+    #return resp_app_f "不删档测试于6月10日上午11点开启" unless white_list.include? request.remote_ip
+    #return resp_app_f "巡秦记不删档测试首发6月10日11：00开启" if un_block_list.include? mask
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
@@ -153,9 +154,9 @@ class AppController < AppSideController
       user, account_id = ios_i4
       # when 'IOS-BAIDU'
       # user, account_id = ios_baidu
-    when 'IOS-PP'
+    when 'IOS-XUNQIN-PP'
       user, account_id = ios_pp
-    when 'IOS-KY'
+    when 'IOS-XUNQIN-KY'
       user, account_id = ios_ky
     when 'GB'
       user,account_id = game_begin
