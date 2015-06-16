@@ -50,7 +50,7 @@ class ToolsController < ApplicationController
 		data = params.select{|n|n != 'job_time'}
 		logger.debug "data = #{data}"
 		job_time = DateTime.strptime(params[:job_time], '%Y-%m-%d %H:%M').to_time
-		HttpJob.create(url: request.url, http_type: "POST", data: data, trigger_time: job_time)
+		HttpJob.create(url: request.url.gsub(/^http:\/\/.*:/, "http://127.0.0.1:"), http_type: "POST", data: data, trigger_time: job_time)
 	end
 
 	# 奖品界面
