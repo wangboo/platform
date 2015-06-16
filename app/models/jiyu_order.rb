@@ -29,9 +29,20 @@ class JiyuOrder
 
  	# 1-8 充值，9月卡
  	def validate_charge money
-		@hash ||= {'1' => 6, '2' => 30, '3' => 50, '4' => 100, '5' => 200, '6' => 500, '7' => 1000,
+ 		JiyuOrder.product_money_mapping[self.product_id] == money
+	end
+
+	def self.product_money_mapping
+		@gmm ||= {'1' => 6, '2' => 30, '3' => 50, '4' => 100, '5' => 200, '6' => 500, '7' => 1000,
 			'8' => 2000, '9' => 25}
-		@hash[product_id] == money
+	end
+
+	def self.gold_product_mapping
+		@gpm ||= {60=>'1', 300=>'2', 500=>'3', 1000=>'4', 2000=>'5', 5000=>'6', 10000=>'7', 20000=>'8', 250=>'9'}
+	end
+
+	def self.gold2product gold
+		gold_product_mapping[gold] or '-1'
 	end
 
  	def self.prefix
@@ -45,7 +56,7 @@ class JiyuOrder
  	# 创建订单号
  	def self.generate_order role_id, product_id, server_id, platform
  		date = Time.new.strftime("%Y%m%d%H%M%S")
- 		Rails.logger.debug "userId = #{role_id}"
+ 		# Rails.logger.debug "userId = #{role_id}"
  		order_id = "#{JiyuOrder.prefix}#{date}#{SecureRandom.hex(2)}"
  		order_id = "#{order_id}#{JiyuOrder.suffix(order_id)}"
  		self.generate_order(order_id, money, server_id, platform) if JiyuOrder.where(order_id: order_id).exists?

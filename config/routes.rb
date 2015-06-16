@@ -60,6 +60,8 @@ Rails.application.routes.draw do
   # iiapple
   post '/app/iiapple_verify_pay' => 'iiapple#verify_pay'
   get '/app/gb_verify_pay' => 'game_begin#verify_pay'
+  # ios 充值
+  get '/app/iap_verify' => 'iap#verify_pay'
 
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
@@ -126,7 +128,6 @@ Rails.application.routes.draw do
   post "/ajax/manage/update_white_platform_all" => 'manage#update_white_platform_all', as: "manage_update_white_platform_all"
   post "/ajax/manage/update_white_platform_on" => 'manage#update_white_platform_on', as: "manage_update_white_platform_on"
   post '/ajax/manage/update_white_platform_notice' => 'manage#update_white_platform_notice', as: "manage_update_white_platform_notice"
-
   # 兑奖码
   resources :rewards
   # 兑奖码批次
@@ -175,6 +176,11 @@ Rails.application.routes.draw do
 
   post "/platforms/:id/tools/reward/to_platform" => "tools#reward_to_platform", as: "tools_reward_to_platform"
 
+  get "/platforms/:id/tools/unsend" => 'tools#unsend_view', as: "tools_reward_unsend_view"
+
+  get "/platforms/:id/tools/send" => 'tools#send_view', as: "tools_reward_send_view"
+
+  post '/json/delete_job' => 'tools#delete_job', as: "tools_delete_job"
   # 公告
   get "/platforms/:id/tools/notice" => "tools#notice_view", as: "tools_notice_view"
   # 发公告
@@ -187,6 +193,9 @@ Rails.application.routes.draw do
   get "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg_view", as: "tools_scroll_msg_view"
   # 发公告
   post "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg", as: "tools_scroll_msg"
+
+
+
 
   # ajax请求
   # 服务器信息

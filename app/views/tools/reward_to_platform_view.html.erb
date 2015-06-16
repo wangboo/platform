@@ -35,6 +35,7 @@
 			      <%= select_tag("to_platform", options_from_collection_for_select(Platform.all, "id", "name"), class: "form-control") %>
 			    </div>
 			  </div>
+			  <%= mail_job_field %>
 				<div class="text-center">
 					<button id="send" type="button" class="btn btn-primary">提交</button>
 				</div>
@@ -44,6 +45,15 @@
 </div>
 <script type="text/javascript">
 $(function(){
+	["job"].forEach(function(name){
+		$("#"+name+"Check").click(function(){	
+			if($("#"+name+"Check").attr('checked') == 'checked') {
+				$("#"+name).attr("disabled", false)
+			}else {
+				$("#"+name).attr("disabled", true)
+			}
+		})
+	})
 	$("#damgerAlter").alert('close')
 	$("#send").bind('click', function(){
 		var params = {}
@@ -54,6 +64,9 @@ $(function(){
 		params.name = $("#sender_name").val()
 		params.to_platform = $("#to_platform option:checked").val()
 		params.platform = "<%= @platform.id %>"
+		if($("#jobCheck").attr('checked') == 'checked') {
+			params.job_time = $("#job").val()
+		}
 		// console.log("to", params.to_platform)
 		$.ajax({
 			type: "POST",

@@ -1,0 +1,41 @@
+<%= render partial: "menu" %>
+<div class="col-md-8">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			已发送邮件
+		</div>
+		<div class="panel-body">
+			<% @jobs.each do |job| %>
+			<div class="panel panel-info" id="job_<%= job.id %>">
+				<div class="panel-body">
+					<div class="col-md-4">邮件标题: <%= job.data["title"] %></div>
+					<div class="col-md-4">邮件内容: <%= job.data["message"] %></div>
+					<div class="col-md-4">邮件内容: <%= job.data["reward"] %></div>
+					<div class="col-md-4">平台: <%= @platform.name %></div>
+					<div class="col-md-8">服务器: 
+					<% if job.data["servers"] == 'all' %>所有<% else %>
+					<%= Server.where(id: job.data["servers"]).map{|s|s.name}.join(";") %>
+					<% end %></div>
+					<div class="col-md-4">时间:<%= job.trigger_time.strftime("%Y-%m-%d %H:%M") %></div>
+					<div class="col-md-12">
+						结果: <%= job.result %>
+					</div>
+				</div>
+			</div>
+			<% end %>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function deleteJob(id) {
+	$.ajax({
+			type: "POST",
+			url: "<%= tools_delete_job_path %>",
+			beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+			data: {job_id: id},
+		}).success(function(data){
+			$("#job_"+id).remove()
+		}).error(function(){
+		})
+}
+</script>

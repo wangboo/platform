@@ -29,6 +29,7 @@
 	  <div class="panel-body">
 			<form class="form-horizontal">
 				<%= base_form_field [['names', '玩家名', '玩家名(用因为逗号分隔)']] %>
+				<%= mail_job_field %>
 				<div class="text-center">
 					<button id="send" type="button" class="btn btn-primary">提交</button>
 				</div>
@@ -38,6 +39,15 @@
 </div>
 <script type="text/javascript">
 $(function(){
+	["job"].forEach(function(name){
+		$("#"+name+"Check").click(function(){	
+			if($("#"+name+"Check").attr('checked') == 'checked') {
+				$("#"+name).attr("disabled", false)
+			}else {
+				$("#"+name).attr("disabled", true)
+			}
+		})
+	})
 	$("#damgerAlter").alert('close')
 	$("#send").bind('click', function(){
 		var params = {}
@@ -48,6 +58,9 @@ $(function(){
 		params.message = $("#content").val()
 		params.name = $("#sender_name").val()
 		params.platform = "<%= @platform.id %>"
+		if($("#jobCheck").attr('checked') == 'checked') {
+			params.job_time = $("#job").val()
+		}
 		$.ajax({
 			type: "POST",
 			url: "<%= tools_reward_to_user_path(@platform) %>",

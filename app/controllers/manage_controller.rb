@@ -30,6 +30,13 @@ class ManageController < ApplicationController
 		render text: "ok"
 	end
 
+	def update_white_platform
+		mask = params[:mask]
+		@manage.white_platform.delete_if{|m|m == mask}
+		@manage.save 
+		render text: "ok"
+	end
+
 	def update_white_platform_all
 		@manage.white_platform = Platform.all.pluck(:mask)
 		@manage.save
