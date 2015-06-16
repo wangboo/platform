@@ -3,38 +3,54 @@
 class ToolsController < ApplicationController
 	include ToolsHelper
 	before_action :tools_before_action, except: [:web_console, :notice_modify]
+	skip_before_action :verify_authenticity_token, only: [:reward_to_platform, :reward_to_user, :reward_to_condition]
 
 	@@check_server_fields = %w(ssh_user ssh_pwd project_path mysql_user mysql_pwd mysql_database mysql_host)
 
 	def tools_before_action
-		@platform = Platform.find(params[:id])
-		@servers = @platform.servers
-		if request.xml_http_request?
-			if params[:reward] and not /^(\w+(\-\d+){1,2}\,){0,}(\w+(\-\d+){1,2})$/ =~ params[:reward] 
-				render json: {rst: "处理失败", msgs: ["奖励表达式错误", "don't match /^(\w+(\-\d+){1,2}\,){0,}(\w+(\-\d+){1,2})$/"]}
-				return false
-			end
-			@servers = if params[:servers] == 'all'
-				@platform.servers
-			else
-				Server.where(id:params[:servers])
-			end
-			if @servers.empty? 
-				render json: {rst: "处理失败", msgs: "在#{@platform.name}找不到服务器 #{params[:servers]}"}
+		return true unless params[:id]
+		@platform = Platform.find(params[:id]) if params[:id]
+		if params[:reward] and not /^(\w+(\-\d+){1,2}\,){0,}(\w+(\-\d+){1,2})$/ =~ params[:reward] 
+			render json: {rst: "处理失败", msgs: ["奖励表达式错误", "don't match /^(\w+(\-\d+){1,2}\,){0,}(\w+(\-\d+){1,2})$/"]}
+			return false
+		end
+		unless params[:servers]
+			@servers = @platform.servers
+			return true
+		end
+		if params[:job_time]
+			unless /^\d{4}\-\d\d\-\d\d\s\d\d:\d\d$/ =~ params[:job_time]
+				render json: {rst: "处理失败", msgs: ["定时任务格式错误", 'don\'t match /^\d{4}\-\d\d\-\d\d\s\d\d:\d\d$/']}
 				return false 
 			end
-			if params[:servers] 
-				# 检查服务器配置是否齐全
-				@servers.any? do |s|
-					if nil_field = @@check_server_fields.find{|f|if s[f] == nil or s[f].empty? then f else false end}
-						render json: {rst: "处理失败", msgs: "服务器<#{s.name}>,ip=(#{s.ip}) 配置项#{nil_field}为空"}
-						return false
-					end
-				end
-			end 
+			save_to_job
+			render json: {rst: "ok", msgs: "现已加入定时任务"}
+			return false 
+		end
+		@servers = if params[:servers] == 'all'
+			@platform.servers
 		else
-			# html
-		end 
+			[Server.find(params[:servers])]
+		end
+		if @servers.empty? 
+			render json: {rst: "处理失败", msgs: "在#{@platform.name}找不到服务器 #{params[:servers]}"}
+			return false 
+		end
+		# 检查服务器配置是否齐全
+		@servers.any? do |s|
+			if nil_field = @@check_server_fields.find{|f|if s[f] == nil or s[f].empty? then f else false end}
+				render json: {rst: "处理失败", msgs: "服务器<#{s.name}>,ip=(#{s.ip}) 配置项#{nil_field}为空"}
+				return false
+			end
+		end
+	end
+
+	def save_to_job
+		logger.debug "save_to_job url = #{request.url}"
+		data = params.select{|n|n != 'job_time'}
+		logger.debug "data = #{data}"
+		job_time = DateTime.strptime(params[:job_time], '%Y-%m-%d %H:%M').to_time
+		HttpJob.create(url: request.url, http_type: "POST", data: data, trigger_time: job_time)
 	end
 
 	# 奖品界面
@@ -67,6 +83,7 @@ class ToolsController < ApplicationController
 		names = params[:names]
 		msgs = []
 		@servers.each do |s|
+			logger.debug "server = #{s.id} #{s.name}"
 			sync s
 			p = send_mail(s, type: "reward", user: names)
 			p.force_encoding("utf-8")
@@ -187,6 +204,19 @@ class ToolsController < ApplicationController
 	rescue => e 
 
 	end 
+	# 未发送邮件
+	def unsend_view
+		@jobs = HttpJob.where(trigger: false)
+	end
+
+	def send_view
+		@jobs = HttpJob.where(trigger: true).sort(trigger_time: -1)
+	end
+
+	def delete_job
+		HttpJob.where(id: params[:job_id]).delete
+		render text: "ok"
+	end
 
 	private
 

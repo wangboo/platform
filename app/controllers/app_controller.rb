@@ -29,6 +29,7 @@ class AppController < AppSideController
 
     if manage = Manage.first
       # ip限制
+      puts "request.remote_ip = #{request.remote_ip}"
       return resp_app_f manage.white_ips_notice if manage.white_ips_on and not manage.white_ips.include?(request.remote_ip)
       # 平台限制
       return resp_app_f manage.white_platform_notice if manage.white_platform_on and not manage.white_platform.include?(mask)

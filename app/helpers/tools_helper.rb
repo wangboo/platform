@@ -69,4 +69,20 @@ module ToolsHelper
 		form_field_builder fields
 	end
 
+	def mail_job_field
+		raw %Q{
+			<div class="form-group">
+				<label class="col-md-3 control-label" for="job">定时任务</label>
+				<div class="col-md-7">
+					<div class="input-group">
+			      <span class="input-group-addon">
+			        <input type="checkbox" id="jobCheck">
+			      </span>
+			      <input type="text" class="form-control" id="job" disabled placeholder="年年年年-月月-日日 时时:分分">
+			    </div><!-- /input-group -->
+				</div>
+			</div>
+	}
+	end
+
 end
