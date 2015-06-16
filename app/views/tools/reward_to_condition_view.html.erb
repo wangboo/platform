@@ -109,6 +109,9 @@ $(function(){
 		params.message = $("#content").val()
 		params.name = $("#sender_name").val()
 		params.platform = "<%= @platform.id %>";
+		if($("#jobCheck").attr('checked') == 'checked') {
+			params.job_time = $("#job").val()
+		}
 		["registBegin", "registAfter", "levelBigger", "levelSmaller"].forEach(function(name){
 			if($("#"+name+"Check").attr('checked') == 'checked') {
 				params[name+"Check"] = true
