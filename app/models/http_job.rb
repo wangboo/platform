@@ -18,7 +18,7 @@ class HttpJob
 	field :exception_his, type: Array, default: []
 
 	def should_trigger
-		Time.now >= trigger_time
+		Time.now >= (trigger_time - 8.hours)
 	end
 
 	def do_it
