@@ -61,6 +61,8 @@ Rails.application.routes.draw do
   get '/app/gb_verify_pay' => 'game_begin#verify_pay'
   # ios 充值
   get '/app/iap_verify' => 'iap#verify_pay'
+  # asdk
+  get '/app/asdk_verify_pay' => 'asdk#verify_pay'
 
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
