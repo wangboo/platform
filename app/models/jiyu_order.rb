@@ -42,7 +42,7 @@ class JiyuOrder
 	end
 
 	def self.day_product_mapping
-		@dpm ||= {'7': '10', : '30': '11', '180': '12'}
+		@dpm ||= {'7' => '10', '30' => '11', '180' => '12'}
 	end
 
 	def self.gold2product gold
