@@ -1,4 +1,4 @@
-require_dependency Rails.root.join("lib", "properties.rb")
+# require_dependency Rails.root.join("lib", "properties.rb")
 
 class VersionsController < ApplicationController
 	# 删除其中一项

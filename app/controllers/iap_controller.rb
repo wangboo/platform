@@ -30,7 +30,9 @@ class IapController < AppSideController
 		product = if body["product_id"] == 'com.jiyu.xqj.monthcard' 
 			'9'
 		elsif rst = body["product_id"].scan(/^com\.jiyu\.xqj\.(\d+)gold$/).first
-			gold2product rst.first
+			JiyuOrder.gold2product rst.first
+		elsif rst = body["product_id"].scan(/^com\.jiyu\.xqj\.(\d+)leaguer$/).first
+			JiyuOrder.day_product_mapping rst.first
 		else
 			'-1'
 		end
