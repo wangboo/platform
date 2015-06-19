@@ -46,7 +46,7 @@ class AnyPay
     data = keys.reduce({}){|s,a|s[a]=params[a];s}
 
     product_id = params['product_id']
-    list = [6,30,50,100,200,500,1000,2000,25,12,28,98]
+    list = [6,30,50,100,200,500,1000,2000,25,12,25,98]
     if amount.to_i != list[product_id.to_i-1]
         data['add_money']=0
         ChargeInfo.create data
