@@ -59,6 +59,8 @@ Rails.application.routes.draw do
   get '/app/tongbu_verify_pay' => 'tongbu#verify_pay'
 
   get '/app/gb_verify_pay' => 'game_begin#verify_pay'
+
+  post '/app/mogoo_verify_pay' => 'mogoo#verify_pay'
   # ios 充值
   get '/app/iap_verify' => 'iap#verify_pay'
   # asdk
