@@ -60,8 +60,7 @@ Rails.application.routes.draw do
 
   get '/app/gb_verify_pay' => 'game_begin#verify_pay'
 
-  # get '/app/mogoo_verify'     => 'mogoo#verify'
-  get '/app/mogoo_verify_pay' => 'mogoo#verify_pay'
+  post '/app/mogoo_verify_pay' => 'mogoo#verify_pay'
   # ios 充值
   get '/app/iap_verify' => 'iap#verify_pay'
   # asdk
