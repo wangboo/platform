@@ -1,10 +1,10 @@
 require_dependency Rails.root.join("lib", "comm.rb")
 class ServersController < ApplicationController
 
-  before_action :find_server, only: [:show, :update, :user_range, :user_active, :use_gold]
+  before_action :find_server, only: [:show, :update, :user_range, :user_active, :use_gold, :delete]
 
   def find_server
-    @server = Server.find(params[:id])
+    @server = Server.find(params[:id] || params[:server_id])
   end
 
   def love
@@ -25,6 +25,8 @@ class ServersController < ApplicationController
   end
 
   def delete
+    @server.delete
+    redirect_to platform_path(params[:platform_id])
   end
 
   def server_params 

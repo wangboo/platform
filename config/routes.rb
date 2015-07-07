@@ -60,6 +60,7 @@ Rails.application.routes.draw do
 
   get '/app/gb_verify_pay' => 'game_begin#verify_pay'
 
+  # get '/app/mogoo_verify'     => 'mogoo#verify'
   get '/app/mogoo_verify_pay' => 'mogoo#verify_pay'
   # ios 充值
   get '/app/iap_verify' => 'iap#verify_pay'
@@ -151,6 +152,7 @@ Rails.application.routes.draw do
     resources :servers do
       get '/charge', action: :charge_info, as: "charge_info"
       get '/charge/user/:user_id', action: :charge_info_user, as: "charge_info_user"
+      get '/delete', action: :delete, as: "delete"
     end
     get '/kf', action: :kf_view, as: "kf_view"
     post '/kf', action: :kf, as: "kf"
