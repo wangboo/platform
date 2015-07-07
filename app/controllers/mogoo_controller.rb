@@ -14,8 +14,24 @@ class MogooController < AppSideController
     render json: {error_code: "1", error_message: "msg"}
   end
 
+  def login_url
+  	"http://test.17mogu.com:8080/mogoo2/gameUser/checkToken.do"
+  	# "http://app.17mogu.com:8080/mogoo2/gameUser/checkToken.do"
+  end
+
   def verify_keys
   	%w{uid sid oid gold time}
+  end
+
+  def verify token
+  	resp = HTTParty.post(login_url, header: {"Cookie" => "JSESSIONID=#{token}"}).body
+  	rst = JSON.parse(resp)
+  	return [-1, 0] unless rst["res_info"]["response_code"] == "000"
+    user = QicUser.find_or_create_by(username: token) do |u|
+      u.username = token
+      u.password = params[:password]
+    end
+    [user, token]
   end
 
 	def verify_pay
