@@ -156,7 +156,7 @@ class AppController < AppSideController
     account.save
     Rails.logger.debug "mask=#{params[:mask]}"
     case params[:mask]
-    when 'ANDROID-XICHU-UC'
+    when 'ANDROID-XUNQIN-UC'
       user, account_id = android_uc
     when 'IOS-ICE'
       user, account_id = ios_i4

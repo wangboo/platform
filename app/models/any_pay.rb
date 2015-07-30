@@ -14,11 +14,11 @@ class AnyPay
     return md5_str
   end
 
-  def self.key mask 
-    @key ||= {
-      "ANDROID-XICHU-BIEJI-TMGP" => "43852A705E7B0A7C19938A2168029B68",
-    }
-    @key[mask] or "371BB654EBE0C7E0165B0DC840F5A97C"
+  def self.key mask
+    case mask
+    when /^ANDROID-XUNQIN.*$/ then "7C361B572BF66DBDFB7D67AE1DCDB524"
+    else "7C361B572BF66DBDFB7D67AE1DCDB524"
+    end
   end
 
   def self.md5_digest private_key,md5_str
@@ -36,7 +36,7 @@ class AnyPay
     exclude = ['action', 'controller', 'sign']
     data = params.delete_if{|k,v|exclude.include? k}
     md5_str = data.to_a.sort{|v0,v1|v0[0]<=>v1[0]}.collect{|v|v[1]}.join
-    
+
     private_key = AnyPay.key params[:private_data]
     Rails.logger.debug("md5_str = #{md5_str}")
     #md5_str = sort_params params

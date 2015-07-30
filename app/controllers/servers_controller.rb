@@ -27,9 +27,9 @@ class ServersController < ApplicationController
   def delete
   end
 
-  def server_params 
+  def server_params
     params.require("server").permit(:name, :desc, :ip, :port, :platform_id, :server_state_id, :work_state, :zone_id,
-      :ssh_user, :ssh_pwd, :project_path, :mysql_user, :mysql_pwd, :mysql_database, :mysql_host, :local_ip)
+      :ssh_user, :ssh_pwd, :project_path, :mysql_user, :mysql_pwd, :mysql_database, :mysql_host, :local_ip).delete_if{|k,v|v=~/^\*+$/}
   end
 
   # 服务器在线人数, json请求
@@ -40,7 +40,7 @@ class ServersController < ApplicationController
   end
 
 # 查询该服务器信息
-  def server_info 
+  def server_info
     server = Server.find(params[:id])
     Rails.logger.debug "ip=#{server.ip},port=#{server.port}"
     rst = GameServer.call_cmd(server, "server_info")
@@ -56,14 +56,14 @@ class ServersController < ApplicationController
     Rails.logger.debug("usersize : #{rst}, server = #{server.name}")
     if rst.code == 200
       render json: {ok: true, size: rst['size'], shutdown: rst['shutdown']}
-    else 
+    else
       render json: {ok: false}
     end
   end
 
   def charge_info
     @server = Server.find(params[:server_id])
-    
+
   end
 
   # 报表服务
@@ -82,13 +82,13 @@ class ServersController < ApplicationController
     last = nil
     @data = find_chat_data.inject([]) do |sum, item|
       if last
-        hash = {time: item.time.to_s[8,2], 
-          # goldSum: last.goldSum - item.goldSum, 
-          goldSum: item.goldSum, 
-          donateSum: last.donateSum - item.donateSum, 
+        hash = {time: item.time.to_s[8,2],
+          # goldSum: last.goldSum - item.goldSum,
+          goldSum: item.goldSum,
+          donateSum: last.donateSum - item.donateSum,
           voucherSum: last.voucherSum - item.voucherSum,
-          goldCost: last.goldCost - item.goldCost, 
-          voucherCost: last.voucherCost - item.voucherCost, 
+          goldCost: last.goldCost - item.goldCost,
+          voucherCost: last.voucherCost - item.voucherCost,
           donateCost: last.donateCost - item.donateCost,
           server_id: item.server_id}
         sum << hash
@@ -109,7 +109,7 @@ class ServersController < ApplicationController
     begin_date = (Time.new(year, month, day).yesterday+23.hours)
     end_date = (begin_date + 24.hours).strftime("%Y%m%d%H").to_i
     begin_date = begin_date.strftime("%Y%m%d%H").to_i
-    
+
     # ServerInfo.where("date between ? and ?", begin_date, end_date).select(select_params)
     ServerInfo.where(time: begin_date..end_date, server_id: params[:id])
   end
