@@ -60,10 +60,14 @@ Rails.application.routes.draw do
   # iiapple
   post '/app/iiapple_verify_pay' => 'iiapple#verify_pay'
   get '/app/gb_verify_pay' => 'game_begin#verify_pay'
+
+  post '/app/mogoo_verify_pay' => 'mogoo#verify_pay'
   # ios 充值
   get '/app/iap_verify' => 'iap#verify_pay'
   # asdk
   post '/app/asdk_verify_pay' => 'asdk#verify_pay'
+  # 泥巴充值
+  post '/app/mud_verify_pay' => 'mud#verify_pay'
 
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
@@ -150,6 +154,7 @@ Rails.application.routes.draw do
     resources :servers do
       get '/charge', action: :charge_info, as: "charge_info"
       get '/charge/user/:user_id', action: :charge_info_user, as: "charge_info_user"
+      get '/delete', action: :delete, as: "delete"
     end
     get '/kf', action: :kf_view, as: "kf_view"
     post '/kf', action: :kf, as: "kf"

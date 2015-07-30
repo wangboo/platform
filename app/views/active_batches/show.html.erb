@@ -31,7 +31,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<%@active_batch.active_codes[0...10].each_with_index do |code, index|%>
+		<%@active_batch.active_codes.limit(10).each_with_index do |code, index|%>
 		<tr>
 			<td><%=index+1%>
 			<td><%=code.code%></td>

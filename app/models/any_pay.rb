@@ -19,6 +19,7 @@ class AnyPay
     when /^ANDROID-XUNQIN.*$/ then "7C361B572BF66DBDFB7D67AE1DCDB524"
     else "7C361B572BF66DBDFB7D67AE1DCDB524"
     end
+    @key[mask] or "371BB654EBE0C7E0165B0DC840F5A97C"
   end
 
   def self.md5_digest private_key,md5_str

@@ -164,12 +164,14 @@ class AppController < AppSideController
       # user, account_id = ios_baidu
     when 'IOS-XUNQIN-PP'
       user, account_id = ios_pp
-    when 'IOS-XUNQIN-KY'
-      user, account_id = ios_ky
     when 'GB'
       user,account_id = game_begin
     when 'IOS-TONGBU'
       user,account_id = ios_tongbu
+    when /\-MUD/
+      user,account_id = MudController.login params[:token], request.remote_ip
+    when /KY/
+      user,account_id = ios_ky
     else
       # 默认用sid创建一个账号
       user = QicUser.find_or_create_by(username: params[:sid]) do |u|
@@ -180,7 +182,7 @@ class AppController < AppSideController
     end
 		logger.debug "user=#{user}, account = #{account_id}"
     if user == -1 then
-      return
+      return resp_app_f
     end
     account.account_id=account_id
     account.save

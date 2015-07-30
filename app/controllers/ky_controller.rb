@@ -15,7 +15,9 @@ class KyController < AppSideController
 
   def self.login token
     md5 = Digest::MD5.hexdigest "#{KyController.app_key}#{token}"
-    HTTParty.post(KyController.login_url, body: {tokenKey: token, sign: md5}).body
+    resp = HTTParty.post(KyController.login_url, body: {tokenKey: token, sign: md5}).body
+    Rails.logger.debug("resp = #{resp}")
+    resp
   end
 
   def success msg
