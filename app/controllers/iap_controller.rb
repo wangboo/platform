@@ -19,7 +19,7 @@ class IapController < AppSideController
   end
 
 	def verify_pay
-		data = Base64.decode params[:receipt]
+		data = Base64.decode64 params[:receipt]
 		user_id, server_id, platform_id = params[:userId], params[:serverId], params[:platform]
 		url = if data["environment"] == 'Sandbox' then sandbox_url or production_url end 
 		body = HTTParty.post(url, body: {"receipt-data" => params[:receipt]}.to_json).body

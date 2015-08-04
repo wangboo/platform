@@ -65,6 +65,8 @@ Rails.application.routes.draw do
   get '/app/iap_verify' => 'iap#verify_pay'
   # asdk
   post '/app/asdk_verify_pay' => 'asdk#verify_pay'
+  # 泥巴充值
+  post '/app/mud_verify_pay' => 'mud#verify_pay'
 
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
