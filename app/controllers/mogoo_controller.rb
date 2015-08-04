@@ -1,5 +1,5 @@
 
-class MogooController < AppSideController 
+class MogooController < AppSideController
 
 	def secret_key
 		"mogoo-3P60EINppHnQQ2MPCz"
@@ -10,8 +10,8 @@ class MogooController < AppSideController
   end
 
   def fail msg=nil
-    Rails.logger.debug "TtController fail #{msg}"
-    render json: {error_code: "1", error_message: "msg"}
+    Rails.logger.error "TtController fail #{msg}"
+    render json: {error_code: "1", error_message: msg}
   end
 
   def login_url
@@ -43,7 +43,7 @@ class MogooController < AppSideController
       order_id:           params['eif'],
       platform_order_id:  params['oid'],
       state:              true,
-      money:              params['gold'],
+      money:              params['gold'].to_i,
       params:             params.to_json
     )
     IOSChargeInfo.charge payment, proc{|m|success m}, proc{|m|fail m}

@@ -30,7 +30,7 @@ class ServerUser
 
   def has_login_his?
     last_login.size > 0
-  end 
+  end
 
   # 最近登陆的服务器id集合
   def last_login_ids
@@ -38,7 +38,7 @@ class ServerUser
   end
 
   def last_servers_data
-    last_login_ids.map{|id|Server.find(id)}.select{|s|s.visible?}.map{|s|s.to_app_hash}
+    last_login_ids.map{|id|Server.find(id)}.select{|s|s and s.visible?}.map{|s|s.to_app_hash}
   end
 
 end

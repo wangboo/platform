@@ -22,7 +22,7 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-    
+
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
@@ -49,8 +49,11 @@ class AppController < AppSideController
     data[:last] = server_user.last_servers_data
     # 推荐
     if data[:last].empty? and platform.rmd_id
-      data[:last] = [Server.find(platform.rmd_id).to_app_hash]
-      data[:rmd] = 0
+      rmd_server = Server.find(platform.rmd_id)
+      if rmd_server
+        data[:last] = [Server.find(platform.rmd_id).to_app_hash]
+        data[:rmd] = 0
+      end
     end
     # 白名单测试
     # unless white_list.include? request.remote_ip
@@ -81,6 +84,9 @@ class AppController < AppSideController
     return resp_aff_f "缺少入参zoneId" unless params[:zoneId]
 
     mask, zone_id,code,username = params[:platform], params[:zoneId].to_i,params[:code],params[:username]
+
+    return render text: HTTParty.get("http://203.195.224.152:3000/app/validate_code", body: {platform: mask, zoneId: zone_id, code: code, username: username}).body if /XUNQIN/ =~ params[:platform]
+    #zone_id = 12 if /XICHU/ =~ mask and zone_id == 3 and request.remote_ip = '203.195.224.152'
     # 查找并检查大区和用户名
     platform = Platform.where(mask: mask).first
     return resp_app_f '大区不存在' unless platform
