@@ -20,19 +20,24 @@ class IapController < AppSideController
 
 	def verify_pay
 		data = Base64.decode64 params[:receipt]
-		user_id, server_id, platform_id = params[:userId], params[:serverId], params[:platform]
-		url = if data["environment"] == 'Sandbox' then sandbox_url or production_url end 
+		user_id, server_id = params[:userId], params[:serverId]
+    platform_id = Server.find(server_id).platform_id
+    sandbox = data.split("\n\t")[3].include?("Sandbox")
+		url = if sandbox then sandbox_url else production_url end
 		body = HTTParty.post(url, body: {"receipt-data" => params[:receipt]}.to_json).body
-		hash = JSON.pase body
+		hash = JSON.parse body
 		return resp_app_f "receipt错误" unless hash["status"] == 0
 		# 订单已经成功
-		return resp_app_s if charge and charge.add_money == 1
-		product = if body["product_id"] == 'com.jiyu.xqj.monthcard' 
+    receipt = hash['receipt']
+    logger.debug "return #{hash}"
+    charge = IOSChargeInfo.find_by(order_id: receipt['unique_identifier'])
+		return resp_app_s("该订单已经充值成功，不再受理") if charge and charge.add_money == 1
+		product = if receipt["product_id"].include? 'monthcard'
 			'9'
-		elsif rst = body["product_id"].scan(/^com\.jiyu\.xqj\.(\d+)gold$/).first
+		elsif rst = receipt["product_id"].scan(/^.*\.(\d+)gold$/).first
 			JiyuOrder.gold2product rst.first
-		elsif rst = body["product_id"].scan(/^com\.jiyu\.xqj\.(\d+)leaguer$/).first
-			JiyuOrder.day_product_mapping rst.first
+		elsif rst = receipt["product_id"].scan(/^.*\.(\d+)leaguer$/).first
+			JiyuOrder.day_product_mapping[rst.first] or '-1'
 		else
 			'-1'
 		end
@@ -43,7 +48,7 @@ class IapController < AppSideController
 		# def self.charge data, suc_func, fail_func
 		payment = HashWithIndifferentAccess.new(
       order_id:           order.order_id,
-      platform_order_id:  hash['unique_identifier'],
+      platform_order_id:  receipt['unique_identifier'],
       state:              true ,
       money:              money,
       params:             params.to_json
