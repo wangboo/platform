@@ -4,7 +4,7 @@
 	<div class="col-md-5 col-lg-5">
 		<div class="jumbotron">
 			<div class="container">
-				<h2><%= "#{@server.platform.name} : #{@server.name}" %></h2>				
+				<h2><%= "#{@server.platform.name} : #{@server.name}" %></h2>
 				<p><%= @server.desc %></p>
 			</div>
 		</div>
@@ -14,7 +14,7 @@
 		  <div class="panel-heading">
 				<h3 class="panel-title">修改服务器信息</h3>
 		  </div>
-		  <div class="panel-body">					
+		  <div class="panel-body">
 				<%= form_for(platform_server_path(@server.platform, @server), method: "put", html: {class: "form-horizontal"}) do |f|%>
 						<div class="form-group">
 							<label class="control-label col-md-2" for="update_name">名字</label>
@@ -63,7 +63,7 @@
 						<div class="form-group">
 							<label class="control-label col-md-2" for="<%= i %>"><%= i %></label>
 							<div class="col-md-10">
-								<input class="form-control" type='text' name='server[<%= i %>]' id='<%= i %>' value="<%=@server[i] %>">
+                <input class="form-control" type='text' name='server[<%= i %>]' id='<%= i %>' value="<%=(@server[i] || "").gsub(/./, "*") %>">
 							</div>
 						</div>
 						<% end %>
@@ -72,9 +72,9 @@
 						</div>
 					<% end %>
 		  </div>
-		
+
 	</div>
-<!-- 
+<!--
 	<form class="form-horizontal" role="form">
 		<div class="form-group">
 			<legend>
@@ -168,7 +168,7 @@
 
 
 <script type="text/javascript">
-	
+
 	function userInfo() {
 		$.get("<%= ajax_server_info_path %>", {id: "<%= @server.id %>"}, function(data, status){
 			console.log(data);
@@ -188,11 +188,11 @@
 	}
 
 	$(function(){
-		
+
 		userInfo();
 
 
-		
+
 	})
 </script>
 

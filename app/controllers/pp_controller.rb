@@ -4,17 +4,14 @@ require 'base64'
 
 class PpController < AppSideController
 
-	PP_PEM = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA29hYrlTLzXGX284Yu5lw\nc09k8iNpNYBvbFoQfGOrYRgD3l1+nZtX1qPtKHwVVFG2UKih9cQT8gc/BsCzkxIO\nnSHP4wtI8m4kttbs+b+DGstZnQLgRoTa+zzGJWhDSY5Gngg2xXfh7Ewx1SPdLoiP\nfaFKj8/MNjGfZz1iI3wmWMLDJftFc6drd42LBT63Qoph9dBZZlnxgINWiGHGpeZC\nGoxalcYyt+gH+h+w5Og2+lsvrH4IWSzk6eRSt8qi8rDK9lJOw0rHtqhpbAgaAs3k\nfDml1yFlzT3XrP5FvLo09wigg/q/8egcssXCdFuO//42jPaCk0H9HpZrmjQFK8Au\nXQIDAQAB\n-----END PUBLIC KEY-----"
-
-
-	#PP_PEM = "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC2kcrRvxURhFijDoPpqZ/IgPlA\ngppkKrek6wSrua1zBiGTwHI2f+YCa5vC1JEiIi9uw4srS0OSCB6kY3bP2DGJagBo\nEgj/rYAGjtYJxJrEiTxVs5/GfPuQBYmU0XAtPXFzciZy446VPJLHMPnmTALmIOR5\nDddd1Zklod9IQBMjjwIDAQAB\n-----END PUBLIC KEY-----"
+  PP_PEM = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApx/pwU0+DM5GlFkA5XTu\nCLqKf6Se9AyhIAqHCCHmDPp2DJQSguO2wGp0Nit97cZ20vcefVjuEICf2dd4hga/\n2MurRJwPB6v/s5M511rBWftU9SVa493Cvdtg/bgdhNf/z4Gja3mFrin+EMxRn051\n1+dg8YRhhjpMfMkZo4uGC6wX4FuYSLMFUz9uYLhuRiv+Z+Q+S7gidQdMh2+zftAu\nQXOwbzaAa6TUicHeG6arNEv731Vb3RJS43/qDmjoQe6m+mjPzkvs8cti9aZG7BeW\n1BIVFFvNdEU281+foWx1SjB+FVhyWQm2fbnJlsDuIBTkNZ0Jrp4wW06c+aaJM1Dw\nsQIDAQAB\n-----END PUBLIC KEY-----"
 
 	def self.app_key
-		@app_key ||= '439fcd9d8309613c4dc3ceae8b1a4fbb'
+		@app_key ||= 'c74923d3c2cd4078b03e85b6cb89f57e'
 	end
 
 	def self.appid
-		@appid ||= 5329
+		@appid ||= 6111
 	end
 
 	def self.login token

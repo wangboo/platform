@@ -1,3 +1,3 @@
-every 1.hour do
-	runner "ServerInfo.cron_update"
+every 1.minute do
+	runner "HttpJob.tryDoJob"
 end

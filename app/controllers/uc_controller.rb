@@ -17,8 +17,7 @@ class UcController < AppSideController
    # hash_data = JSON.parse params['data']
     sign = params['sign']
     md5_before = hash_data.to_a.sort{|a,b|a[0]<=>b[0]}.map{|a|a.join("=")}.join("")
-    #private_key = "a6fb07456626474f9ed441b455dc9922"
-    private_key = "39889cf08f1901acd5fc386a4773f2f3"
+    private_key = "122a0218e344f51633710af7f64ccc12"
     logger.debug "md5_before=#{md5_before}"
     md5 = Digest::MD5.hexdigest(md5_before+private_key)
     return fail "md5验证错误 params= #{params}" unless sign == md5

@@ -26,7 +26,7 @@ class IOSChargeInfo
 		order = JiyuOrder.where(order_id: data['order_id']).first
 		# 校验订单
 		return fail_func.call "订单不存在" unless order
-		#return fail_func.call "订单中金钱和产品不对应" unless order.validate_charge data['money']
+		return fail_func.call "订单中金钱和产品不对应#{data[:params]}" unless order.validate_charge data['money']
 		# 查询该订单充值记录
 		charge_info = IOSChargeInfo.find_or_create_by(order_id: data['order_id']) do |i|
 			data.each{|k,v|i[k] = v}
