@@ -7,6 +7,7 @@ gem 'rails', '4.1.1'
 # gem 'sqlite3'
 # , github: 'mongoid/mongoid'
 gem 'mongoid', '~> 4.0.0.beta1'
+gem 'moped', '2.0.4', github: 'wandenberg/moped', branch: 'operation_timeout'
 # gem 'mongoid_auto_increment_id', "0.6.2"
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'

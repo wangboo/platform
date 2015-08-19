@@ -7,3 +7,4 @@ daemonize true
 workers 4
 threads 8,16
 preload_app!
+#environment 'production'

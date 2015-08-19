@@ -1,11 +1,11 @@
 class AppController < AppSideController
 
   def white_list
-    ['182.138.102.60', '110.184.65.95']
+    ['182.138.102.60', '182.139.182.238', '110.184.65.95']
   end
 
   def un_block_list
-    ['ANDROID-HUAWEI','ANDROID-AM']
+    ['IOS-XUNQIN-KY']
     #['ANDROID-UC']
   end
   def block_list
@@ -22,7 +22,6 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
@@ -169,7 +168,7 @@ class AppController < AppSideController
       user, account_id = ios_i4
       # when 'IOS-BAIDU'
       # user, account_id = ios_baidu
-    when 'IOS-PP'
+    when 'IOS-XUNQIN-PP'
       user, account_id = ios_pp
     when 'GB'
       user,account_id = game_begin

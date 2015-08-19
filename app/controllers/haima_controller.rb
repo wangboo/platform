@@ -3,38 +3,44 @@ require 'digest/sha1'
 
 class HaimaController < AppSideController
 
-	def success msg
+	def success msg=nil
     Rails.logger.debug msg if msg
     render json: 'SUCCESS'
   end
 
-  def fail msg
+  def fail msg=nil
     Rails.logger.debug msg if msg
     render json: 'FAILURE'
   end
 
 	def verify_pay
-		Rails.logger.debug "params = #{params}"
-		unless valid_sign params[:transdata], params[:sign]
-			# 签名验证不通过
-			Rails.logger.debug "签名验证不通过"
-			return render json: "FAILURE"
-		end
-		data = JSON.parse params[:transdata]
+		return fail unless verify2
 		payment = HashWithIndifferentAccess.new(
-      order_id:           data['exorderno'],
-      platform_order_id:  data['transid'],
-      state:              data[	'result'] == '0',
-      money:              data['money'].to_i / 100,
+      order_id:           params['out_trade_no'],
+      platform_order_id:  '0',
+      state:              params[	'trade_status'].to_i == 1,
+      money:              params['total_fee'].to_i,
       params:             params.to_json
     )
     IOSChargeInfo.charge payment, proc{|m|success m}, proc{|m|fail m}
-	end	
+	end
 
 	private
 	def api_key
-		"NEU0Qzg4OUMxNzI1NDBEN0RCODc3RDYwREM0OUQ1REUzMUI3OTA4Q09UZ3pOek0yTVRBeE9UTXpNekUwTkRZeE1Tc3hPRFF6TlRNME9UYzROVGN6TmpZd05qQTVOelEyTURZd016Z3lNRGt6TlRjMk16VTFNVGM9"
-	end
+	  "87ba22ff54016a5cbb7602a00b5ff013"
+  end
+
+  def verify2
+    md5_before = %w(notify_time appid out_trade_no total_fee subject body trade_status).map{|k|"#{k}=#{CGI.escape params[k]}"}.join("&") << api_key
+    #escape = CGI.escape(md5_before)
+    sign = Digest::MD5.hexdigest(md5_before)
+    unless params[:sign] == sign
+      logger.error "校验签名错误 md5_before=#{md5_before}， sign=#{sign}, param_sign=#{params[:sign]}"
+      logger.error "params = #{params}"
+      return false
+    end
+    return true
+  end
 
 	def rsa_keys
 		after = Base64.decode64(api_key)
