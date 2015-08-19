@@ -163,7 +163,7 @@ class AppController < AppSideController
     account.save
     Rails.logger.debug "mask=#{params[:mask]}"
     case params[:mask]
-    when 'ANDROID-XICHU-UC'
+    when /XICHU.*-UC/
       user, account_id = android_uc
     when 'IOS-ICE'
       user, account_id = ios_i4
@@ -238,7 +238,7 @@ class AppController < AppSideController
   def android_uc
     resp = U9Server.login params[:sid]
     unless resp['state']['code'] == 1
-      resp_app_f "登陆失败"
+      #resp_app_f "登陆失败"
       return [-1, 0]
     end
     account_id = resp['data']['accountId']
