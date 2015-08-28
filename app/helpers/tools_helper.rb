@@ -30,7 +30,7 @@ module ToolsHelper
 				<select id="server" class="form-control" multiple="multiple">
 					<option value="all">--所有服务器--</option>
 		}
-		@servers.sort_by{|s|s.zone_id or 0}.each do |s|
+		@servers.sort_by{|s|s.name or "0"}.each do |s|
 			html << "<option value='#{s.id}'>#{s.name}</option>"
 		end
 		html << "</select></div></div>"

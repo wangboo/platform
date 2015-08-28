@@ -16,7 +16,7 @@ class ServersController < ApplicationController
       logger.debug "group_id = #{group_id}"
       group = Group.find(group_id)
       sp = server_params
-      group.platform_id.each do |pid|
+      group.platform_ids.each do |pid|
         if Platform.where(id: pid).size > 0 
           sp[:platform_id] = pid 
           Server.create sp
