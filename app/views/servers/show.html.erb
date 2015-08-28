@@ -64,7 +64,7 @@
 							<label class="control-label col-md-2" for="<%= i %>"><%= i %></label>
 							<div class="col-md-10">
                 <input class="form-control" type='text' name='server[<%= i %>]' id='<%= i %>' 
-                value="<%=XConfig.hide_pwd ? (@server[i] || "").gsub(/./, "*") : @server[i] %>">
+                value="<%=Xconfig.hide_pwd ? (@server[i] || "").gsub(/./, "*") : @server[i] %>">
 							</div>
 						</div>
 						<% end %>
