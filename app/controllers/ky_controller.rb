@@ -2,12 +2,10 @@ require 'digest/md5'
 
 class KyController < AppSideController
 
-  #KY_PEM = "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAw/iiqHBRdg25+yKyNxcbS70K\nBqzrXz6X2K+T7G0gTPvzam4exgE7mnfPBIZAB1qQQQGg7NfKJY7Vpe7rdlvmUagp\nuWKPVRLb5wHB71bQhgNc9iAV3Fn/SpdFospDV+/aA+gvIoAqe7mpe3so6C5HwDKQ\njKiBVP38NhzGB4b5uQIDAQAB\n-----END PUBLIC KEY-----"
-
-  KY_PEM = "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDYQCiFb4j6HXzJn80wvWKmFERHDWvw463rUKiX9vVCRgYBuzZ9vtIKSsz1yfwP9lT+s4fKkzKZa6kQQ6UK62iPCu07aR2Rsd6AV0OhhjKi6zMpfWFgQrlI/fAUQGQTQ73KlCDNysIKzZzJcnilpDwrzmlu4jdUW3a3ZZ6Ou0bI2QIDAQAB\n-----END PUBLIC KEY-----"
+  KY_PEM = "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAw/iiqHBRdg25+yKyNxcbS70K\nBqzrXz6X2K+T7G0gTPvzam4exgE7mnfPBIZAB1qQQQGg7NfKJY7Vpe7rdlvmUagp\nuWKPVRLb5wHB71bQhgNc9iAV3Fn/SpdFospDV+/aA+gvIoAqe7mpe3so6C5HwDKQ\njKiBVP38NhzGB4b5uQIDAQAB\n-----END PUBLIC KEY-----"
 
   def self.app_key
-    'b2bd94eb0dc9ea2be3261d1ff8db5d16'
+    @app_key ||= 'b2bd94eb0dc9ea2be3261d1ff8db5d16'
   end
 
   def self.login_url

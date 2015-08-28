@@ -8,15 +8,15 @@ class U9Server
 
 	class << self
 	def game_id
-		"542891"
+		"557371"
 	end
 
 	def api_key
-		"39889cf08f1901acd5fc386a4773f2f3"
+		"122a0218e344f51633710af7f64ccc12"
 	end
 
 	def cp_id
-		"51991"
+		"55919"
 	end
 
 	def p uri, service, data

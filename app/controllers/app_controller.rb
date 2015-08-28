@@ -1,11 +1,11 @@
 class AppController < AppSideController
 
   def white_list
-    ['182.138.102.60', '110.184.65.95']
+    ['182.138.102.60', '182.139.182.238', '110.184.65.95']
   end
 
   def un_block_list
-    ['ANDROID-HUAWEI','ANDROID-AM']
+    ['IOS-XUNQIN-KY']
     #['ANDROID-UC']
   end
   def block_list
@@ -22,7 +22,6 @@ class AppController < AppSideController
   def server_list
     username = params[:username]
     mask = params[:mask]
-
     return resp_app_f "入参不正确" unless username and mask
     platform = Platform.where(mask: params[:mask]).first
     return resp_app_f "平台不存在" unless platform
@@ -49,8 +48,11 @@ class AppController < AppSideController
     data[:last] = server_user.last_servers_data
     # 推荐
     if data[:last].empty? and platform.rmd_id
-      data[:last] = [Server.find(platform.rmd_id).to_app_hash]
-      data[:rmd] = 0
+      rmd_server = Server.find(platform.rmd_id)
+      if rmd_server
+        data[:last] = [Server.find(platform.rmd_id).to_app_hash]
+        data[:rmd] = 0
+      end
     end
     # 白名单测试
     # unless white_list.include? request.remote_ip
@@ -81,6 +83,9 @@ class AppController < AppSideController
     return resp_aff_f "缺少入参zoneId" unless params[:zoneId]
 
     mask, zone_id,code,username = params[:platform], params[:zoneId].to_i,params[:code],params[:username]
+
+    return render text: HTTParty.get("http://203.195.224.152:3000/app/validate_code", body: {platform: mask, zoneId: zone_id, code: code, username: username}).body if /XUNQIN/ =~ params[:platform]
+    #zone_id = 12 if /XICHU/ =~ mask and zone_id == 3 and request.remote_ip = '203.195.224.152'
     # 查找并检查大区和用户名
     platform = Platform.where(mask: mask).first
     return resp_app_f '大区不存在' unless platform
@@ -157,13 +162,13 @@ class AppController < AppSideController
     account.save
     Rails.logger.debug "mask=#{params[:mask]}"
     case params[:mask]
-    when 'ANDROID-XICHU-UC'
+    when /XICHU.*-UC/
       user, account_id = android_uc
     when 'IOS-ICE'
       user, account_id = ios_i4
       # when 'IOS-BAIDU'
       # user, account_id = ios_baidu
-    when 'IOS-PP'
+    when 'IOS-XUNQIN-PP'
       user, account_id = ios_pp
     when 'GB'
       user,account_id = game_begin
@@ -232,7 +237,7 @@ class AppController < AppSideController
   def android_uc
     resp = U9Server.login params[:sid]
     unless resp['state']['code'] == 1
-      resp_app_f "登陆失败"
+      #resp_app_f "登陆失败"
       return [-1, 0]
     end
     account_id = resp['data']['accountId']
