@@ -27,10 +27,10 @@ module ToolsHelper
 			<div class="col-md-12 form-group">
 				<label for="server" class="col-md-3 control-label">发放范围</label>
 				<div class="col-md-7">
-				<select id="server" class="form-control">
+				<select id="server" class="form-control" multiple="multiple">
 					<option value="all">--所有服务器--</option>
 		}
-		@servers.each do |s|
+		@servers.sort_by(&:zone_id).each do |s|
 			html << "<option value='#{s.id}'>#{s.name}</option>"
 		end
 		html << "</select></div></div>"

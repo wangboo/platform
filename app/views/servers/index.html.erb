@@ -2,7 +2,7 @@
 	<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
 		<div class="jumbotron">
 			<div class="container">
-				<h2>一共有<%= @servers.size %>个服务器</h2>
+				<h2>一共有<%= @servers.size %>个服务器(最多显示20个)</h2>
 			</div>
 		</div> <!-- jumbotron over -->
 		
@@ -21,7 +21,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<%= content_tag_for :tr, @servers do |server| %>
+					<%= content_tag_for :tr, @servers[0...20] do |server| %>
 					<td><%= link_to server.platform.name, platform_path(server.platform) %></td>
 					<td><%= link_to server.name, platform_server_path(server.platform, server) %></td>
 					<td><%= server.server_state.name %></td>
@@ -37,21 +37,43 @@
 	<%= form_for(@new_server, html: {class: "form-horizontal"}) do |f| %>
 		<div class="panel panel-default" style="padding: 10px 10px 10px 10px">
 			<legend>创建一个新的服务器</legend>
-			<!-- <div class=""> -->
+				<!-- <div class=""> -->
+			<div class="col-md-12">
+				<div class="checkbox col-md-3">
+			    <label>
+			      <input type="radio" id="groupCheckBox" checked="checked" name="gc" value="group"> 使用分组创建方式
+			    </label>
+			  </div>
 				<div class="col-md-6 form-group" >
-					<label for="platform_id" class="col-md-4 control-label">平台</label>
+					<label for="group_id" class="col-md-4 control-label">分组</label>
 					<div class="col-md-8">
-						<%= f.select :platform_id, Platform.all.collect{|p|[p.name, p.id]},{}, {class: "form-control", id: "platform_id"} %>
+						<%= f.select :group_id, Group.all.map{|g|[g.name, g.id]}, {include_blank: true}, {class: "form-control", id: "group_id"} %>
 					</div>
 				</div>
+			</div>
+				<!-- 平台 -->
+			<div class="col-md-12">
+				<div class="checkbox col-md-3">
+			    <label>
+			      <input type="radio" id="platformCheckBox" name="gc" value="platform"> 使用平台创建方式
+			    </label>
+			  </div>
 				<div class="col-md-6 form-group">
+					<label for="platform_id" class="col-md-4 control-label">平台</label>
+					<div class="col-md-8">
+						<%= f.select :platform_id, Platform.all.collect{|p|[p.name, p.id]}, {include_blank: true}, {class: "form-control", id: "platform_id"} %>
+					</div>
+				</div>
+			</div>
+			<!-- 状态 -->
+				<div class="col-md-12 form-group">
 					<label for="server_state_id" class="col-md-2 control-label">状态</label>
 					<div class="col-md-8">
 						<%= f.select :server_state_id, ServerState.all.collect{|p|[p.name, p.id]},{}, {class: "form-control", id: "server_state_id"} %>
 					</div>
 				</div>
-				<div class="col-md-6 form-group">
-					<label class="col-md-4 control-label" for="work_state">工作状态</label>
+				<div class="col-md-12 form-group">
+					<label class="col-md-2 control-label" for="work_state">工作状态</label>
 					<div class="col-md-8">
 						<%= work_state_select_tag %>
 					</div>
@@ -88,9 +110,23 @@
 		  </div>
 		</div>
 		<% end %>
-		
-		  
 
 	</div>
 
 </div>
+
+<script type="text/javascript">
+	$(function() {
+		$("#platform_id").attr("disabled", "disabled")
+		$("#groupCheckBox").click(function() {
+			var checked = $("#groupCheckBox").attr("checked") == 'checked'
+			$("#group_id").removeAttr("disabled")
+			$("#platform_id").attr("disabled", "disabled")
+		})
+		$("#platformCheckBox").click(function() {
+			var checked = $("#platformCheckBox").attr("checked") == 'checked'
+			$("#group_id").attr("disabled", "disabled")
+			$("#platform_id").removeAttr("disabled")
+		})
+	})
+</script>

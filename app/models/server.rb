@@ -1,6 +1,9 @@
 class Server
   include Mongoid::Document
   include Mongoid::Timestamps
+
+  attr_accessor :group_id
+
   #服务器名字
   field :name
   # 服务器id

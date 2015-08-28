@@ -218,6 +218,10 @@ class ToolsController < ApplicationController
 		render text: "ok"
 	end
 
+	# 批量执行任务
+	def batch_url_view
+	end
+
 	private
 
 	def post server, path, args

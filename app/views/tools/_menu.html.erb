@@ -34,5 +34,10 @@
   <li class="<%= "active" if action_name == 'scroll_msg_view' %>">
     <%= link_to "发布消息", tools_scroll_msg_path(@platform) %>
   </li>
+  <li><h4>批量执行</h4></li>
+  <li class="divider"></li>
+  <li class="<%= "active" if action_name == 'batch_url_view' %>">
+    <%= link_to "发布消息", tools_batch_url_path(@platform) %>
+  </li>
 </ul>
 </div>

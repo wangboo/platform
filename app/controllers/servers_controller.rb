@@ -7,15 +7,24 @@ class ServersController < ApplicationController
     @server = Server.find(params[:id] || params[:server_id])
   end
 
-  def love
-    render :love, layout: false
-  end
-
   def show
   end
 
   def create
-    Server.create server_params
+    if params[:gc] == 'group'
+      group_id = params[:server][:group_id]
+      logger.debug "group_id = #{group_id}"
+      group = Group.find(group_id)
+      sp = server_params
+      group.platform_id.each do |pid|
+        if Platform.where(id: pid).size > 0 
+          sp[:platform_id] = pid 
+          Server.create sp
+        end 
+      end
+    else 
+      Server.create server_params
+    end
     redirect_to servers_path
   end
 

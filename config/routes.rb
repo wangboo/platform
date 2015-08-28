@@ -168,6 +168,11 @@ Rails.application.routes.draw do
     post '/kf_all', action: :kf_all_the_same, as: "kf_all"
   end
 
+  get '/groups' => 'group#index', as: "groups_index"
+  post '/groups' => 'group#create', as: "new_group"
+  get '/groups/:id' => 'group#show', as: "group_show"
+  get '/groups/:id/delete' => 'group#delete', as: "group_delete"
+
   resources :bgm
 
   get "/platforms/:id/tools" => "tools#reward_to_user_view", as: "tools"
@@ -196,12 +201,13 @@ Rails.application.routes.draw do
   # 公告
   post "/platforms/:id/tools/notice_modify" => "tools#notice_modify", as: "tools_notice_modify"
   # 公告
-  get "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg_view", as: "tools_scroll_msg_view"
+  get   "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg_view", as: "tools_scroll_msg_view"
   # 发公告
-  post "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg", as: "tools_scroll_msg"
-
-
-
+  post  "/platforms/:id/tools/scroll_msg" => "tools#scroll_msg", as: "tools_scroll_msg"
+  # 批量执行url任务
+  get   '/platforms/:id/tools/batch_url'  =>  "tools#batch_url_view", as: "tools_batch_url_view"
+  # 批量执行url
+  post  '/platforms/:id/tools/batch_url'  =>  'tools#batch_url', as: 'tools_batch_url'
 
   # ajax请求
   # 服务器信息

@@ -1,0 +1,93 @@
+<div class="col-md-10 col-md-offset-1">
+
+	<div class="col-md-12">
+		<% @groups.each do |g| %>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				分组：<%= g.name %>
+				<div class="pull-right">
+					<a class="btn btn-warning" href="<%= group_show_path(g) %>">修改</a>
+					<button class="btn btn-danger" onClick="deleteGroup('<%= g.name %>','<%= g.id %>')">删除</button>
+				</div>
+			</div>
+			<div class="panel-body">
+				<% g.platform_ids.each do |pid| %>
+				<div class="col-md-2">
+					<% p = Platform.find(pid) %>
+					<span class="label label-default"><%= p.mask %></span>
+					<h5></h5>
+				</div>
+				<% end %>
+			</div>
+		</div>
+		<% end %>
+
+		<div class="panel panel-info col-md-12">
+			<div class="panel-heading">
+				创建分组
+			</div>
+			<div class="panel-body">
+				<%= form_for(@new_group, url: new_group_path, html: {class: "form-horizontal"}) do |g| %>
+					<!-- 组名 -->
+					<div class="form-group col-md-12">
+						<label for="name" class="col-md-2 control-label">组名</label>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="name" name="group[name]" placeholder="请输入组名">
+						</div>
+					</div>
+					<!-- 类型 -->
+					<div class="form-group col-md-12">
+						<label for="platform_ids" class="col-md-2 control-label">平台</label>
+						<div class="col-md-8">
+								<% @platforms.each do |p| %>
+								<label class="checkbox col-md-4">
+									<input type="checkbox" value="<%= p[0] %>" id="platform_ids" name="group[p_<%= p[2] %>]">
+									<%="#{p[2]}" %>
+								</label>
+								<% end %>
+						</div>
+					</div> <!-- end 类型 -->
+
+					<div class="col-md-offset-5" style="text-center">
+						<input type="submit" class="btn btn-info" value="提交">
+					</div>
+
+				<% end %>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+
+<!-- modal -->
+<div class="modal fade" id="deleteGroupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">删除分组</h4>
+      </div>
+      <div class="modal-body">
+        <h3 id="modal_content"></h3>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-danger" href="#" id="modal_ok">确定</a>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+	function deleteGroup(name, id) {
+		console.log("deleteGroup")
+		var content = $("#modal_content")
+		content.html("是否删除分组：" + name)
+		var modelOK = $("#modal_ok")
+		modelOK.attr("href", "/groups/"+id+"/delete")
+		$('#deleteGroupModal').modal('show')
+	}
+</script>

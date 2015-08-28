@@ -1,0 +1,21 @@
+<%= render partial: "menu" %>
+<div class="col-md-8">
+	<div class="panel panel-info">
+	  <div class="panel-heading">
+			<h3 class="panel-title">批量执行url</h3>
+	  </div>
+	  <div class="panel-body">
+			<form class="form-horizontal">
+				<%= server_select %>
+				<input type="text" class="form-control" placeholder="执行的uri，如（/jiyu/admin/system/cache/refresh?name=base.BaseHeroAttrMapper）" aria-describedby="basic-addon1">
+				<div class="text-center" style="margin-top:10px">
+					<input type="submit" value="提交" class="btn btn-default">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	
+</script>
