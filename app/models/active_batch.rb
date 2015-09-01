@@ -38,4 +38,8 @@ class ActiveBatch
     num.times{active_codes.create(times: lim_times)}
   end
 
+  def active_code_size
+    ActiveCode.where(active_batch_id: id).size
+  end
+
 end

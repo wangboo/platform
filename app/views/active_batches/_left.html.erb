@@ -1,13 +1,14 @@
 <nav class="navbar navbar-default col-md-3" role="navigation" style="margin-top: 20px">
   <ul class="nav nav-pills nav-stacked">
-	<%ActiveBatch.all.each do |item|%>
-		<%if @selected && @selected.id == item.id%>
+	<% @batches.each do |item| %>
+		<%if @selected_id == item[0]%>
 			<li class="active">
 		<%else%>
 			<li>
 		<%end%>
-		<%=link_to "#{item.name}-#{item.active_codes.size}条",active_batch_path(item)%>
-	</li> 
+			<%=link_to "#{item[1]}","/active_batches/#{item[0]}"%>
+			<!-- -#{item.active_code_size} -->
+		</li> 
 	<%end%>
 	<%if args[:create_active]%>
 		<li class="active">

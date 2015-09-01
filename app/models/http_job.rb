@@ -30,16 +30,15 @@ class HttpJob
 			end
 			self.trigger = true
 			self.save
-		rescue => e 
+		rescue => e
+			self.trigger = true  
 			self.exception_his << e.message
 			self.save 
 		end
 	end
 
 	def self.tryDoJob
-		HttpJob.where(trigger: false).select(&:should_trigger).each do |job|
-			job.do_it
-		end
+		HttpJob.where(trigger: false).select(&:should_trigger).each(&:do_it)
 	end
 
 end

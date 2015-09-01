@@ -137,9 +137,7 @@ Rails.application.routes.draw do
   # 兑奖码
   resources :rewards
   # 兑奖码批次
-  resources :active_batches do
-    # get '/download', action: "download"
-  end
+  resources :active_batches
 
   get "active_batches/:id/download" => "active_batches#download", as: "active_batch_download"
   # 兑奖类型

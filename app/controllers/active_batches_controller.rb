@@ -5,11 +5,15 @@ class ActiveBatchesController < ApplicationController
   # GET /active_batches
   # GET /active_batches.json
   def index
-    if @active_batches.first
-      @active_batch = @active_batches.first
+    @batches = ActiveBatch.where(name: {"$ne" => ""}).pluck(:id, :name)
+    # @active_batch = ActiveBatch.first
+    if @active_batch = ActiveBatch.first
+      @selected_id = @active_batch.id
       render action: :show
     else
       @new_active_batch = ActiveBatch.new
+      logger.debug "new"
+      @selected_id = 0
       render action: :new
     end
   end
@@ -17,6 +21,9 @@ class ActiveBatchesController < ApplicationController
   # GET /active_batches/1
   # GET /active_batches/1.json
   def show
+    @batches = ActiveBatch.where(name: {"$ne" => ""}).pluck(:id, :name)
+    @active_batch = ActiveBatch.find(params[:id])
+    @selected_id = @active_batch.id
   end
 
   # GET /active_batches/new
