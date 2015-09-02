@@ -1,6 +1,6 @@
 class PlatformsController < ApplicationController
 
-  before_action :set_platform, only: [:update]
+  before_action :set_platform, only: [:update, :tongbu_p2p]
 
   # 创建一个平台
   def create
@@ -13,7 +13,9 @@ class PlatformsController < ApplicationController
 
   def show
     Rails.logger.debug("params=#{params}")
-    @platform = Platform.find(params[:id])
+    params_id = params[:id]
+    @platform = Platform.find(params_id)
+    @platform_id_names = Platform.all.pluck(:name, :id).map{|pair|pair[1] = pair[1].to_s;pair}.select{|name, id| id != params_id}
     @rmd = Server.find(@platform.rmd_id) if @platform.rmd_id 
   end
 
@@ -107,13 +109,45 @@ class PlatformsController < ApplicationController
   def delete
   end
 
+  # 将该平台服务器同步至to平台
+  def tongbu_p2p
+    to_platform_id = params[:to]
+    rst = {create: 0, update: 0}
+    @platform.servers.each do |s|
+      ip, port, name, zone_id = s.ip, s.port, s.name, s.zone_id
+      new_server = false 
+      to_server = Server.find_or_create_by(platform_id: to_platform_id, ip: ip, port: port) do 
+        rst[:create] += 1
+        new_server = true 
+      end
+      unless to_server.name == name and to_server.zone_id == zone_id 
+        to_server.update_attributes(
+          name:         name, 
+          zone_id:      zone_id, 
+          desc:         s.desc,
+          ssh_user:     s.ssh_user,
+          ssh_pwd:      s.ssh_pwd,
+          project_path: s.project_path,
+          mysql_user:   s.mysql_user,
+          mysql_pwd:    s.mysql_pwd,
+          mysql_host:     s.mysql_host,
+          mysql_database: s.mysql_database,
+          local_ip:     s.local_ip,
+          work_state:   s.work_state, 
+          server_state: s.server_state)
+        rst[:update] += 1 unless new_server
+      end
+    end
+    render json: rst
+  end
+
   def platform_params
     params.require(:platform).permit(:name, :desc, :mask, :id, :download_url, :channel_id, :channel_name, :platform, :vers)
   end
 
 
   def set_platform
-    @platform = Platform.find params[:id]
+    @platform = Platform.find((params[:id] or params[:platform_id]))
   end
 
 end

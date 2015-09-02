@@ -165,6 +165,8 @@ Rails.application.routes.draw do
     post '/kf_rmd_all', action: :kf_all_rmd_the_same, as: "kf_rmd_all"
     # 将该平台的所有配置设置为所有平台的配置
     post '/kf_all', action: :kf_all_the_same, as: "kf_all"
+    # 将A平台同步至B平台
+    post '/tongbu_p2p/:to', action: :tongbu_p2p, as: "tongbu_p2p"
   end
 
   get '/groups' => 'group#index', as: "groups_index"
