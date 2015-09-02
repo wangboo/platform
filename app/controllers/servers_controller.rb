@@ -137,6 +137,9 @@ class ServersController < ApplicationController
     @server = Server.find(params[:server_id])
     @info = HTTParty.post(@server.charge_info_user_url, body: {userId: params[:user_id]}).body
     @info = JSON.parse(@info)
+    @info["online"].each do |o|
+      (o['d'] = Base64.decode64 o['d']) unless o['d'] =~ /\d+/
+    end
     logger.debug "@info = #{@info}"
     @name = params[:name]
   end
