@@ -17,6 +17,8 @@ class UcController < AppSideController
       "39889cf08f1901acd5fc386a4773f2f3"
     when /XICHU-YAOJI-UC/
       "d32be774745c20fc0eff882af1b41d42"
+    else
+      "39889cf08f1901acd5fc386a4773f2f3"
     end
   end
 

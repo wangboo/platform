@@ -17,7 +17,7 @@ class AuthController < ApplicationController
 
 	# 验证账号密码
 	def validate
-		if params[:auth][:username] == 'bawang' and params[:auth][:password] == 'mudxunqin'
+		if params[:auth][:username] == 'bawang' and params[:auth][:password] == 'xiangyuniubi'
 			cookies[:bawang_auth] = {value: auth_key, expires: 8.hours.from_now}
 			redirect_to server_index_path
 		else

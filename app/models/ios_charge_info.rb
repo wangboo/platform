@@ -21,7 +21,7 @@ class IOSChargeInfo
 	# 充值 充值数据，成功调用方法，失败调用方法
 	def self.charge data, suc_func, fail_func
 		Rails.logger.debug "data = #{data}"
-   		 return fail_func.call("订单状态失败 #{data}") unless data[:state]
+   	return fail_func.call("订单状态失败 #{data}") unless data[:state]
 		# 查询订单
 		order = JiyuOrder.where(order_id: data['order_id']).first
 		# 校验订单
