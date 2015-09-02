@@ -12,9 +12,9 @@
 			</div>
 			<div class="panel-body">
 				<% g.platform_ids.each do |pid| %>
-				<div class="col-md-2">
+				<div class="col-md-6">
 					<% p = Platform.find(pid) %>
-					<span class="label label-default"><%= p.mask %></span>
+					<li><a href="/platforms/<%= p.id %>"><%= p.mask %></a></li>
 					<h5></h5>
 				</div>
 				<% end %>
@@ -40,7 +40,7 @@
 						<label for="platform_ids" class="col-md-2 control-label">平台</label>
 						<div class="col-md-8">
 								<% @platforms.each do |p| %>
-								<label class="checkbox col-md-4">
+								<label class="checkbox col-md-6">
 									<input type="checkbox" value="<%= p[0] %>" id="platform_ids" name="group[p_<%= p[2] %>]">
 									<%="#{p[2]}" %>
 								</label>

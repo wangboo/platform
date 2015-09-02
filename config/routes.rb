@@ -173,6 +173,10 @@ Rails.application.routes.draw do
   post '/groups' => 'group#create', as: "new_group"
   get '/groups/:id' => 'group#show', as: "group_show"
   get '/groups/:id/delete' => 'group#delete', as: "group_delete"
+  get '/group/:id/rmplatform/:pid' => 'group#rmplatform', as: "group_rmplatform"
+  get '/group/:id/addplatform/:pid' => 'group#addplatform', as: "group_addplatform"
+  # 修改名字
+  post '/group/:id' => 'group#update', as: "group_update"
 
   resources :bgm
 
