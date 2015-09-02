@@ -1,0 +1,35 @@
+<div class="col-md-10 col-md-offset-1">
+	<div class="panel panel-info">
+		<div class="panel-heading">修改组信息</div>
+		<div class="panel-body">
+			<%= form_tag(group_update_path(@group)) do |g| %>
+				<div class="col-md-6 form-horizontal">
+					<label for="name" class="col-md-4 control-label">名字</label>
+					<div class="col-md-8">
+						<input type="text" value="<%= @group.name %>" id="name" class="form-control" name="name">
+					</div>
+				</div>
+				<input type="submit" value="提交" class="btn btn-info">
+			<% end %>
+		</div>
+	</div>
+	<!-- 坐标 -->
+	<div class="col-md-5">
+		<h4>拥有的平台(<%= @owned_platforms.size %>个)</h4>
+		<% @owned_platforms.each do |id, name| %>
+		<div>
+			<a class="btn btn-info col-md-10" style="margin: 10px 0px 10px 0px" href="/group/<%= @group.id %>/rmplatform/<%= id %>"><%= name %> => </a>
+		</div>
+		<% end %>
+	</div>
+
+	<!-- 右边 -->
+	<div class="col-md-5 col-md-offset-2">
+		<h4>待添加的平台(<%= @other_platforms.size %>个)</h4>
+		<% @other_platforms.each do |id, name| %>
+		<div>
+			<a class="btn btn-warning col-md-10" style="margin: 10px 0px 10px 0px" href="/group/<%= @group.id %>/addplatform/<%= id %>"> &lt;= <%= name %> </a>
+		</div>
+		<% end %>
+	</div>
+</div>
