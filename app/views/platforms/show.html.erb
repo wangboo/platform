@@ -1,8 +1,8 @@
 <div class="container">
 
 	<!-- <form action="<%= platform_path @platform %>" method="post" class="form-horizontal" role="form"> -->
-	<%= form_for @platform, html: {class: "col-md-offset-2 col-lg-offset-2 form-horizontal", action: platform_path(@platform)} do |f| %>
-		<div class="col-md-10 panel panel-info">
+	<%= form_for @platform, html: {class: "form-horizontal col-md-10 col-md-offset-1", action: platform_path(@platform)} do |f| %>
+		<div class="col-md-12 panel panel-info">
 			  <div class="panel-heading">
 					<h3 class="panel-title">服务器信息:</h3>
 			  </div>
@@ -75,7 +75,27 @@
 <!-- </form> -->
 	<% end %>
 
-	<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
+
+	<!-- 同步操作 -->
+	<div class="panel panel-warning col-md-10 col-md-offset-1" style="padding: 10px 10px 10px 10px">
+		<div class="panel-heading">同步平台</div>
+		<div class="panel-body col-md-12">
+			<!-- <div class=""> -->
+				<div class="form-horizontal col-md-6">
+					<label class="control-label col-md-3" for="tongbu">选定平台</label>
+					<div class="col-md-9">
+						<%= select_tag("tongbu", options_for_select(@platform_id_names), class: "form-control") %>
+					</div>
+				</div>
+			<!-- </div> -->
+			<div class="col-md-6">
+				<button onclick="tongbuPingtai()" class="btn btn-danger">将当前平台的所有服务器同步至选定平台(可能会创建)</button>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="col-md-10 col-md-offset-1">
 		<div class="row">
 			<!-- jumbotron -->
 			<div class="jumbotron">
@@ -108,7 +128,7 @@
 					<td><%= server.server_state.name %></td>
           <td><%= link_to "点我", platform_server_charge_info_path(@platform, server) %></td>
           <td><a href="http://203.195.224.152:9000/#/platform/<%=@platform.id%>" target="blank">进入</a></td>
-          <td><%= link_to "删除", platform_server_delete_path(@platform, server) %></td>
+          <td><button onclick="deleteServer('<%= server.id %>', '<%= server.name %>')" class="btn btn-danger">删除</button></td>
 					<% end %>
 				</tbody>
 			</table>
@@ -117,3 +137,62 @@
 	</div>
 
 </div>
+
+<!-- 删除服务器模态框 -->
+<div class="modal fade" id="deleteServerModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modal_title">删除服务器</h4>
+      </div>
+      <div class="modal-body">
+        <p id="modal_msg"></p>
+        <span id="modal_match"></span><input type="text" id="math_rst">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" onclick="deleteServerEnsure()">删除</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+$.ajaxSetup({
+	headers: {
+		'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+	}
+})
+function tongbuPingtai() {
+	var id = $("#tongbu").find("option:selected").attr("value")
+	$.post("/platforms/<%=@platform.id%>/tongbu_p2p/"+id, function(resp){
+		console.log("resp: ", resp)
+		alert("创建：" + resp.create + "个，修改：" + resp.update + "个")
+	})
+}
+
+mathRst = "0"
+server_id = "0"
+
+function deleteServer(id, name) {
+	$("#modal_msg").text("你真的要删除《" + name + "》这台服务器么？")
+	var a = Math.round(Math.random() * 90 + 10)
+	var b = Math.round(Math.random() * 90 + 10)
+	var matchStr = "请填写这个算数结果: " + a.toString() + " + " + b.toString() + " = "
+	mathRst = (a + b).toString() 
+	server_id = id 
+	$("#modal_match").text(matchStr)
+	$('#deleteServerModal').modal('show')
+}
+
+function deleteServerEnsure() {
+	if($("#math_rst").val() == mathRst) {
+		location.href = "/platforms/<%= @platform.id %>/servers/"+server_id+"/delete"
+	}else {
+		$("#math_rst").val("")
+		alert("对不起，答案是: " + mathRst)
+	}
+	$('#deleteServerModal').modal('hide')
+}
+</script>
