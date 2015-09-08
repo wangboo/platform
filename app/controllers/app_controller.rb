@@ -178,6 +178,8 @@ class AppController < AppSideController
       user,account_id = MudController.login params[:token], request.remote_ip
     when /KY/
       user,account_id = ios_ky
+    when /XICHU.*-UC/
+      user, account_id= android_baidu
     else
       # 默认用sid创建一个账号
       user = QicUser.find_or_create_by(username: params[:sid]) do |u|
@@ -329,6 +331,20 @@ class AppController < AppSideController
   # 百度登陆
   # def ios_baidu
   # end
+  #百度登陆
+  def android_baidu
+    resp = BaiduController.login params[:token]
+    resp = JSON.parse resp
+    unless resp['ResultCode'] == 1
+      resp_app_f "登陆失败"
+      return [-1, 0]
+    end
+    account_id = Base64.decode64 resp['Content']['UID']
+    user = QicUser.find_or_create_by(username: account_id) do |u|
+      u.password = params[:password]
+    end
+    [user,account_id]
+  end
 
   #   随机用户
   def random_user

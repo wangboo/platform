@@ -1,4 +1,5 @@
 require 'base64'
+require 'digest/md5'
 # 百度充值
 class BaiduController < AppSideController
 
@@ -8,8 +9,17 @@ class BaiduController < AppSideController
 			:CreateTime]
 	end
 
-	def self.app_key
-		@app_key ||= "8395360142b469f9ef9d0236d1ec82f93f4212705af8b63b"
+	def self.app_key mask 
+		case mask 
+		when "ANDROID-XICHU-WCBY-BAIDU"
+			"f3Os4GAOqxgm79GqbnkT9L8T"
+		when 'ANDROID-XICHU-BAIDU'
+			"8395360142b469f9ef9d0236d1ec82f93f4212705af8b63b"
+		end
+	end
+
+	def self.appid
+		@appid ||= 3067515
 	end
 
 	def self.key_pairs
@@ -43,7 +53,7 @@ class BaiduController < AppSideController
 
 	# 支付接口
 	def verify_pay
-		md5_str = BaiduController.keys.map{|k|params[k]}.join << BaiduController.app_key
+		md5_str = BaiduController.keys.map{|k|params[k]}.join << BaiduController.app_key(JiyuOrder.find_by(order_id: params['CooOrderSerial']).platform_mask)
 		# md5_str = ERB::Util.url_encode(md5_str)
 		Rails.logger.debug "md5_str = #{md5_str}"
 		Rails.logger.debug "md5 = #{Digest::MD5.hexdigest(CGI::unescape(md5_str))}"
@@ -61,4 +71,15 @@ class BaiduController < AppSideController
     IOSChargeInfo.charge payment, proc{|m|success m}, proc{|m|fail m}
 	end
 
+	def login token
+    	sign = Digest::MD5.hexdigest "#{BaiduController.appid}#{token}f3Os4GAOqxgm79GqbnkT9L8T"
+    	host = 'querysdkapi.91.com/CpLoginStateQuery.ashx'
+    	body = HTTParty.post("http://#{host}?AppID=#{BaiduController.appid}&AccessToken=#{token}&Sign=#{sign}").body
+    	md5_str = "#{BaiduController.appid}#{body['ResultCode']}#{Base64.decode64 body['Content']}f3Os4GAOqxgm79GqbnkT9L8T"
+    	unless params[:Sign] == Digest::MD5.hexdigest(md5_str)
+			Rails.logger.debug "签名校验失败"
+			return fail
+		end
+    	resp
+	end
 end
