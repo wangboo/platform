@@ -71,7 +71,7 @@ class BaiduController < AppSideController
     IOSChargeInfo.charge payment, proc{|m|success m}, proc{|m|fail m}
 	end
 
-	def login token
+	def self.login token
     	sign = Digest::MD5.hexdigest "#{BaiduController.appid}#{token}f3Os4GAOqxgm79GqbnkT9L8T"
     	host = 'querysdkapi.91.com/CpLoginStateQuery.ashx'
     	body = HTTParty.post("http://#{host}?AppID=#{BaiduController.appid}&AccessToken=#{token}&Sign=#{sign}").body

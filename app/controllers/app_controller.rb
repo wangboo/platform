@@ -334,6 +334,7 @@ class AppController < AppSideController
   #百度登陆
   def android_baidu
     resp = BaiduController.login params[:token]
+    Rails.logger.debug "resp========#{resp}"
     resp = JSON.parse resp
     unless resp['ResultCode'] == 1
       resp_app_f "登陆失败"
