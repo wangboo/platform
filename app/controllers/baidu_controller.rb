@@ -76,7 +76,8 @@ class BaiduController < AppSideController
     	host = 'querysdkapi.91.com/CpLoginStateQuery.ashx'
     	body = HTTParty.post("http://#{host}?AppID=#{BaiduController.appid}&AccessToken=#{token}&Sign=#{sign}").body
     	md5_str = "#{BaiduController.appid}#{body['ResultCode']}#{Base64.decode64 body['Content']}f3Os4GAOqxgm79GqbnkT9L8T"
-    	unless body[:Sign] == Digest::MD5.hexdigest(md5_str)
+    	Rails.logger.debug "body====#{body}"
+    	unless body['Sign'] == Digest::MD5.hexdigest(md5_str)
 			Rails.logger.debug "签名校验失败"
 			return fail
 		end
