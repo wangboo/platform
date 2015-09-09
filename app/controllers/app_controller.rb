@@ -178,7 +178,7 @@ class AppController < AppSideController
       user,account_id = MudController.login params[:token], request.remote_ip
     when /KY/
       user,account_id = ios_ky
-    when /XICHU.*-UC/
+    when /XICHU.*-BAIDU/
       user, account_id= android_baidu
     else
       # 默认用sid创建一个账号

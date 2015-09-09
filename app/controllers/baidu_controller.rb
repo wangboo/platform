@@ -82,4 +82,25 @@ class BaiduController < AppSideController
 		end
     	resp
 	end
+
+		# ANDROID_BAIDU支付接口
+	def android_verify_pay
+		keys = []
+		md5_str = BaiduController.keys.map{|k|params[k]}.join << BaiduController.app_key(JiyuOrder.find_by(order_id: params['CooOrderSerial']).platform_mask)
+		# md5_str = ERB::Util.url_encode(md5_str)
+		Rails.logger.debug "md5_str = #{md5_str}"
+		Rails.logger.debug "md5 = #{Digest::MD5.hexdigest(CGI::unescape(md5_str))}"
+		unless params[:Sign] == Digest::MD5.hexdigest(CGI::unescape(md5_str))
+			Rails.logger.debug "签名校验失败"
+			return fail
+		end
+		payment = HashWithIndifferentAccess.new(
+      order_id:           params['CooOrderSerial'],
+      platform_order_id:  params['ConsumeStreamId'],
+      state:              params['PayStatus'].to_i == 1,
+      money:              params['OrderMoney'].to_i,
+      params:             params.to_json
+    )
+    IOSChargeInfo.charge payment, proc{|m|success m}, proc{|m|fail m}
+	end
 end
