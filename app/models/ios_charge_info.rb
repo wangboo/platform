@@ -33,6 +33,7 @@ class IOSChargeInfo
 			i.mask = order.platform_mask
 		end
 		return suc_func.call "订单已经处理成功" if charge_info.add_money == 1
+    Rails.logger.debug "order.product=#{order.product_id}"
 		begin
 			body = {}
 			body['game_user_id'] 	= order.role_id
