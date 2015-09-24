@@ -13,10 +13,11 @@ class HuaweiController < AppController
 	end
 
 	def self.login token, user_in
-    	user = QicUser.find_or_create_by(username: user_in) do |u|
-      	u.username = account_id
-      	u.password = ""
-    	end
+		begin 
+	    	user = QicUser.find_or_create_by(username: user_in) do |u|
+		      	u.username = account_id
+		      	u.password = ""
+	    	end
     	return [user, account_id]
 		rescue => e
 			Rails.logger.error "login to mud error #{e}"
@@ -51,13 +52,13 @@ class HuaweiController < AppController
 			return fail
 		end
 		payment = HashWithIndifferentAccess.new(
-      order_id:           params['CooOrderSerial'],
-      platform_order_id:  params['ConsumeStreamId'],
-      state:              params['PayStatus'].to_i == 1,
-      money:              params['OrderMoney'].to_i,
-      params:             params.to_json
-    )
-    IOSChargeInfo.charge payment, proc{|m|success m}, proc{|m|fail m}
+	      order_id:           params['CooOrderSerial'],
+	      platform_order_id:  params['ConsumeStreamId'],
+	      state:              params['PayStatus'].to_i == 1,
+	      money:              params['OrderMoney'].to_i,
+	      params:             params.to_json
+    	)
+   		IOSChargeInfo.charge payment, proc{|m|success m}, proc{|m|fail m}
 	end
 
 end
