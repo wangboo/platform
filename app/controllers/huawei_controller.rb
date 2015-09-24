@@ -42,7 +42,7 @@ class HuaweiController < AppController
 
 	# 支付接口
 	def verify_pay
-		md5_str = HuaweiController.keys.map{|k|params[k]}.join << pay_key
+		md5_str = HuaweiController.keys.map{|k|params[k]}.join << HuaweiController.pay_key
 		# md5_str = ERB::Util.url_encode(md5_str)
 		Rails.logger.debug "md5_str = #{md5_str}"
 		Rails.logger.debug "md5 = #{Digest::MD5.hexdigest(CGI::unescape(md5_str))}"
