@@ -1,4 +1,6 @@
-class HuaweiController < AppSideController
+require 'base64'
+require 'digest/md5'
+class HuaweiController < AppController
 
 	def self.app_id
 		1000019559
