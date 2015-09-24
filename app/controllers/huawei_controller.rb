@@ -23,10 +23,9 @@ class HuaweiController < AppController
 			Rails.logger.error "login to mud error #{e}"
 			return [-1, 0]
 		end
-
 	end
 
-	def pay_key
+	def self.pay_key
 		"c0e24702a24d4c48b3ca4c0646138bff"
 	end
 
