@@ -26,7 +26,7 @@ class HuaweiController < AppController
 
 	end
 
-	def self.pay_key
+	def pay_key
 		"c0e24702a24d4c48b3ca4c0646138bff"
 	end
 
