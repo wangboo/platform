@@ -6,7 +6,7 @@
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
 					设置该平台推荐服务器(修改及生效)&nbsp;&nbsp;&nbsp;&nbsp;在线用户数10s刷新一次
 					<button id="tf_buttom" class="btn btn-danger" onclick="shutdown()">一键停服</button>
-					<%= @platform.servers.sort_by(&:zone_id).collect do |s|
+          <%= @platform.servers.sort_by{|s|s.zone_id or -1}.collect do |s|
 						str = "<div class='col-md-12' style='margin: 5px 0px 5px 0px'><div class='col-md-2'>"
 						str << if s.id == @platform.rmd_id
 							%(<input type='radio' id='kf' name='kf' value='#{s.id}' checked> #{s.name})
@@ -31,7 +31,7 @@
 						end.join.html_safe
 						str << "</select></div><div class='col-md-4' id='ren_#{s.id}'>服务器人数查询中。。。</div></div>"
 					end.join.html_safe %>
-					
+
 				</div>
 				<div class="col-md-12" style="margin: 10px 0 10px 0">
 					<button id="update_rmd_all" class="btn btn-warning">如果可以，将该推荐服务器设置为所有平台推荐服务器</button>
@@ -77,7 +77,7 @@ function send(url, data, cb) {
 			if(cb){
 				cb(data)
 			}else {
-				alert(data.rst)	
+				alert(data.rst)
 			}
 		})
 }
@@ -89,7 +89,7 @@ function refreshUser() {
 				if(data.shutdown) {
 					$("#ren_"+id).text("服务器当前人数：" + data.size + "(已关服)")
 				}else {
-					$("#ren_"+id).text("服务器当前人数：" + data.size)	
+					$("#ren_"+id).text("服务器当前人数：" + data.size)
 				}
 			}else {
 				$("#ren_"+id).text("查询失败")
@@ -128,7 +128,7 @@ $(function() {
 	[<%= @platform.servers.map{|s|"'#{s.id}'"}.join(",").html_safe %>].forEach(function(id){
 		$("input[name='"+id+"']").change(function() {
 			var kf = $("input[name='"+id+"']:checked")
-			send("<%= platform_kf_ws_path(@platform) %>", {s_id: kf.attr('name'), ws: kf.val()})	
+			send("<%= platform_kf_ws_path(@platform) %>", {s_id: kf.attr('name'), ws: kf.val()})
 		})
 	});
 	$("#update_rmd_all").click(function() {

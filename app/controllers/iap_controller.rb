@@ -32,11 +32,11 @@ class IapController < AppSideController
     logger.debug "return #{hash}"
     charge = IOSChargeInfo.find_by(order_id: receipt['unique_identifier'])
 		return resp_app_s("该订单已经充值成功，不再受理") if charge and charge.add_money == 1
-		product = if receipt["product_id"].include? 'monthcard'
+		product = if receipt["product_id"].include? 'monthcard2'
 			'9'
-		elsif rst = receipt["product_id"].scan(/^.*\.(\d+)gold$/).first
+		elsif rst = receipt["product_id"].scan(/^.*\.(\d+)gold2$/).first
 			JiyuOrder.gold2product rst.first
-		elsif rst = receipt["product_id"].scan(/^.*\.(\d+)leaguer$/).first
+		elsif rst = receipt["product_id"].scan(/^.*\.(\d+)leaguer2$/).first
 			JiyuOrder.day_product_mapping[rst.first] or '-1'
 		else
 			'-1'
