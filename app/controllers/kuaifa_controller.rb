@@ -27,7 +27,7 @@ class KuaifaController < AppSideController
 			rst = JSON.parse resp
 			Rails.logger.debug "rst['result'] ====== #{rst["result"]}"
 			Rails.logger.debug "rst['result_desc'] ====== #{rst["result_desc"]}"
-			return [-1, 0] unless rst["result"] == 0
+			return [-1, 0] unless rst["result"] != 0
 			account_id = uid
     	user = QicUser.find_or_create_by(username: account_id) do |u|
       		u.username = account_id
