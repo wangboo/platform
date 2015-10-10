@@ -22,7 +22,7 @@ class KuaifaController < AppSideController
 		begin
 			resp = HTTParty.post(login_url, body: hash.to_json).body
 			rst = JSON.parse resp
-			Rails.logger.debug "rst["result"] ====== #{rst["result"]}"
+			Rails.logger.debug "rst['result'] ====== #{rst["result"]}"
 			return [-1, 0] unless rst["result"] == 0
 			account_id = openId
     	user = QicUser.find_or_create_by(username: account_id) do |u|
