@@ -70,7 +70,8 @@ Rails.application.routes.draw do
   post '/app/asdk_verify_pay' => 'asdk#verify_pay'
   # 泥巴充值
   post '/app/mud_verify_pay' => 'mud#verify_pay'
-
+ #快发充值
+  post '/app/kf_verify_pay' => 'kuaifa#verify_pay'
   # flist 入参platform 平台码
   get "/app/flist" => "app#flist"
 
