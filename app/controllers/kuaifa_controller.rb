@@ -23,7 +23,7 @@ class KuaifaController < AppSideController
 
 		begin
 			Rails.logger.debug "hash.to_json====#{hash.to_json}"
-			resp = HTTParty.post(login_url, body: hash.to_json).body
+			resp = HTTParty.post(login_url, body: hash).body
 			rst = JSON.parse resp
 			Rails.logger.debug "rst['result'] ====== #{rst["result"]}"
 			Rails.logger.debug "rst['result_desc'] ====== #{rst["result_desc"]}"
