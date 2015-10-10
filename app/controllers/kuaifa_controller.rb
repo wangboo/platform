@@ -17,6 +17,7 @@ class KuaifaController < AppSideController
 		hash['timestamp']=Time.now.to_i/1000
 		hash['gamekey']='5b698dfefa12cd12453bd6020e812f77'
 		beSign = hash.keys.sort.map{|k|"#{k}=#{CGI::escape(hash[k].to_s)}"}.join('&')
+		Rails.logger.debug "beSign======#{beSign}"
 		hash['_sign']= Digest::MD5.hexdigest(Digest::MD5.hexdigest(beSign)+"Idkm4hRccAEOU5sZ4WewWLllNzg0J7YV")
 		Rails.logger.debug "sign===========#{hash['_sign']}"
 
