@@ -18,11 +18,13 @@ class KuaifaController < AppSideController
 		hash['gamekey']='5b698dfefa12cd12453bd6020e812f77'
 		beSign = hash.keys.sort.map{|k|"#{k}=#{CGI::escape(hash[k].to_s)}"}.join('&')
 		hash['_sign']= Digest::MD5.hexdigest(Digest::MD5.hexdigest(beSign)+"Idkm4hRccAEOU5sZ4WewWLllNzg0J7YV")
+		Rails.logger.debug "sign===========#{hash['_sign']}"
 
 		begin
 			resp = HTTParty.post(login_url, body: hash.to_json).body
 			rst = JSON.parse resp
 			Rails.logger.debug "rst['result'] ====== #{rst["result"]}"
+			Rails.logger.debug "rst['result_desc'] ====== #{rst["result_desc"]}"
 			return [-1, 0] unless rst["result"] == 0
 			account_id = openId
     	user = QicUser.find_or_create_by(username: account_id) do |u|
