@@ -21,7 +21,7 @@ class KuaifaController < AppSideController
 		Rails.logger.debug "sign===========#{hash['_sign']}"
 
 		begin
-			Rails.logger.debgug "hash.to_json====#{hash.to_json}"
+			Rails.logger.debug "hash.to_json====#{hash.to_json}"
 			resp = HTTParty.post(login_url, body: hash.to_json).body
 			rst = JSON.parse resp
 			Rails.logger.debug "rst['result'] ====== #{rst["result"]}"
