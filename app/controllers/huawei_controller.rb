@@ -13,7 +13,7 @@ class HuaweiController < AppController
 	end
 
 	def self.login token, user_in
-		begin 
+		begin
 	    	user = QicUser.find_or_create_by(username: user_in) do |u|
 		      	u.username = account_id
 		      	u.password = ""
