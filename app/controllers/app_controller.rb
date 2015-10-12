@@ -183,7 +183,7 @@ class AppController < AppSideController
     when 'ANDROID-XICHU-HUAWEI'
         user,account_id = HuaweiController.login params[:token],params[:uid]
     when 'ANDROID-XICHU-KUAIFA'
-      user,account_id = KuaifaController.login params[:token],params[:sid],params[:uid]
+      user,account_id = KuaifaController.login params[:token],params[:sid]
     else
       # 默认用sid创建一个账号
       user = QicUser.find_or_create_by(username: params[:sid]) do |u|

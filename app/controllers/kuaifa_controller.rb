@@ -8,7 +8,7 @@ class KuaifaController < AppSideController
 #GameKey:5b698dfefa12cd12453bd6020e812f77
 #SecurityKey:Idkm4hRccAEOU5sZ4WewWLllNzg0J7YV
 
-	def self.login token,openId,uid
+	def self.login token,openId
 		Rails.logger.debug "token ====== #{token}"
 		Rails.logger.debug "openId ====== #{openId}"
 		hash = Hash.new
@@ -28,7 +28,7 @@ class KuaifaController < AppSideController
 			Rails.logger.debug "rst['result'] ====== #{rst["result"]}"
 			Rails.logger.debug "rst['result_desc'] ====== #{rst["result_desc"]}"
 			return [-1, 0] unless rst["result"] != 0
-			account_id = uid
+			account_id = openId
     	user = QicUser.find_or_create_by(username: account_id) do |u|
       		u.username = account_id
       		u.password = ""
