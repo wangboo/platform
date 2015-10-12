@@ -64,7 +64,7 @@ class KuaifaController < AppSideController
   	def verify_pay
   		Rails.logger.debug "params[:result]====#{params[:result].to_i}"
   		return fail "订单状态为失败" unless params[:result].to_i == 0
-    	beSign = sign_keys.map.sort.map{|k|"#{key}=#{CGI::escape(params[k].to_s)}"}.join('&')
+    	beSign = sign_keys.map.sort.map{|k|"#{k}=#{CGI::escape(params[k].to_s)}"}.join('&')
     	md5 = Digest::MD5.hexdigest(Digest::MD5.hexdigest(beSign)+"Idkm4hRccAEOU5sZ4WewWLllNzg0J7YV")
     	Rails.logger.debug "params[:_sign]====#{params[:_sign]}"
     	Rails.logger.debug "md5===========#{md5}"
