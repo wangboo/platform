@@ -70,8 +70,8 @@ class KuaifaController < AppSideController
     	Rails.logger.debug "md5===========#{md5}"
     	return fail "校验签名失败" unless md5 == params[:sign]
     	payment = HashWithIndifferentAccess.new(
-	    order_id:           params['serial_number'],
-	    platform_order_id:  '0',
+	    order_id:           params['game_orderno'],
+	    platform_order_id:  params['serial_number'],
 	    state:              params[	'result'].to_i == 0,
 	    money:              params['amount'].to_i,
 	    params:             params.to_json
