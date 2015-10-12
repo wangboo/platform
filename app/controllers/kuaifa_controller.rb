@@ -47,14 +47,14 @@ class KuaifaController < AppSideController
 
 	def fail msg=nil
 		Rails.logger.debug msg if msg
-		# render json: {"result":"1","result_desc":msg}
-		render json: "{'result':'1','result_desc':#{msg}}"
+		render json: '{"result":"1","result_desc":msg}'
+		# render json: "{'result':'1','result_desc':#{msg}}"
 	end
 
 	def success msg=nil
 		Rails.logger.debug msg if msg
-		# render json: {"result":"0","result_desc":"接收成功"}
-		render json: "{'result':'0','result_desc':'接收成功'}"
+		render json: '{"result":"0","result_desc":"ok"}'
+		# render json: "{'result':'0','result_desc':'ok'}"
 	end
 
 	def sign_keys
