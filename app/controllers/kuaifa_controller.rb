@@ -66,9 +66,9 @@ class KuaifaController < AppSideController
   		return fail "订单状态为失败" unless params[:result].to_i == 0
     	beSign = sign_keys.map.sort.map{|k|"#{k}=#{CGI::escape(params[k].to_s)}"}.join('&')
     	md5 = Digest::MD5.hexdigest(Digest::MD5.hexdigest(beSign)+"Idkm4hRccAEOU5sZ4WewWLllNzg0J7YV")
-    	Rails.logger.debug "params[:_sign]====#{params[:_sign]}"
+    	Rails.logger.debug "params[:_sign]====#{params[:sign]}"
     	Rails.logger.debug "md5===========#{md5}"
-    	return fail "校验签名失败" unless md5 == params[:_sign]
+    	return fail "校验签名失败" unless md5 == params[:sign]
     	payment = HashWithIndifferentAccess.new(
 	    order_id:           params['serial_number'],
 	    platform_order_id:  '0',
