@@ -29,7 +29,7 @@ class U9Server
 	end
 
 	def p uri, service, data,mask
-		txt = data.collect{|i|i.join("=")}.join << api_key mask
+		txt = data.collect{|i|i.join("=")}.join << api_key(mask)
 		md5 = Digest::MD5.hexdigest txt
 		post '/account.verifySession', body: {id: Time.now.to_i, service: service,game: {gameId: game_id(mask)},
 			data: data, sign: md5}.to_json
