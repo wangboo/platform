@@ -9,6 +9,7 @@ class U9Server
 
 	class << self
 	def game_id mask
+		Rails.logger.debug "mask===#{mask}"
 		if mask=="ANDOIRD-XICHU-ZHANSHEN-UC"
 			"560484"
 		else
