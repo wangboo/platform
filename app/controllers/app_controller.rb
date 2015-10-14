@@ -162,29 +162,29 @@ class AppController < AppSideController
     account.save
     Rails.logger.debug "mask=#{params[:mask]}"
     case params[:mask]
-    when /XICHU.*-UC/
-      Rails.logger.debug "uc--SDK==#{params[]}"
-      user, account_id = android_uc params[:mask]}
-    when 'IOS-ICE'
-      user, account_id = ios_i4
-      # when 'IOS-BAIDU'
-      # user, account_id = ios_baidu
-    when 'IOS-XUNQIN-PP'
-      user, account_id = ios_pp
-    when 'GB'
-      user,account_id = game_begin
-    when 'IOS-TONGBU'
-      user,account_id = ios_tongbu
-    when /\-MUD/
-      user,account_id = MudController.login params[:token], request.remote_ip
-    when /KY/
-      user,account_id = ios_ky
-    when /XICHU.*-BAIDU/
-      user, account_id= android_baidu
-    when 'ANDROID-XICHU-HUAWEI'
-        user,account_id = HuaweiController.login params[:token]
-    when 'ANDROID-XICHU-KUAIFA'
-      user,account_id = KuaifaController.login params[:token],params[:sid]
+    # when /XICHU.*-UC/
+    #   Rails.logger.debug "uc--SDK==#{params[]}"
+    #   user, account_id = android_uc params[:mask]}
+    # when 'IOS-ICE'
+    #   user, account_id = ios_i4
+    #   # when 'IOS-BAIDU'
+    #   # user, account_id = ios_baidu
+    # when 'IOS-XUNQIN-PP'
+    #   user, account_id = ios_pp
+    # when 'GB'
+    #   user,account_id = game_begin
+    # when 'IOS-TONGBU'
+    #   user,account_id = ios_tongbu
+    # when /\-MUD/
+    #   user,account_id = MudController.login params[:token], request.remote_ip
+    # when /KY/
+    #   user,account_id = ios_ky
+    # when /XICHU.*-BAIDU/
+    #   user, account_id= android_baidu
+    # when 'ANDROID-XICHU-HUAWEI'
+    #     user,account_id = HuaweiController.login params[:token]
+    # when 'ANDROID-XICHU-KUAIFA'
+    #   user,account_id = KuaifaController.login params[:token],params[:sid]
     when 'ANDROID-XICHU-ZHANSHEN-UC'
       user, account_id = android_uc params[:mask]}
     else
