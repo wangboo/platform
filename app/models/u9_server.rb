@@ -29,6 +29,8 @@ class U9Server
 	end
 
 	def p uri, service, data,mask
+		Rails.logger.debug "api_key==#{api_key(mask)}"
+		Rails.logger.debug "game_id==#{game_id(mask)}"
 		txt = data.collect{|i|i.join("=")}.join << api_key(mask)
 		md5 = Digest::MD5.hexdigest txt
 		post '/account.verifySession', body: {id: Time.now.to_i, service: service,game: {gameId: game_id(mask)},
