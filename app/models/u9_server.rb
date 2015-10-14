@@ -10,7 +10,7 @@ class U9Server
 	class << self
 	def game_id mask
 		Rails.logger.debug "mask===#{mask}"
-		if mask=="ANDOIRD-XICHU-ZHANSHEN-UC"
+		if mask=="ANDROID-XICHU-ZHANSHEN-UC"
 			"560484"
 		else
 			"557371"
@@ -18,7 +18,7 @@ class U9Server
 	end
 
 	def api_key mask
-		if mask=="ANDOIRD-XICHU-ZHANSHEN-UC"
+		if mask=="ANDROID-XICHU-ZHANSHEN-UC"
 			"cc0c51ccf5741d529d15291599a9f1e6"
 		else
 			"122a0218e344f51633710af7f64ccc12"
