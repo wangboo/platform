@@ -41,7 +41,7 @@ class HuaweiController < AppController
 		Rails.logger.debug "body = #{body.to_json}"
 
 		begin
-			resp = HTTParty.post('https://api.vmall.com/rest.php', body: bodys.to_json).body
+			resp = HTTParty.post('https://api.vmall.com/rest.php', body: bodys.to_s).body
 			# resp = HTTParty.post(login_url, body: hash.to_json).body
 			rst = JSON.parse resp
 			account_id = resp['userID']
