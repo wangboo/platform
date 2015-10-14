@@ -163,7 +163,6 @@ class AppController < AppSideController
     Rails.logger.debug "mask=#{params[:mask]}"
     case params[:mask]
     when /XICHU.*-UC/
-      Rails.logger.debug "uc--SDK==#{params[]}"
       user, account_id = android_uc params[:mask]
     when 'IOS-ICE'
       user, account_id = ios_i4
@@ -185,8 +184,8 @@ class AppController < AppSideController
         user,account_id = HuaweiController.login params[:token]
     when 'ANDROID-XICHU-KUAIFA'
       user,account_id = KuaifaController.login params[:token],params[:sid]
-    when 'ANDROID-XICHU-ZHANSHEN-UC'
-      user, account_id = android_uc params[:mask]
+    # when 'ANDROID-XICHU-ZHANSHEN-UC'
+    #   user, account_id = android_uc params[:mask]
     else
       # 默认用sid创建一个账号
       user = QicUser.find_or_create_by(username: params[:sid]) do |u|
