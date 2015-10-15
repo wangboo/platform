@@ -18,7 +18,7 @@ class UcController < AppSideController
       "39889cf08f1901acd5fc386a4773f2f3"
     when /XICHU-YAOJI-UC/
       "d32be774745c20fc0eff882af1b41d42"
-    when /ANDOIRD-XICHU-ZHANSHEN-UC/
+    when /ANDROID-XICHU-ZHANSHEN-UC/
       "cc0c51ccf5741d529d15291599a9f1e6"
     end
   end
