@@ -4,8 +4,8 @@ class U9Server
 	@default_options = {}
 	@default_options[:headers] = {"Content-Type" => "application/json"}
 	@default_options[:debug_output] = STDOUT
-	base_uri "http://sdk.g.uc.cn/cp/"
-	# base_uri "sdk.test4.g.uc.cn/cp/"
+	# base_uri "http://sdk.g.uc.cn/cp/"
+	base_uri "sdk.test4.g.uc.cn/cp/"
 
 	class << self
 	def game_id mask
