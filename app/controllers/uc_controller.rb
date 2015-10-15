@@ -33,7 +33,7 @@ class UcController < AppSideController
     #private_key = "39889cf08f1901acd5fc386a4773f2f3"
     private_key = key(hash_data['callbackInfo'])
     logger.debug "md5_before=#{md5_before}"
-    md5 = Digest::MD5.hexdigest(md5_before+private_key)
+    md5 = Digest::MD5.hexdigest(md5_before.to_s+private_key.to_s)
     return fail "md5验证错误 params= #{params}" unless sign == md5
 
     payment = HashWithIndifferentAccess.new(
