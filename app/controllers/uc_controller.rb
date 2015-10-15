@@ -12,11 +12,14 @@ class UcController < AppSideController
 
   def key order_id
     mask = JiyuOrder.find_by(order_id: order_id).platform_mask
-    case mask
+    Rails.logger.debug "mask===#{mask}"
+    case mask.to_s
     when /XICHU-UC/
       "39889cf08f1901acd5fc386a4773f2f3"
     when /XICHU-YAOJI-UC/
       "d32be774745c20fc0eff882af1b41d42"
+    when /ANDROID-XICHU-ZHANSHEN-UC/
+      "cc0c51ccf5741d529d15291599a9f1e6"
     else
       "39889cf08f1901acd5fc386a4773f2f3"
     end
@@ -33,7 +36,8 @@ class UcController < AppSideController
     #private_key = "39889cf08f1901acd5fc386a4773f2f3"
     private_key = key(hash_data['callbackInfo'])
     logger.debug "md5_before=#{md5_before}"
-    md5 = Digest::MD5.hexdigest(md5_before+private_key)
+    Rails.logger.debug "private_key===#{private_key}"
+    md5 = Digest::MD5.hexdigest(md5_before.to_s+private_key.to_s)
     return fail "md5验证错误 params= #{params}" unless sign == md5
 
     payment = HashWithIndifferentAccess.new(

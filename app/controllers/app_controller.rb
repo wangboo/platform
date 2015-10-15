@@ -163,7 +163,7 @@ class AppController < AppSideController
     Rails.logger.debug "mask=#{params[:mask]}"
     case params[:mask]
     when /XICHU.*-UC/
-      user, account_id = android_uc
+      user, account_id = android_uc params[:mask]
     when 'IOS-ICE'
       user, account_id = ios_i4
       # when 'IOS-BAIDU'
@@ -180,8 +180,12 @@ class AppController < AppSideController
       user,account_id = ios_ky
     when /XICHU.*-BAIDU/
       user, account_id= android_baidu
-    when 'ANDROID_XICHU_HUAWEI'
-        user,account_id = HuaweiController.login params[:token],params[:uid]
+    when 'ANDROID-XICHU-HUAWEI'
+        user,account_id = HuaweiController.login params[:token]
+    when 'ANDROID-XICHU-KUAIFA'
+      user,account_id = KuaifaController.login params[:token],params[:sid]
+    # when 'ANDROID-XICHU-ZHANSHEN-UC'
+    #   user, account_id = android_uc params[:mask]
     else
       # 默认用sid创建一个账号
       user = QicUser.find_or_create_by(username: params[:sid]) do |u|
@@ -238,8 +242,8 @@ class AppController < AppSideController
   end
 
   # 用UC account创建一个账号
-  def android_uc
-    resp = U9Server.login params[:sid]
+  def android_uc mask
+    resp = U9Server.login params[:sid],mask
     unless resp['state']['code'] == 1
       #resp_app_f "登陆失败"
       return [-1, 0]

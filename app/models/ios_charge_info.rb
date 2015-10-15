@@ -56,4 +56,40 @@ class IOSChargeInfo
 		suc_func.call
 	end
 
+
+	def self.huawei_charge data, suc_func, fail_func
+		Rails.logger.debug "data = #{data}"
+   		 return fail_func.call(3) unless data[:state]
+		# 查询订单
+		order = JiyuOrder.where(order_id: data['order_id']).first
+		# 校验订单
+		return fail_func.call 3 unless order
+		return fail_func.call 3 unless order.validate_charge data['money']
+		# 查询该订单充值记录
+		charge_info = IOSChargeInfo.find_or_create_by(order_id: data['order_id']) do |i|
+			data.each{|k,v|i[k] = v}
+			i.mask = order.platform_mask
+		end
+		return suc_func.call 0 if charge_info.add_money == 1
+    	Rails.logger.debug "order.product=#{order.product_id}"
+		begin
+			body = {}
+			body['game_user_id'] 	= order.role_id
+			body['product_id'] 		= order.product_id
+			body['result'] 				= 'SUCCESS'
+			body['exorderno'] 		= order.order_id
+			body['money'] 				= data['money']
+			body['transtime'] 		= Time.now
+      		Rails.logger.debug "url #{order.ios_url}, body=#{body}"
+			resp = HTTParty.post(order.ios_url, body: body).body
+     		Rails.logger.debug "resp = #{resp}"
+		rescue => e
+			return fail_func.call 2
+		end
+		return fail_func.call 94 unless resp == 'ok'
+		charge_info.add_money = 1
+		charge_info.save
+		suc_func.call
+	end
+
 end
