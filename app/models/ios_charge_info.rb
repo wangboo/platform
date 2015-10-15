@@ -19,20 +19,23 @@ class IOSChargeInfo
 	field :add_money, type: Integer, default: 0
 
 	# 充值 充值数据，成功调用方法，失败调用方法
-	def self.charge data, suc_func, fail_func
+	def self.charge data, suc_func, fail_func, validate_payment=true
 		Rails.logger.debug "data = #{data}"
    	return fail_func.call("订单状态失败 #{data}") unless data[:state]
 		# 查询订单
 		order = JiyuOrder.where(order_id: data['order_id']).first
 		# 校验订单
 		return fail_func.call "订单不存在 #{data}" unless order
-		return fail_func.call "订单中金钱和产品不对应 #{data} order=#{order}" unless order.validate_charge data['money']
+    if validate_payment
+		  return fail_func.call "订单中金钱和产品不对应 #{data} order=#{order}" unless order.validate_charge data['money']
+    end
 		# 查询该订单充值记录
 		charge_info = IOSChargeInfo.find_or_create_by(order_id: data['order_id']) do |i|
 			data.each{|k,v|i[k] = v}
 			i.mask = order.platform_mask
 		end
 		return suc_func.call "订单已经处理成功" if charge_info.add_money == 1
+    Rails.logger.debug "order.product=#{order.product_id}"
 		begin
 			body = {}
 			body['game_user_id'] 	= order.role_id

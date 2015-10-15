@@ -46,6 +46,7 @@ class JiyuOrder
 	end
 
 	def self.gold2product gold
+    logger.debug "mapping===#{gold_product_mapping}"
 		gold_product_mapping[gold] or '-1'
 	end
 

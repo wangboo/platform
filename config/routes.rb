@@ -49,6 +49,8 @@ Rails.application.routes.draw do
   post "/app/i4_verify_pay" => "i4#verify_pay"
   # 百度支付
   get "/app/baidu_verify_pay" => "baidu#verify_pay"
+  #华为支付
+  get "/app/huawei_verify_pay" => "huawei#verify_pay"
   # pp助手
   post "/app/pp_verify_pay"   => 'pp#verify_pay'
   # xy 支付
