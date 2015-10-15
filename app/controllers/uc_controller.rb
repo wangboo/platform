@@ -12,7 +12,8 @@ class UcController < AppSideController
 
   def key order_id
     mask = JiyuOrder.find_by(order_id: order_id).platform_mask
-    case mask
+    Rails.logger.debug "mask===#{mask}"
+    case mask.to_s
     when /XICHU-UC/
       "39889cf08f1901acd5fc386a4773f2f3"
     when /XICHU-YAOJI-UC/
