@@ -72,7 +72,7 @@ class AppController < AppSideController
     return resp_app_f "用户名#{username}不存在" unless user
     return resp_app_f "服务器#{server_id}不存在" unless Server.find(server_id)
     user.update_last_login server_id
-    resp_app_s
+    resp_app_s ""
   end
 
   # 兑奖码
@@ -139,7 +139,7 @@ class AppController < AppSideController
     # 创建失败
     return resp_app_f user.errors.messages.first[1].first unless user.save
     # 应答token
-    resp_app_s
+    resp_app_s ""
   end
 
   # 登陆
@@ -406,7 +406,7 @@ class AppController < AppSideController
     error: error,
     server_id: server_id
     )
-    resp_app_s
+    resp_app_s ""
   end
 
   def data
